@@ -1,466 +1,459 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Play Daily 15 | Tutorial</title>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNLVGXD9M4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Play Daily 15 | Tutorial</title>
+  <style>
+    /* --- Reset --- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  gtag('config', 'G-ZNLVGXD9M4');
-</script>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: white;
-        }
+    /* --- Container --- */
+    .tutorial-container {
+      max-width: 800px;
+      width: 100%;
+      text-align: center;
+    }
 
-        .tutorial-container {
-            text-align: center;
-            max-width: 800px;
-            width: 100%;
-        }
+    h1 {
+      font-size: clamp(24px, 5vw, 36px);
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
 
-        h1 {
-            font-size: clamp(24px, 5vw, 36px);
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+    .subtitle {
+      font-size: 18px;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
 
-        .subtitle {
-            font-size: 18px;
-            opacity: 0.9;
-            margin-bottom: 30px;
-        }
+    /* --- Steps --- */
+    .step {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
 
-        .step {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
-        }
+    .step.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-        .step.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .step-number {
+      display: inline-block;
+      background: linear-gradient(145deg, #4CAF50, #45a049);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      line-height: 40px;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
 
-        .step-number {
-            display: inline-block;
-            background: linear-gradient(145deg, #4CAF50, #45a049);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            line-height: 40px;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
+    .step-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
 
-        .step-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
+    .step-description {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
 
-        .step-description {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
+    /* --- Grid --- */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      aspect-ratio: 1;
+      max-width: 300px;
+      margin: 0 auto 20px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 15px;
+      padding: 15px;
+    }
 
-        .demo-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            gap: 8px;
-            aspect-ratio: 1;
-            max-width: 300px;
-            width: 100%;
-            margin: 0 auto 20px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 15px;
-            padding: 15px;
-        }
+    .demo-tile {
+      background: linear-gradient(145deg, #ffffff, #e6e6e6);
+      border-radius: 12px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
 
-        .demo-tile {
-            background: linear-gradient(145deg, #ffffff, #e6e6e6);
-            border-radius: 12px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
+    .demo-tile.empty {
+      background: transparent;
+      box-shadow: none;
+    }
 
-        .demo-tile.empty {
-            background: transparent;
-            box-shadow: none;
-        }
+    .demo-tile.highlight {
+      background: linear-gradient(145deg, #4CAF50, #45a049);
+      color: white;
+      animation: pulse 1.5s infinite;
+    }
 
-        .demo-tile.highlight {
-            background: linear-gradient(145deg, #4CAF50, #45a049);
-            color: white;
-            animation: pulse 1.5s infinite;
-        }
+    .demo-tile.moving {
+      transform: scale(1.1);
+      z-index: 10;
+    }
 
-        .demo-tile.moving {
-            transform: scale(1.1);
-            z-index: 10;
-        }
+    .demo-tile.green {
+      background: linear-gradient(145deg, #4CAF50, #45a049);
+      color: white;
+    }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
+    /* --- Animations --- */
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
 
-        @keyframes slideAnimation {
-            0% { transform: translateX(0) translateY(0); }
-            50% { transform: translateX(var(--slide-x, 0)) translateY(var(--slide-y, 0)) scale(1.1); }
-            100% { transform: translateX(0) translateY(0); }
-        }
+    @keyframes slideAnimation {
+      0% { transform: translateX(0) translateY(0); }
+      50% { transform: translateX(var(--slide-x, 0)) translateY(var(--slide-y, 0)) scale(1.1); }
+      100% { transform: translateX(0) translateY(0); }
+    }
 
-        .slide-animation {
-            animation: slideAnimation 0.8s ease-in-out;
-        }
+    .slide-animation {
+      animation: slideAnimation 0.8s ease-in-out;
+    }
 
-        .controls {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
+    /* --- Controls --- */
+    .controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
 
-        .btn {
-            background: linear-gradient(145deg, #4CAF50, #45a049);
-            border: none;
-            border-radius: 25px;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
+    .btn {
+      background: linear-gradient(145deg, #4CAF50, #45a049);
+      border: none;
+      border-radius: 25px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
 
-        .btn.secondary {
-            background: linear-gradient(145deg, #2196F3, #1976D2);
-        }
+    .btn.secondary {
+      background: linear-gradient(145deg, #2196F3, #1976D2);
+    }
 
-        .btn.play-now {
-            background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
-            font-size: 18px;
-            padding: 15px 30px;
-        }
+    .btn.play-now {
+      background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
+      font-size: 18px;
+      padding: 15px 30px;
+    }
 
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 2px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
+    /* --- Progress Bar --- */
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4CAF50, #45a049);
-            width: 0%;
-            transition: width 0.6s ease;
-        }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4CAF50, #45a049);
+      width: 0%;
+      transition: width 0.6s ease;
+    }
 
-        .tip-box {
-            background: rgba(76, 175, 80, 0.2);
-            border: 2px solid rgba(76, 175, 80, 0.5);
-            border-radius: 15px;
-            padding: 15px;
-            margin-top: 15px;
-        }
+    /* --- Tip Box --- */
+    .tip-box {
+      background: rgba(76, 175, 80, 0.2);
+      border: 2px solid rgba(76, 175, 80, 0.5);
+      border-radius: 15px;
+      padding: 15px;
+      margin-top: 15px;
+    }
 
-        .tip-box .tip-icon {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
+    .tip-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
 
-        @media (max-width: 600px) {
-            .demo-grid {
-                max-width: 250px;
-            }
-            
-            .demo-tile {
-                font-size: 16px;
-            }
-            
-            .step {
-                padding: 20px;
-            }
-        }
-    </style>
+    /* --- Responsive --- */
+    @media (max-width: 600px) {
+      .demo-grid {
+        max-width: 250px;
+      }
+
+      .demo-tile {
+        font-size: 16px;
+      }
+
+      .step {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="tutorial-container">
-        <h1>🧩 How to Play Daily 15</h1>
-        <p class="subtitle">Master the classic sliding puzzle in minutes</p>
-        
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
+  <div class="tutorial-container">
+    <h1>🧩 How to Play Daily 15</h1>
+    <p class="subtitle">Master the classic sliding puzzle in minutes</p>
 
-        <!-- Step 1: Introduction -->
-        <div class="step active" id="step1">
-            <div class="step-number">1</div>
-            <h2 class="step-title">Welcome to Daily 15!</h2>
-            <div class="step-description">
-                Daily 15 is a sliding puzzle where you arrange numbered tiles from 1-15 in order. 
-                Every day brings a new puzzle that everyone around the world solves!
-            </div>
-            <div class="demo-grid" id="demoGrid1">
-                <div class="demo-tile">1</div><div class="demo-tile">2</div><div class="demo-tile">3</div><div class="demo-tile">4</div>
-                <div class="demo-tile">5</div><div class="demo-tile">6</div><div class="demo-tile">7</div><div class="demo-tile">8</div>
-                <div class="demo-tile">9</div><div class="demo-tile">10</div><div class="demo-tile">11</div><div class="demo-tile">12</div>
-                <div class="demo-tile">13</div><div class="demo-tile">14</div><div class="demo-tile">15</div><div class="demo-tile empty"></div>
-            </div>
-            <div class="tip-box">
-                <div class="tip-icon">🎯</div>
-                <strong>Goal:</strong> Get all numbers in order with the empty space in the bottom-right corner
-            </div>
-        </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 
-        <!-- Step 2: How to Move -->
-        <div class="step" id="step2">
-            <div class="step-number">2</div>
-            <h2 class="step-title">How to Move Tiles</h2>
-            <div class="step-description">
-                Click or tap tiles next to the empty space to slide them. The highlighted tile shows what you can move.
-            </div>
-            <div class="demo-grid" id="demoGrid2">
-                <div class="demo-tile">1</div><div class="demo-tile">2</div><div class="demo-tile">3</div><div class="demo-tile">4</div>
-                <div class="demo-tile">5</div><div class="demo-tile">6</div><div class="demo-tile">7</div><div class="demo-tile">8</div>
-                <div class="demo-tile">9</div><div class="demo-tile">10</div><div class="demo-tile">11</div><div class="demo-tile">12</div>
-                <div class="demo-tile">13</div><div class="demo-tile">14</div><div class="demo-tile empty"></div><div class="demo-tile highlight">15</div>
-            </div>
-            <div class="tip-box">
-                <div class="tip-icon">📱</div>
-                <strong>Mobile Tip:</strong> You can also swipe in the direction you want the empty space to move
-            </div>
+     <!-- Step 1: Introduction -->
+     <div class="step active" id="step1">
+        <div class="step-number">1</div>
+        <h2 class="step-title">Welcome to Daily 15!</h2>
+        <div class="step-description">
+            Daily 15 is a sliding puzzle where you arrange numbered tiles from 1-15 in order. 
+            Every day brings a new puzzle that everyone around the world solves!
         </div>
-
-        <!-- Step 3: Strategy -->
-        <div class="step" id="step3">
-            <div class="step-number">3</div>
-            <h2 class="step-title">Basic Strategy</h2>
-            <div class="step-description">
-                Start by solving the top row (1-4), then work your way down. Don't worry about messing up lower numbers while fixing the top!
-            </div>
-            <div class="demo-grid" id="demoGrid3">
-                <div class="demo-tile" style="background: linear-gradient(145deg, #4CAF50, #45a049); color: white;">1</div>
-                <div class="demo-tile" style="background: linear-gradient(145deg, #4CAF50, #45a049); color: white;">2</div>
-                <div class="demo-tile" style="background: linear-gradient(145deg, #4CAF50, #45a049); color: white;">3</div>
-                <div class="demo-tile" style="background: linear-gradient(145deg, #4CAF50, #45a049); color: white;">4</div>
-                <div class="demo-tile">8</div><div class="demo-tile">5</div><div class="demo-tile">6</div><div class="demo-tile">7</div>
-                <div class="demo-tile">9</div><div class="demo-tile">10</div><div class="demo-tile">11</div><div class="demo-tile">15</div>
-                <div class="demo-tile">13</div><div class="demo-tile">14</div><div class="demo-tile">12</div><div class="demo-tile empty"></div>
-            </div>
-            <div class="tip-box">
-                <div class="tip-icon">🧠</div>
-                <strong>Pro Tip:</strong> Work row by row, top to bottom. Green tiles show a completed row.
-            </div>
+        <div class="demo-grid" id="demoGrid1">
+            <div class="demo-tile">1</div><div class="demo-tile">2</div><div class="demo-tile">3</div><div class="demo-tile">4</div>
+            <div class="demo-tile">5</div><div class="demo-tile">6</div><div class="demo-tile">7</div><div class="demo-tile">8</div>
+            <div class="demo-tile">9</div><div class="demo-tile">10</div><div class="demo-tile">11</div><div class="demo-tile">12</div>
+            <div class="demo-tile">13</div><div class="demo-tile">14</div><div class="demo-tile">15</div><div class="demo-tile empty"></div>
         </div>
-
-        <!-- Step 4: Daily Challenge -->
-        <div class="step" id="step4">
-            <div class="step-number">4</div>
-            <h2 class="step-title">Daily Challenge</h2>
-            <div class="step-description">
-                Every day at midnight, a new puzzle appears. Everyone gets the same puzzle, so you can compare your score with friends!
-            </div>
-            <div class="demo-grid" id="demoGrid4">
-                <div class="demo-tile">12</div><div class="demo-tile">8</div><div class="demo-tile">3</div><div class="demo-tile">4</div>
-                <div class="demo-tile">1</div><div class="demo-tile">6</div><div class="demo-tile">2</div><div class="demo-tile">7</div>
-                <div class="demo-tile">5</div><div class="demo-tile">10</div><div class="demo-tile">11</div><div class="demo-tile">15</div>
-                <div class="demo-tile">9</div><div class="demo-tile">13</div><div class="demo-tile">14</div><div class="demo-tile empty"></div>
-            </div>
-            <div class="tip-box">
-                <div class="tip-icon">📅</div>
-                <strong>Daily Fun:</strong> Your progress saves automatically, so you can solve it throughout the day!
-            </div>
-        </div>
-
-        <!-- Step 5: Sharing -->
-        <div class="step" id="step5">
-            <div class="step-number">5</div>
-            <h2 class="step-title">Share Your Success</h2>
-            <div class="step-description">
-                When you complete the puzzle, share your results! Compare moves and time with friends, just like other daily puzzle games.
-            </div>
-            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; font-family: monospace; margin: 20px 0;">
-                Daily 15 | Puzzle Game #123<br>
-                Solved in 45 moves<br>
-                Time: 2:34<br>
-                Try it yourself at daily15.xyz!
-            </div>
-            <div class="tip-box">
-                <div class="tip-icon">🏆</div>
-                <strong>Challenge:</strong> Try to solve it in under 100 moves - that's the mark of a puzzle master!
-            </div>
-        </div>
-
-        <div class="controls">
-            <button class="btn secondary" onclick="prevStep()" id="prevBtn" style="display: none;">← Previous</button>
-            <button class="btn" onclick="nextStep()" id="nextBtn">Next Step →</button>
-            <button class="btn play-now" onclick="playNow()" id="playBtn" style="display: none;">🎮 Play Daily 15 Now!</button>
+        <div class="tip-box">
+            <div class="tip-icon">🎯</div>
+            <strong>Goal:</strong> Get all numbers in order with the empty space in the bottom-right corner
         </div>
     </div>
 
-    <script>
-        let currentStep = 1;
-        const totalSteps = 5;
+    <!-- Step 2: How to Move -->
+    <div class="step" id="step2">
+        <div class="step-number">2</div>
+        <h2 class="step-title">How to Move Tiles</h2>
+        <div class="step-description">
+            Click or tap tiles next to the empty space to slide them. The highlighted tile shows what you can move.
+        </div>
+        <div class="demo-grid" id="demoGrid2">
+            <div class="demo-tile">1</div><div class="demo-tile">2</div><div class="demo-tile">3</div><div class="demo-tile">4</div>
+            <div class="demo-tile">5</div><div class="demo-tile">6</div><div class="demo-tile">7</div><div class="demo-tile">8</div>
+            <div class="demo-tile">9</div><div class="demo-tile">10</div><div class="demo-tile">11</div><div class="demo-tile">12</div>
+            <div class="demo-tile">13</div><div class="demo-tile">14</div><div class="demo-tile empty"></div><div class="demo-tile highlight">15</div>
+        </div>
+        <div class="tip-box">
+            <div class="tip-icon">📱</div>
+            <strong>Mobile Tip:</strong> You can also swipe in the direction you want the empty space to move
+        </div>
+    </div>
 
-        function updateProgress() {
-            const progress = (currentStep / totalSteps) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
+    <!-- Step 3: Strategy -->
+    <div class="step" id="step3">
+        <div class="step-number">3</div>
+        <h2 class="step-title">Basic Strategy</h2>
+        <div class="step-description">
+            Start by solving the top row (1-4), then work your way down. Don't worry about messing up lower numbers while fixing the top!
+        </div>
+        <div class="demo-grid" id="demoGrid3">
+            <div class="demo-tile" style="background: linear-gradient(145deg, #4CAF50, #45a049); color: white;">1</div>
+            <div class="demo-tile" style="background: linear-gradient(145deg, #4CAF50, #45a049); color: white;">2</div>
+            <div class="demo-tile" style="background: linear-gradient(145deg, #4CAF50, #45a049); color: white;">3</div>
+            <div class="demo-tile" style="background: linear-gradient(145deg, #4CAF50, #45a049); color: white;">4</div>
+            <div class="demo-tile">8</div><div class="demo-tile">5</div><div class="demo-tile">6</div><div class="demo-tile">7</div>
+            <div class="demo-tile">9</div><div class="demo-tile">10</div><div class="demo-tile">11</div><div class="demo-tile">15</div>
+            <div class="demo-tile">13</div><div class="demo-tile">14</div><div class="demo-tile">12</div><div class="demo-tile empty"></div>
+        </div>
+        <div class="tip-box">
+            <div class="tip-icon">🧠</div>
+            <strong>Pro Tip:</strong> Work row by row, top to bottom. Green tiles show a completed row.
+        </div>
+    </div>
+
+    <!-- Step 4: Daily Challenge -->
+    <div class="step" id="step4">
+        <div class="step-number">4</div>
+        <h2 class="step-title">Daily Challenge</h2>
+        <div class="step-description">
+            Every day at midnight, a new puzzle appears. Everyone gets the same puzzle, so you can compare your score with friends!
+        </div>
+        <div class="demo-grid" id="demoGrid4">
+            <div class="demo-tile">12</div><div class="demo-tile">8</div><div class="demo-tile">3</div><div class="demo-tile">4</div>
+            <div class="demo-tile">1</div><div class="demo-tile">6</div><div class="demo-tile">2</div><div class="demo-tile">7</div>
+            <div class="demo-tile">5</div><div class="demo-tile">10</div><div class="demo-tile">11</div><div class="demo-tile">15</div>
+            <div class="demo-tile">9</div><div class="demo-tile">13</div><div class="demo-tile">14</div><div class="demo-tile empty"></div>
+        </div>
+        <div class="tip-box">
+            <div class="tip-icon">📅</div>
+            <strong>Daily Fun:</strong> Your progress saves automatically, so you can solve it throughout the day!
+        </div>
+    </div>
+
+    <!-- Step 5: Sharing -->
+    <div class="step" id="step5">
+        <div class="step-number">5</div>
+        <h2 class="step-title">Share Your Success</h2>
+        <div class="step-description">
+            When you complete the puzzle, share your results! Compare moves and time with friends, just like other daily puzzle games.
+        </div>
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; font-family: monospace; margin: 20px 0;">
+            Daily 15 | Puzzle Game #123<br>
+            Solved in 45 moves<br>
+            Time: 2:34<br>
+            Try it yourself at daily15.xyz!
+        </div>
+        <div class="tip-box">
+            <div class="tip-icon">🏆</div>
+            <strong>Challenge:</strong> Try to solve it in under 100 moves - that's the mark of a puzzle master!
+        </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn secondary" onclick="prevStep()" id="prevBtn" style="display: none;">← Previous</button>
+      <button class="btn" onclick="nextStep()" id="nextBtn">Next Step →</button>
+      <button class="btn play-now" onclick="playNow()" id="playBtn" style="display: none;">🎮 Play Daily 15 Now!</button>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 5;
+
+    function updateProgress() {
+      const progress = (currentStep / totalSteps) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+    }
+
+    function showStep(stepNum) {
+      for (let i = 1; i <= totalSteps; i++) {
+        document.getElementById(`step${i}`).classList.remove('active');
+      }
+
+      document.getElementById(`step${stepNum}`).classList.add('active');
+
+      document.getElementById('prevBtn').style.display = stepNum === 1 ? 'none' : 'inline-block';
+      document.getElementById('nextBtn').style.display = stepNum === totalSteps ? 'none' : 'inline-block';
+      document.getElementById('playBtn').style.display = stepNum === totalSteps ? 'inline-block' : 'none';
+
+      updateProgress();
+
+      // Trigger special animation on Step 2
+      if (stepNum === 2) {
+        setTimeout(demonstrateMove, 1000);
+      }
+    }
+
+    function nextStep() {
+      if (currentStep < totalSteps) {
+        currentStep++;
+        showStep(currentStep);
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    }
+
+    function demonstrateMove() {
+      const tile15 = document.querySelector('#demoGrid2 .demo-tile.highlight');
+      const emptySpace = document.querySelector('#demoGrid2 .demo-tile.empty');
+
+      if (tile15 && emptySpace) {
+        tile15.classList.add('moving');
+
+        setTimeout(() => {
+          const parent = tile15.parentNode;
+          const tile15Index = Array.from(parent.children).indexOf(tile15);
+          const emptyIndex = Array.from(parent.children).indexOf(emptySpace);
+
+          if (tile15Index < emptyIndex) {
+            parent.insertBefore(tile15, emptySpace.nextSibling);
+          } else {
+            parent.insertBefore(tile15, emptySpace);
+          }
+
+          tile15.classList.remove('moving', 'highlight');
+          tile15.classList.add('empty');
+          tile15.textContent = '';
+
+          emptySpace.classList.remove('empty');
+          emptySpace.classList.add('highlight');
+          emptySpace.textContent = '15';
+
+          setTimeout(() => {
+            emptySpace.classList.remove('highlight');
+          }, 500);
+        }, 400);
+      }
+    }
+
+    function playNow() {
+      window.open('https://daily15.xyz', '_blank');
+      // Or redirect within the same site: window.location.href = './index.html';
+    }
+
+    // --- Auto-advance ---
+    let autoAdvanceTimer;
+
+    function resetAutoAdvance() {
+      clearTimeout(autoAdvanceTimer);
+      autoAdvanceTimer = setTimeout(() => {
+        if (currentStep < totalSteps) {
+          nextStep();
         }
+      }, 10000); // 10 seconds of inactivity
+    }
 
-        function showStep(stepNum) {
-            // Hide all steps
-            for (let i = 1; i <= totalSteps; i++) {
-                document.getElementById(`step${i}`).classList.remove('active');
-            }
-            
-            // Show current step
-            document.getElementById(`step${stepNum}`).classList.add('active');
-            
-            // Update buttons
-            document.getElementById('prevBtn').style.display = stepNum === 1 ? 'none' : 'inline-block';
-            document.getElementById('nextBtn').style.display = stepNum === totalSteps ? 'none' : 'inline-block';
-            document.getElementById('playBtn').style.display = stepNum === totalSteps ? 'inline-block' : 'none';
-            
-            updateProgress();
-            
-            // Trigger animations based on step
-            if (stepNum === 2) {
-                setTimeout(() => {
-                    demonstrateMove();
-                }, 1000);
-            }
-        }
+    // --- User interaction resets auto-advance ---
+    document.addEventListener('click', resetAutoAdvance);
+    document.addEventListener('scroll', resetAutoAdvance);
 
-        function nextStep() {
-            if (currentStep < totalSteps) {
-                currentStep++;
-                showStep(currentStep);
-            }
-        }
+    // --- Keyboard Navigation ---
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        nextStep();
+      } else if (e.key === 'ArrowLeft') {
+        prevStep();
+      }
+    });
 
-        function prevStep() {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        }
-
-        function demonstrateMove() {
-            const tile15 = document.querySelector('#demoGrid2 .demo-tile.highlight');
-            const emptySpace = document.querySelector('#demoGrid2 .demo-tile.empty');
-            
-            if (tile15 && emptySpace) {
-                tile15.classList.add('moving');
-                
-                setTimeout(() => {
-                    // Swap positions in DOM
-                    const parent = tile15.parentNode;
-                    const tile15Index = Array.prototype.indexOf.call(parent.children, tile15);
-                    const emptyIndex = Array.prototype.indexOf.call(parent.children, emptySpace);
-                    
-                    if (tile15Index < emptyIndex) {
-                        parent.insertBefore(tile15, emptySpace.nextSibling);
-                    } else {
-                        parent.insertBefore(tile15, emptySpace);
-                    }
-                    
-                    tile15.classList.remove('moving', 'highlight');
-                    tile15.classList.add('empty');
-                    tile15.textContent = '';
-                    
-                    emptySpace.classList.remove('empty');
-                    emptySpace.classList.add('highlight');
-                    emptySpace.textContent = '15';
-                    
-                    setTimeout(() => {
-                        emptySpace.classList.remove('highlight');
-                    }, 500);
-                }, 400);
-            }
-        }
-
-        function playNow() {
-            // This would redirect to your actual game
-            window.open('https://daily15.xyz', '_blank');
-            // Or if embedding in the same site: window.location.href = './index.html';
-        }
-
-        // Auto-advance tutorial every 10 seconds if user isn't interacting
-        let autoAdvanceTimer;
-        
-        function resetAutoAdvance() {
-            clearTimeout(autoAdvanceTimer);
-            autoAdvanceTimer = setTimeout(() => {
-                if (currentStep < totalSteps) {
-                    nextStep();
-                }
-            }, 10000);
-        }
-
-        // Add click handlers to prevent auto-advance when user is engaged
-        document.addEventListener('click', resetAutoAdvance);
-        document.addEventListener('scroll', resetAutoAdvance);
-
-        // Initialize
-        updateProgress();
-        resetAutoAdvance();
-
-        // Add keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' && currentStep < totalSteps) {
-                nextStep();
-            } else if (e.key === 'ArrowLeft' && currentStep > 1) {
-                prevStep();
-            }
-        });
-    </script>
+    // --- Initialize ---
+    showStep(currentStep);
+    resetAutoAdvance();
+  </script>
 </body>
 </html>
