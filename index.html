@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily 15 | Puzzle Game</title>
-    <!-- Google tag (gtag.js) -->
+   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNLVGXD9M4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -12,7 +12,8 @@
   gtag('js', new Date());
 
   gtag('config', 'G-ZNLVGXD9M4');
-</script>    <style>
+</script>
+    <style>
         * {
             box-sizing: border-box;
             margin: 0;
@@ -167,6 +168,7 @@
         .btn.share:hover {
             background: linear-gradient(145deg, #1976D2, #1565C0);
         }
+
         .btn.tutorial {
             background: linear-gradient(145deg, #9C27B0, #7B1FA2);
         }
@@ -174,6 +176,7 @@
         .btn.tutorial:hover {
             background: linear-gradient(145deg, #7B1FA2, #6A1B9A);
         }
+
         .winner-message {
             position: fixed;
             top: 50%;
@@ -280,11 +283,33 @@
 
         // Get puzzle number (days since epoch)
         function getPuzzleNumber() {
+            // OPTION 1: Days since launch (current method)
             const today = new Date();
-            const epoch = new Date('2025-09-20');
+            const epoch = new Date('2025-09-20'); // Change this to your actual launch date
             const diffTime = Math.abs(today - epoch);
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
             return diffDays;
+            
+            // OPTION 2: Start from 1 when you actually launch
+            // const today = new Date();
+            // const launchDate = new Date('2025-09-18'); // Set to your launch date
+            // const diffTime = Math.abs(today - launchDate);
+            // const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            // return diffDays;
+            
+            // OPTION 3: Year-based numbering (resets each year)
+            // const today = new Date();
+            // const startOfYear = new Date(today.getFullYear(), 0, 1);
+            // const diffTime = Math.abs(today - startOfYear);
+            // const dayOfYear = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            // return dayOfYear;
+            
+            // OPTION 4: Simple incremental from a specific number
+            // const today = new Date();
+            // const baseDate = new Date('2025-09-18'); // Your launch date
+            // const diffTime = Math.abs(today - baseDate);
+            // const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            // return diffDays + 1; // Start from puzzle #1 on launch day
         }
 
         // Simple seeded random number generator
@@ -355,7 +380,7 @@
             completionTime = null;
             updateDisplay();
             updateDateDisplay();
-            updateStatus("Load today's puzzle!");
+            updateStatus("Load today's puzzle to start!");
             document.getElementById('shareBtn').style.display = 'none';
         }
 
@@ -466,6 +491,12 @@
 
         // Generate today's daily puzzle
         function loadDailyPuzzle() {
+            // Track puzzle load
+            gtag('event', 'puzzle_load', {
+                'puzzle_number': getPuzzleNumber(),
+                'event_category': 'gameplay'
+            });
+            
             // Check if already loaded
             if (loadProgress()) {
                 updateDisplay();
@@ -524,7 +555,8 @@
         function updateStatus(message) {
             document.getElementById('status').textContent = message;
         }
-// Open tutorial
+
+        // Open tutorial
         function openTutorial() {
             // Track tutorial access
             if (typeof gtag !== 'undefined') {
@@ -620,12 +652,19 @@
                 modal.remove();
             }
         }
+        */
         // Share result
         function shareResult() {
             if (!completionTime) {
-                updateStatus("Complete the puzzle first!");
                 return;
             }
+            
+            // Track sharing event
+            gtag('event', 'share_result', {
+                'puzzle_number': getPuzzleNumber(),
+                'moves': moves,
+                'time_seconds': Math.round((completionTime - startTime) / 1000)
+            });
             
             const puzzleNum = getPuzzleNumber();
             const timeInSeconds = Math.round((completionTime - startTime) / 1000);
@@ -636,12 +675,11 @@
             const shareText = `Daily 15 | Puzzle Game #${puzzleNum}
 Solved in ${moves} moves
 Time: ${timeStr}
-Try it yourself! 🧩
-daily15.xyz`;
+Try it yourself at daily15.xyz!`;
 
             if (navigator.share) {
                 navigator.share({
-                    title: 'Daily 15 | Puzzle Game',
+                    title: 'Daily 15 Puzzle Game',
                     text: shareText
                 });
             } else {
@@ -664,6 +702,15 @@ daily15.xyz`;
             const minutes = Math.floor(timeInSeconds / 60);
             const seconds = timeInSeconds % 60;
             const timeStr = minutes > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : `${seconds}s`;
+            
+            // Track puzzle completion
+            gtag('event', 'puzzle_complete', {
+                'puzzle_number': getPuzzleNumber(),
+                'moves': moves,
+                'time_seconds': timeInSeconds,
+                'event_category': 'gameplay',
+                'value': moves // Lower is better
+            });
             
             updateStatus(`Completed in ${moves} moves! 🎉`);
             document.getElementById('shareBtn').style.display = 'inline-block';
