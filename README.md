@@ -1,20 +1,30 @@
-# 15-Puzzle Daily
+# Daily 15 | Puzzle Game
 
-🧩 **A modern, responsive daily 15-puzzle game inspired by New York Times Games**
+🧩 **A modern, responsive daily 15-puzzle game - the missing piece in your daily puzzle routine**
 
-Play the classic sliding puzzle with a fresh daily challenge that everyone around the world gets to solve on the same day. Perfect for your morning routine or daily mental exercise!
+Play the classic sliding puzzle with a fresh daily challenge that everyone around the world gets to solve on the same day. Perfect complement to your word games, crosswords, and brain teasers - filling the gap for spatial reasoning in your daily mental workout!
 
 ## 🎮 Live Demo
 
 [Play the game here](https://maskquiat.github.io/daily-fifteen/) *(Replace with your actual URL)*
 
-## ✨ Features
+## 🧠 The Missing Daily Puzzle
 
+While daily word games and crosswords exercise your vocabulary and trivia knowledge, **15-Puzzle Daily** targets a different cognitive skill: **spatial reasoning and logical sequencing**. 
+
+It's the perfect addition to your daily puzzle lineup:
+- **Morning routine**: Start with words, end with spatial thinking
+- **Complete workout**: Exercise different parts of your brain
+- **Quick & satisfying**: 2-5 minutes of pure logic puzzle satisfaction
+- **Universal appeal**: No language barriers, just pure problem-solving
+
+## ✨ Features
 ### 🗓️ Daily Puzzle System
 - **One puzzle per day**: Everyone gets the same puzzle each day
 - **Consistent experience**: Seeded generation ensures identical puzzles globally
 - **Progress tracking**: Your game automatically saves and can be resumed
 - **Puzzle numbering**: Each day has a unique puzzle number for reference
+- **Shareable results**: Compare your daily performance with friends
 
 ### 📱 Cross-Platform Compatibility
 - **Desktop/Laptop**: Click tiles to move them
@@ -40,8 +50,8 @@ Play the classic sliding puzzle with a fresh daily challenge that everyone aroun
 ### Option 1: Download and Play Locally
 1. Clone this repository:
 ```bash
-git clone https://github.com/maskquiat/15-puzzle-daily.git
-cd 15-puzzle-daily
+git clone https://github.com/maskquiat/daily-15-puzzle-game.git
+cd daily-15-puzzle-game
 ```
 
 2. Open `index.html` in your web browser
@@ -62,7 +72,7 @@ cd 15-puzzle-daily
 3. **GitHub Pages**:
    - Enable GitHub Pages in repository settings
    - Select source branch
-   - Access via `maskquiat.github.io/daily-fifteen`
+   - Access via `maskquiat.github.io/daily-15-puzzle-game`
 
 ## 🎲 How to Play
 
@@ -94,7 +104,7 @@ cd 15-puzzle-daily
 
 ### Sharing Format
 ```
-Daily 15-Puzzle #123
+Daily 15 | Puzzle Game #123
 Solved in 45 moves
 Time: 2:34
 Try it yourself!
@@ -155,7 +165,7 @@ gtag('event', 'puzzle_complete', {
 
 ### File Structure
 ```
-15-puzzle-daily/
+daily-15-puzzle-game/
 ├── index.html          # Complete game (HTML, CSS, JS)
 ├── README.md          # This file
 └── assets/            # Optional: images, icons
@@ -214,15 +224,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - Inspired by the classic 15-puzzle invented in the 1870s
-- Design patterns from New York Times Games
-- Modern web development best practices
+- Built for the modern daily puzzle ecosystem
+- Designed to complement word-based and trivia daily games
 - Community feedback and contributions
 
 ## 📞 Contact
 
-- **Issues**: [GitHub Issues](https://github.com/maskquiat/15-puzzle-daily/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/maskquiat/15-puzzle-daily/discussions)
-- **Email**: maskquiat@gmail.com
+- **Issues**: [GitHub Issues](https://github.com/maskquiat/daily-15-puzzle-game/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/maskquiat/daily-15-puzzle-game/discussions)
+- **Email**: your.email@example.com *(Replace with your email)*
 
 ---
 
