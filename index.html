@@ -167,7 +167,13 @@
         .btn.share:hover {
             background: linear-gradient(145deg, #1976D2, #1565C0);
         }
+        .btn.tutorial {
+            background: linear-gradient(145deg, #9C27B0, #7B1FA2);
+        }
 
+        .btn.tutorial:hover {
+            background: linear-gradient(145deg, #7B1FA2, #6A1B9A);
+        }
         .winner-message {
             position: fixed;
             top: 50%;
@@ -242,6 +248,7 @@
         <div class="controls">
             <button class="btn shuffle" onclick="loadDailyPuzzle()">Today's Puzzle</button>
             <button class="btn" onclick="resetPuzzle()">Reset</button>
+            <button class="btn tutorial" onclick="openTutorial()">How to Play</button>
             <button class="btn share" onclick="shareResult()" id="shareBtn" style="display: none;">Share Result</button>
         </div>
     </div>
@@ -517,7 +524,102 @@
         function updateStatus(message) {
             document.getElementById('status').textContent = message;
         }
+// Open tutorial
+        function openTutorial() {
+            // Track tutorial access
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'tutorial_open', {
+                    'event_category': 'engagement'
+                });
+            }
+            
+            // Option 1: Open in new tab (recommended)
+            window.open('./tutorial.html', '_blank');
+            
+            // Option 2: If you want to embed the tutorial inline, uncomment below:
+            // showInlineTutorial();
+        }
 
+        // Alternative: Inline tutorial modal (uncomment if you prefer this approach)
+        /*
+        function showInlineTutorial() {
+            const tutorialHTML = `
+                <div class="tutorial-modal" style="
+                    position: fixed;
+                    top: 0; left: 0; right: 0; bottom: 0;
+                    background: rgba(0,0,0,0.9);
+                    z-index: 2000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px;
+                ">
+                    <div style="
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        border-radius: 20px;
+                        padding: 30px;
+                        max-width: 600px;
+                        width: 100%;
+                        max-height: 80vh;
+                        overflow-y: auto;
+                        position: relative;
+                        color: white;
+                        text-align: center;
+                    ">
+                        <button onclick="closeTutorial()" style="
+                            position: absolute;
+                            top: 15px;
+                            right: 15px;
+                            background: none;
+                            border: none;
+                            color: white;
+                            font-size: 24px;
+                            cursor: pointer;
+                        ">×</button>
+                        
+                        <h2 style="margin-bottom: 20px;">🧩 How to Play Daily 15</h2>
+                        
+                        <div style="text-align: left; line-height: 1.6;">
+                            <h3>🎯 Goal</h3>
+                            <p style="margin-bottom: 15px;">Arrange the numbered tiles (1-15) in order with the empty space in the bottom-right corner.</p>
+                            
+                            <h3>🎮 How to Play</h3>
+                            <ul style="margin-bottom: 15px; padding-left: 20px;">
+                                <li>Click tiles next to the empty space to slide them</li>
+                                <li>On mobile: Tap tiles OR swipe to move the empty space</li>
+                                <li>Work row by row, starting from the top</li>
+                            </ul>
+                            
+                            <h3>📅 Daily Challenge</h3>
+                            <p style="margin-bottom: 15px;">Everyone gets the same puzzle each day. Your progress saves automatically!</p>
+                            
+                            <h3>🏆 Sharing</h3>
+                            <p style="margin-bottom: 15px;">Complete the puzzle to share your score with friends!</p>
+                        </div>
+                        
+                        <button onclick="closeTutorial()" style="
+                            background: linear-gradient(145deg, #4CAF50, #45a049);
+                            border: none;
+                            padding: 12px 24px;
+                            border-radius: 25px;
+                            color: white;
+                            font-weight: bold;
+                            cursor: pointer;
+                            margin-top: 20px;
+                        ">Got it! Let's Play</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', tutorialHTML);
+        }
+        
+        function closeTutorial() {
+            const modal = document.querySelector('.tutorial-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
         // Share result
         function shareResult() {
             if (!completionTime) {
