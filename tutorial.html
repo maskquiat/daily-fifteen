@@ -4,15 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>How to Play Daily 15 | Tutorial</title>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNLVGXD9M4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-ZNLVGXD9M4');
-</script>
   <style>
     html, body {
       margin: 0;
@@ -27,83 +18,86 @@
     .container {
       display: flex;
       flex-direction: column;
-      justify-content: center; /* Vertical centering */
-      align-items: center;     /* Horizontal centering */
-      height: 100vh;           /* Take full screen height */
+      justify-content: flex-start; /* Changed from center to flex-start */
+      align-items: center;
+      height: 100vh;
       text-align: center;
-      padding: 20px;
+      padding: 10px 20px 15px 20px; /* Reduced top padding, added bottom padding */
       box-sizing: border-box;
+      padding-top: max(10px, env(safe-area-inset-top)); /* Handle notches */
+      padding-bottom: max(15px, env(safe-area-inset-bottom)); /* Handle home indicators */
     }
 
     h1 {
-      margin: 10px 0;
-      font-size: clamp(24px, 4vw, 36px);
+      margin: 5px 0 5px 0; /* Reduced margins */
+      font-size: clamp(20px, 4vw, 32px); /* Slightly smaller max size */
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
 
     .step-content {
       background: rgba(255,255,255,0.1);
       backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 30px;
-      margin: 20px 0;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      border-radius: 16px; /* Smaller radius */
+      padding: 20px; /* Reduced padding */
+      margin: 8px 0 12px 0; /* Reduced margins */
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Smaller shadow */
       max-width: 600px;
-      min-height: 200px;
+      min-height: 180px; /* Reduced minimum height */
       display: flex;
       flex-direction: column;
       justify-content: center;
+      flex: 1; /* Allow content to expand but not exceed viewport */
     }
 
     .step-number {
       display: inline-block;
       background: linear-gradient(145deg, #4CAF50, #45a049);
       color: white;
-      width: 40px;
-      height: 40px;
+      width: 32px; /* Smaller */
+      height: 32px;
       border-radius: 50%;
-      line-height: 40px;
-      font-size: 18px;
+      line-height: 32px;
+      font-size: 16px;
       font-weight: bold;
-      margin-bottom: 15px;
+      margin-bottom: 10px; /* Reduced margin */
     }
 
     .step-title {
-      font-size: clamp(20px, 3vw, 28px);
+      font-size: clamp(18px, 3vw, 24px); /* Smaller sizes */
       font-weight: bold;
-      margin-bottom: 15px;
+      margin-bottom: 8px; /* Reduced margin */
     }
 
     .step-description {
-      font-size: clamp(14px, 2.5vw, 18px);
-      line-height: 1.6;
-      margin-bottom: 20px;
+      font-size: clamp(13px, 2.5vw, 16px); /* Smaller sizes */
+      line-height: 1.5; /* Tighter line height */
+      margin-bottom: 12px; /* Reduced margin */
     }
 
     .demo-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: repeat(4, 1fr);
-      gap: 6px;
+      gap: 4px; /* Smaller gap */
       aspect-ratio: 1;
-      max-width: 200px;
+      max-width: 160px; /* Smaller grid */
       width: 100%;
-      margin: 15px auto;
+      margin: 8px auto 10px auto; /* Reduced margins */
       background: rgba(0,0,0,0.2);
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 10px;
+      padding: 8px; /* Reduced padding */
     }
 
     .demo-tile {
       background: linear-gradient(145deg, #ffffff, #e6e6e6);
-      border-radius: 8px;
-      font-size: clamp(12px, 2.5vw, 16px);
+      border-radius: 6px; /* Smaller radius */
+      font-size: clamp(10px, 2.2vw, 14px); /* Smaller font */
       font-weight: bold;
       color: #333;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2); /* Smaller shadow */
     }
 
     .demo-tile.empty {
@@ -124,32 +118,35 @@
     .tip-box {
       background: rgba(76, 175, 80, 0.2);
       border: 2px solid rgba(76, 175, 80, 0.5);
-      border-radius: 10px;
-      padding: 12px;
-      margin-top: 15px;
-      font-size: clamp(12px, 2vw, 14px);
+      border-radius: 8px; /* Smaller radius */
+      padding: 8px; /* Reduced padding */
+      margin-top: 8px; /* Reduced margin */
+      font-size: clamp(11px, 2vw, 13px); /* Smaller font */
     }
 
     .buttons {
-      margin-top: 20px;
+      margin-top: 10px; /* Reduced margin */
       display: flex;
-      gap: 15px;
+      gap: 8px; /* Smaller gap to fit 3 buttons */
       flex-wrap: wrap;
       justify-content: center;
+      padding-bottom: env(safe-area-inset-bottom, 0px); /* Handle safe areas */
     }
 
     button {
       background: linear-gradient(145deg, #4CAF50, #45a049);
       border: none;
-      border-radius: 25px;
-      padding: 1px 24px;
-      font-size: clamp(14px, 2.5vw, 16px);
+      border-radius: 20px; /* Smaller radius */
+      padding: 8px 16px; /* Further reduced padding to fit 3 buttons */
+      font-size: clamp(11px, 2.2vw, 13px); /* Smaller font to fit better */
       font-weight: 600;
       color: white;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      min-width: 80px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Smaller shadow */
+      min-width: 60px; /* Smaller minimum width */
+      flex: 1; /* Allow buttons to share space equally */
+      max-width: 100px; /* Prevent buttons from getting too wide */
     }
 
     button:hover:not(:disabled) {
@@ -176,10 +173,10 @@
     .progress-bar {
       width: 100%;
       max-width: 400px;
-      height: 4px;
+      height: 3px; /* Thinner */
       background: rgba(255,255,255,0.2);
       border-radius: 2px;
-      margin-bottom: 20px;
+      margin: 8px 0 12px 0; /* Reduced margins */
       overflow: hidden;
     }
 
@@ -210,11 +207,47 @@
 
     @media (max-width: 480px) {
       .demo-grid {
-        max-width: 160px;
+        max-width: 140px;
+        gap: 3px;
+        padding: 6px;
       }
       
       .buttons {
-        gap: 10px;
+        gap: 8px;
+      }
+      
+      .step-content {
+        padding: 15px;
+        margin: 6px 0 8px 0;
+      }
+      
+      .container {
+        padding: 8px 15px 12px 15px;
+      }
+    }
+
+    /* iPhone SE and similar small screens */
+    @media (max-width: 375px) and (max-height: 667px) {
+      .container {
+        transform: scale(0.9);
+        padding: 5px 10px 8px 10px;
+      }
+      
+      .demo-grid {
+        max-width: 120px;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 320px) {
+      .container {
+        transform: scale(0.85);
+        padding: 3px 8px 6px 8px;
+      }
+      
+      .step-content {
+        padding: 12px;
+        min-height: 110px;
       }
     }
   </style>
@@ -232,144 +265,146 @@
     </div>
 
     <div class="buttons" id="buttonsContainer">
-      <button onclick="prevStep()" id="prevBtn" disabled>← Back</button>
+      <button onclick="prevStep()" id="prevBtn">← Back</button>
       <button onclick="nextStep()" id="nextBtn">Next →</button>
+      <button onclick="playNow()" id="playBtn" class="play-now">🎮 Play Now!</button>
     </div>
   </div>
 
-  <script>
-    let currentStep = 0;
-    const totalSteps = 5;
+ <script>
+  let currentStep = 0;
+  const totalSteps = 5;
 
-    const steps = [
-      {
-        number: 1,
-        title: "Welcome to Daily 15!",
-        description: "Your goal is to arrange numbered tiles 1-15 in order, with the empty space in the bottom-right corner.",
-        grid: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,null],
-        tip: "🎯 This is what a solved puzzle looks like!",
-        gridClass: "solved"
-      },
-      {
-        number: 2,
-        title: "How to Move Tiles",
-        description: "Click or tap tiles next to the empty space to slide them. Only tiles adjacent to the empty space can move.",
-        grid: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,null,15],
-        tip: "🟩 Tiles near an empty space will be highlighted in green.",
-        gridClass: "demo"
-      },
-      {
-        number: 3,
-        title: "Daily Challenge",
-        description: "Every day brings a new puzzle that everyone around the world solves. Your progress saves automatically!",
-        grid: [12,8,3,4,1,6,2,7,5,10,11,15,9,13,14,null],
-        tip: "📅 Everyone gets the same puzzle each day - compare your score!",
-        gridClass: "scrambled"
-      },
-      {
-        number: 4,
-        title: "Strategy Tips",
-        description: "Start by solving the top row (1-4), then work your way down. Don't worry about messing up lower numbers while fixing the top!",
-        grid: [1,2,3,4,8,5,6,7,9,10,11,15,13,14,12,null],
-        tip: "🧠 Work row by row, top to bottom for best results!",
-        gridClass: "strategy"
-      },
-      {
-        number: 5,
-        title: "Ready to Play!",
-        description: "You're all set! Click 'Play Daily 15' to start today's puzzle. Good luck and have fun!",
-        grid: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,null],
-        tip: "🏆 Try to solve it in under 100 moves - that's the mark of a puzzle master!",
-        gridClass: "ready"
-      }
-    ];
-
-    function updateStep() {
-      const step = steps[currentStep];
-      const content = document.getElementById('stepContent');
-      
-      // Create grid HTML
-      let gridHTML = '<div class="demo-grid">';
-      step.grid.forEach((tile, index) => {
-        let tileClass = 'demo-tile';
-        if (tile === null) {
-          tileClass += ' empty';
-        } else if (step.gridClass === 'solved' && tile <= 4) {
-          tileClass += ' correct';
-        } else if (step.gridClass === 'demo' && tile === 15) {
-          tileClass += ' highlight';
-        } else if (step.gridClass === 'strategy' && tile <= 4) {
-          tileClass += ' correct';
-        } else if (step.gridClass === 'ready' && tile <= 15) {
-          tileClass += ' correct';
-        }
-        gridHTML += `<div class="${tileClass}">${tile || ''}</div>`;
-      });
-      gridHTML += '</div>';
-
-      content.innerHTML = `
-        <div class="step-number">${step.number}</div>
-        <div class="step-title">${step.title}</div>
-        <div class="step-description">${step.description}</div>
-        ${gridHTML}
-        <div class="tip-box">${step.tip}</div>
-      `;
-
-      // Update progress bar
-      const progress = ((currentStep + 1) / totalSteps) * 100;
-      document.getElementById('progressFill').style.width = progress + '%';
-
-      // Update buttons
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      const buttonsContainer = document.getElementById('buttonsContainer');
-
-      prevBtn.disabled = currentStep === 0;
-      
-      if (currentStep === totalSteps - 1) {
-        buttonsContainer.innerHTML = `
-          <button onclick="prevStep()" class="secondary">← Back</button>
-          <button onclick="playNow()" class="play-now">🧩 Play Daily 15 Now!</button>
-        `;
-      } else {
-        buttonsContainer.innerHTML = `
-          <button onclick="prevStep()" id="prevBtn" ${currentStep === 0 ? 'disabled' : ''}>← Back</button>
-          <button onclick="nextStep()" id="nextBtn">Next →</button>
-        `;
-      }
+  const steps = [
+    {
+      number: 1,
+      title: "Welcome to Daily 15!",
+      description: "Your goal is to arrange numbered tiles 1-15 in order, with the empty space in the bottom-right corner.",
+      grid: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,null],
+      tip: "🎯 This is what a solved puzzle looks like!",
+      gridClass: "solved"
+    },
+    {
+      number: 2,
+      title: "How to Move Tiles",
+      description: "Click or tap tiles next to the empty space to slide them. Only tiles adjacent to the empty space can move.",
+      grid: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,null,15],
+      tip: "📱 On mobile, you can also swipe to move tiles!",
+      gridClass: "demo"
+    },
+    {
+      number: 3,
+      title: "Daily Challenge",
+      description: "Every day brings a new puzzle that everyone around the world solves. Your progress saves automatically!",
+      grid: [12,8,3,4,1,6,2,7,5,10,11,15,9,13,14,null],
+      tip: "📅 Everyone gets the same puzzle each day - compare your score!",
+      gridClass: "scrambled"
+    },
+    {
+      number: 4,
+      title: "Strategy Tips",
+      description: "Start by solving the top row (1-4), then work your way down. Don't worry about messing up lower numbers while fixing the top!",
+      grid: [1,2,3,4,8,5,6,7,9,10,11,15,13,14,12,null],
+      tip: "🧠 Work row by row, top to bottom for best results!",
+      gridClass: "strategy"
+    },
+    {
+      number: 5,
+      title: "Ready to Play!",
+      description: "You're all set! Click 'Play Daily 15' to start today's puzzle. Good luck and have fun!",
+      grid: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,null],
+      tip: "🏆 Try to solve it in under 100 moves - that's the mark of a puzzle master!",
+      gridClass: "ready"
     }
+  ];
 
-    function nextStep() {
-      if (currentStep < totalSteps - 1) {
-        currentStep++;
-        updateStep();
+  function updateStep() {
+    const step = steps[currentStep];
+    const content = document.getElementById('stepContent');
+    
+    // Create grid HTML
+    let gridHTML = '<div class="demo-grid">';
+    step.grid.forEach((tile) => {
+      let tileClass = 'demo-tile';
+      if (tile === null) {
+        tileClass += ' empty';
+      } else if (step.gridClass === 'solved' && tile <= 4) {
+        tileClass += ' correct';
+      } else if (step.gridClass === 'demo' && tile === 15) {
+        tileClass += ' highlight';
+      } else if (step.gridClass === 'strategy' && tile <= 4) {
+        tileClass += ' correct';
+      } else if (step.gridClass === 'ready' && tile <= 15) {
+        tileClass += ' correct';
       }
-    }
-
-    function prevStep() {
-      if (currentStep > 0) {
-        currentStep--;
-        updateStep();
-      }
-    }
-
-    function playNow() {
-      // Redirect to your main game
-      window.location.href = 'https://daily15.xyz';
-      // Or if hosted locally: window.location.href = './index.html';
-    }
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' && currentStep < totalSteps - 1) {
-        nextStep();
-      } else if (e.key === 'ArrowLeft' && currentStep > 0) {
-        prevStep();
-      }
+      gridHTML += `<div class="${tileClass}">${tile || ''}</div>`;
     });
+    gridHTML += '</div>';
 
-    // Initialize
-    updateStep();
-  </script>
+    content.innerHTML = `
+      <div class="step-number">${step.number}</div>
+      <div class="step-title">${step.title}</div>
+      <div class="step-description">${step.description}</div>
+      ${gridHTML}
+      <div class="tip-box">${step.tip}</div>
+    `;
+
+    // Update progress bar
+    const progress = ((currentStep + 1) / totalSteps) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+
+    // Update button visual states
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const playBtn = document.getElementById('playBtn');
+
+    if (currentStep === 0) {
+      prevBtn.style.opacity = '0.4'; // dim at first step
+    } else {
+      prevBtn.style.opacity = '1';
+    }
+
+    if (currentStep === totalSteps - 1) {
+      nextBtn.style.opacity = '0.4'; // dim at last step
+    } else {
+      nextBtn.style.opacity = '1';
+    }
+
+    // Keep Play Now always visible & usable
+    playBtn.style.opacity = '1';
+  }
+
+  function nextStep() {
+    if (currentStep < totalSteps - 1) {
+      currentStep++;
+      updateStep();
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 0) {
+      currentStep--;
+      updateStep();
+    }
+  }
+
+  function playNow() {
+    // Always functional - users can play from any step
+    window.location.href = 'https://daily15.xyz';
+    // Or if hosted locally: window.location.href = './index.html';
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' && currentStep < totalSteps - 1) {
+      nextStep();
+    } else if (e.key === 'ArrowLeft' && currentStep > 0) {
+      prevStep();
+    }
+  });
+
+  // Initialize
+  updateStep();
+</script>
 </body>
 </html>
