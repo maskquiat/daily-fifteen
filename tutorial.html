@@ -6,14 +6,6 @@
   <title>How to Play Daily 15 | Tutorial</title>
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNLVGXD9M4"></script>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily 15 | Puzzle Game</title>
-   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNLVGXD9M4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -21,790 +13,406 @@
 
   gtag('config', 'G-ZNLVGXD9M4');
 </script>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden; /* Prevent scrolling */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: white;
-        }
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; /* Changed from center to flex-start */
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 10px 20px 15px 20px; /* Reduced top padding, added bottom padding */
+      box-sizing: border-box;
+      padding-top: max(10px, env(safe-area-inset-top)); /* Handle notches */
+      padding-bottom: max(15px, env(safe-area-inset-bottom)); /* Handle home indicators */
+    }
 
-        .container {
-            text-align: center;
-            max-width: 500px;
-            width: 100%;
-        }
+    h1 {
+      margin: 5px 0 5px 0; /* Reduced margins */
+      font-size: clamp(20px, 4vw, 32px); /* Slightly smaller max size */
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
 
-        h1 {
-            font-size: clamp(24px, 5vw, 36px);
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+    .step-content {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px; /* Smaller radius */
+      padding: 20px; /* Reduced padding */
+      margin: 8px 0 12px 0; /* Reduced margins */
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Smaller shadow */
+      max-width: 600px;
+      min-height: 180px; /* Reduced minimum height */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
 
-        .game-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            font-size: 18px;
-            font-weight: 600;
-        }
+    .step-number {
+      display: inline-block;
+      background: linear-gradient(145deg, #4CAF50, #45a049);
+      color: white;
+      width: 32px; /* Smaller */
+      height: 32px;
+      border-radius: 50%;
+      line-height: 32px;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px; /* Reduced margin */
+    }
 
-        .puzzle-container {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
+    .step-title {
+      font-size: clamp(18px, 3vw, 24px); /* Smaller sizes */
+      font-weight: bold;
+      margin-bottom: 8px; /* Reduced margin */
+    }
 
-        .puzzle-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            gap: 8px;
-            aspect-ratio: 1;
-            max-width: 400px;
-            width: 100%;
-            margin: 0 auto;
-            background: rgba(0,0,0,0.2);
-            border-radius: 15px;
-            padding: 15px;
-        }
+    .step-description {
+      font-size: clamp(13px, 2.5vw, 16px); /* Smaller sizes */
+      line-height: 1.5; /* Tighter line height */
+      margin-bottom: 12px; /* Reduced margin */
+    }
 
-        .tile {
-            background: linear-gradient(145deg, #ffffff, #e6e6e6);
-            border: none;
-            border-radius: 12px;
-            font-size: clamp(18px, 4vw, 28px);
-            font-weight: bold;
-            color: #333;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-            position: relative;
-            overflow: hidden;
-        }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 4px; /* Smaller gap */
+      aspect-ratio: 1;
+      max-width: 160px; /* Smaller grid */
+      width: 100%;
+      margin: 8px auto 10px auto; /* Reduced margins */
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      padding: 8px; /* Reduced padding */
+    }
 
-        .tile:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-            background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
-        }
+    .demo-tile {
+      background: linear-gradient(145deg, #ffffff, #e6e6e6);
+      border-radius: 6px; /* Smaller radius */
+      font-size: clamp(10px, 2.2vw, 14px); /* Smaller font */
+      font-weight: bold;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2); /* Smaller shadow */
+    }
 
-        .tile:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
+    .demo-tile.empty {
+      background: transparent;
+      box-shadow: none;
+    }
 
-        .tile.empty {
-            background: transparent;
-            box-shadow: none;
-            cursor: default;
-            pointer-events: none;
-        }
+    .demo-tile.highlight {
+      background: linear-gradient(145deg, #4CAF50, #45a049);
+      color: white;
+    }
 
-        .tile.moveable {
-            background: linear-gradient(145deg, #4CAF50, #45a049);
-            color: white;
-            animation: pulse 2s infinite;
-        }
+    .demo-tile.correct {
+      background: linear-gradient(145deg, #4CAF50, #45a049);
+      color: white;
+    }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
+    .tip-box {
+      background: rgba(76, 175, 80, 0.2);
+      border: 2px solid rgba(76, 175, 80, 0.5);
+      border-radius: 8px; /* Smaller radius */
+      padding: 8px; /* Reduced padding */
+      margin-top: 8px; /* Reduced margin */
+      font-size: clamp(11px, 2vw, 13px); /* Smaller font */
+    }
 
-        .controls {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap
-        }
+    .buttons {
+      margin-top: 10px; /* Reduced margin */
+      display: flex;
+      gap: 8px; /* Smaller gap to fit 3 buttons */
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-bottom: env(safe-area-inset-bottom, 0px); /* Handle safe areas */
+    }
 
-        .btn {
-            background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
-            border: none;
-            border-radius: 25px;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            min-width: 100px;
-        }
+    button {
+      background: linear-gradient(145deg, #4CAF50, #45a049);
+      border: none;
+      border-radius: 20px; /* Smaller radius */
+      padding: 8px 16px; /* Further reduced padding to fit 3 buttons */
+      font-size: clamp(11px, 2.2vw, 13px); /* Smaller font to fit better */
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Smaller shadow */
+      min-width: 60px; /* Smaller minimum width */
+      flex: 1; /* Allow buttons to share space equally */
+      max-width: 100px; /* Prevent buttons from getting too wide */
+    }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-            background: linear-gradient(145deg, #ff5252, #e53935);
-        }
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
 
-        .btn:active {
-            transform: translateY(0);
-        }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
 
-        .btn.shuffle {
-            background: linear-gradient(145deg, #4CAF50, #45a049);
-        }
+    button.secondary {
+      background: linear-gradient(145deg, #2196F3, #1976D2);
+    }
 
-        .btn.shuffle:hover {
-            background: linear-gradient(145deg, #45a049, #3d8b40);
-        }
+    button.play-now {
+      background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
+      font-size: clamp(16px, 3vw, 18px);
+      padding: 15px 30px;
+    }
 
-        .btn.share {
-            background: linear-gradient(145deg, #2196F3, #1976D2);
-        }
+    .progress-bar {
+      width: 100%;
+      max-width: 400px;
+      height: 3px; /* Thinner */
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+      margin: 8px 0 12px 0; /* Reduced margins */
+      overflow: hidden;
+    }
 
-        .btn.share:hover {
-            background: linear-gradient(145deg, #1976D2, #1565C0);
-        }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4CAF50, #45a049);
+      width: 0%;
+      transition: width 0.6s ease;
+    }
 
-        .btn.tutorial {
-            background: linear-gradient(145deg, #9C27B0, #7B1FA2);
-        }
+    @media (max-height: 700px) {
+      .container {
+        transform: scale(0.9);
+        transform-origin: center center;
+      }
+    }
 
-        .btn.tutorial:hover {
-            background: linear-gradient(145deg, #7B1FA2, #6A1B9A);
-        }
+    @media (max-height: 600px) {
+      .container {
+        transform: scale(0.8);
+      }
+      
+      .step-content {
+        padding: 20px;
+        min-height: 150px;
+      }
+    }
 
-        .winner-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(145deg, #4CAF50, #45a049);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 1000;
-            display: none;
-            text-align: center;
-            animation: celebration 0.6s ease-out;
-        }
+    @media (max-width: 480px) {
+      .demo-grid {
+        max-width: 140px;
+        gap: 3px;
+        padding: 6px;
+      }
+      
+      .buttons {
+        gap: 8px;
+      }
+      
+      .step-content {
+        padding: 15px;
+        margin: 6px 0 8px 0;
+      }
+      
+      .container {
+        padding: 8px 15px 12px 15px;
+      }
+    }
 
-        @keyframes celebration {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        }
+    /* iPhone SE and similar small screens */
+    @media (max-width: 375px) and (max-height: 667px) {
+      .container {
+        transform: scale(0.85);
+        padding: 5px 10px 8px 10px;
+      }
+      
+      .demo-grid {
+        max-width: 120px;
+      }
+    }
 
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-            display: none;
-        }
-
-        @media (max-width: 480px) {
-            .puzzle-grid {
-                gap: 6px;
-                padding: 10px;
-            }
-            
-            .tile {
-                border-radius: 8px;
-                font-size: 20px;
-            }
-            
-            .game-info {
-                font-size: 16px;
-            }
-        }
-    </style>
+    /* Very small screens */
+    @media (max-width: 320px) {
+      .container {
+        transform: scale(0.85);
+        padding: 3px 8px 6px 8px;
+      }
+      
+      .step-content {
+        padding: 12px;
+        min-height: 110px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🧩 Daily 15 | Puzzle Game</h1>
-        
-        <div class="game-info">
-            <div>
-                <div style="font-size: 14px; opacity: 0.9;">Daily Puzzle #<span id="puzzleNumber"></span></div>
-                <div>Moves: <span id="moveCounter">0</span></div>
-            </div>
-            <div style="text-align: right;">
-                <div style="font-size: 14px; opacity: 0.9;" id="dateDisplay"></div>
-                <div id="status">Ready to play!</div>
-            </div>
-        </div>
-        
-        <div class="puzzle-container">
-            <div class="puzzle-grid" id="puzzleGrid"></div>
-        </div>
-        
-        <div class="controls">
-            <button class="btn shuffle" onclick="loadDailyPuzzle()">Today's Puzzle</button>
-            <button class="btn" onclick="resetPuzzle()">Reset</button>
-            <button class="btn tutorial" onclick="openTutorial()">How to Play</button>
-            <button class="btn share" onclick="shareResult()" id="shareBtn" style="display: none;">Share Result</button>
-        </div>
+  <div class="container">
+    <h1>🧩 How to Play Daily 15</h1>
+    
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
     </div>
 
-    <div class="overlay" id="overlay"></div>
-    <div class="winner-message" id="winnerMessage">
-        🎉 Congratulations! 🎉<br>
-        <span id="completionText">You solved today's puzzle!</span><br>
-        <small>Click anywhere to continue</small>
+    <div class="step-content" id="stepContent">
+      <!-- Dynamic content will be inserted here -->
     </div>
 
-    <script>
-        let puzzle = [];
-        let emptyIndex = 15;
-        let moves = 0;
-        let isShuffled = false;
-        let dailyPuzzleLoaded = false;
-        let startTime = null;
-        let completionTime = null;
+    <div class="buttons" id="buttonsContainer">
+      <button onclick="prevStep()" id="prevBtn">← Back</button>
+      <button onclick="nextStep()" id="nextBtn">Next →</button>
+      <button onclick="playNow()" id="playBtn" class="play-now">Play Now!</button>
+    </div>
+  </div>
 
-        // Get today's date as a seed for consistent daily puzzles
-        function getTodaysSeed() {
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth() + 1;
-            const day = today.getDate();
-            return year * 10000 + month * 100 + day;
-        }
+ <script>
+  let currentStep = 0;
+  const totalSteps = 5;
 
-        // Get puzzle number (days since epoch)
-        function getPuzzleNumber() {
-            // OPTION 1: Days since launch (current method)
-            const today = new Date();
-            const epoch = new Date('2025-09-20'); // Change this to your actual launch date
-            const diffTime = Math.abs(today - epoch);
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            return diffDays;
-            
-            // OPTION 2: Start from 1 when you actually launch
-            // const today = new Date();
-            // const launchDate = new Date('2025-09-18'); // Set to your launch date
-            // const diffTime = Math.abs(today - launchDate);
-            // const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            // return diffDays;
-            
-            // OPTION 3: Year-based numbering (resets each year)
-            // const today = new Date();
-            // const startOfYear = new Date(today.getFullYear(), 0, 1);
-            // const diffTime = Math.abs(today - startOfYear);
-            // const dayOfYear = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            // return dayOfYear;
-            
-            // OPTION 4: Simple incremental from a specific number
-            // const today = new Date();
-            // const baseDate = new Date('2025-09-18'); // Your launch date
-            // const diffTime = Math.abs(today - baseDate);
-            // const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            // return diffDays + 1; // Start from puzzle #1 on launch day
-        }
+  const steps = [
+    {
+      number: 1,
+      title: "Welcome to Daily 15!",
+      description: "Your goal is to arrange numbered tiles 1-15 in order, with the empty space in the bottom-right corner.",
+      grid: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,null],
+      tip: "🎯 This is what a solved puzzle looks like!",
+      gridClass: "solved"
+    },
+    {
+      number: 2,
+      title: "How to Move Tiles",
+      description: "Click or tap tiles next to the empty space to slide them. Only tiles adjacent to the empty space can move.",
+      grid: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,null,15],
+      tip: "🟩 Tiles near an open space will be highlighted in green.",
+      gridClass: "demo"
+    },
+    {
+      number: 3,
+      title: "Daily Challenge",
+      description: "Every day brings a new puzzle that everyone around the world solves. Your progress saves automatically!",
+      grid: [12,8,3,4,1,6,2,7,5,10,11,15,9,13,14,null],
+      tip: "📅 Everyone gets the same puzzle each day - compare your score!",
+      gridClass: "scrambled"
+    },
+    {
+      number: 4,
+      title: "Strategy Tips",
+      description: "Start by solving the top row (1-4), then work your way down. Don't worry about messing up lower numbers while fixing the top!",
+      grid: [1,2,3,4,8,5,6,7,9,10,11,15,13,14,12,null],
+      tip: "🧠 Work row by row, top to bottom for best results!",
+      gridClass: "strategy"
+    },
+    {
+      number: 5,
+      title: "Ready to Play!",
+      description: "You're all set! Click 'Play Daily 15' to start today's puzzle. Good luck and have fun!",
+      grid: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,null],
+      tip: "🏆 Try to solve it in under 100 moves - that's the mark of a puzzle master!",
+      gridClass: "ready"
+    }
+  ];
 
-        // Simple seeded random number generator
-        class SeededRandom {
-            constructor(seed) {
-                this.seed = seed % 2147483647;
-                if (this.seed <= 0) this.seed += 2147483646;
-            }
+  function updateStep() {
+    const step = steps[currentStep];
+    const content = document.getElementById('stepContent');
+    
+    // Create grid HTML
+    let gridHTML = '<div class="demo-grid">';
+    step.grid.forEach((tile) => {
+      let tileClass = 'demo-tile';
+      if (tile === null) {
+        tileClass += ' empty';
+      } else if (step.gridClass === 'solved' && tile <= 4) {
+        tileClass += ' correct';
+      } else if (step.gridClass === 'demo' && tile === 15) {
+        tileClass += ' highlight';
+      } else if (step.gridClass === 'strategy' && tile <= 4) {
+        tileClass += ' correct';
+      } else if (step.gridClass === 'ready' && tile <= 15) {
+        tileClass += ' correct';
+      }
+      gridHTML += `<div class="${tileClass}">${tile || ''}</div>`;
+    });
+    gridHTML += '</div>';
 
-            next() {
-                this.seed = this.seed * 16807 % 2147483647;
-                return (this.seed - 1) / 2147483646;
-            }
-        }
+    content.innerHTML = `
+      <div class="step-number">${step.number}</div>
+      <div class="step-title">${step.title}</div>
+      <div class="step-description">${step.description}</div>
+      ${gridHTML}
+      <div class="tip-box">${step.tip}</div>
+    `;
 
-        // Load saved progress
-        function loadProgress() {
-            const today = getTodaysSeed();
-            const saved = localStorage.getItem(`puzzle_${today}`);
-            
-            if (saved) {
-                const data = JSON.parse(saved);
-                puzzle = data.puzzle;
-                emptyIndex = data.emptyIndex;
-                moves = data.moves;
-                dailyPuzzleLoaded = true;
-                
-                if (data.completed) {
-                    completionTime = data.completionTime;
-                    document.getElementById('shareBtn').style.display = 'inline-block';
-                    updateStatus(`Completed in ${moves} moves!`);
-                } else {
-                    startTime = data.startTime || Date.now();
-                    updateStatus("Continue today's puzzle!");
-                }
-                
-                return true;
-            }
-            return false;
-        }
+    // Update progress bar
+    const progress = ((currentStep + 1) / totalSteps) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
 
-        // Save progress
-        function saveProgress(completed = false) {
-            const today = getTodaysSeed();
-            const data = {
-                puzzle: puzzle,
-                emptyIndex: emptyIndex,
-                moves: moves,
-                startTime: startTime,
-                completed: completed,
-                completionTime: completed ? Date.now() : null
-            };
-            
-            localStorage.setItem(`puzzle_${today}`, JSON.stringify(data));
-        }
+    // Update button visual states
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const playBtn = document.getElementById('playBtn');
 
-        // Initialize the puzzle in solved state
-        function initPuzzle() {
-            puzzle = [];
-            for (let i = 1; i <= 15; i++) {
-                puzzle.push(i);
-            }
-            puzzle.push(null); // Empty space
-            emptyIndex = 15;
-            moves = 0;
-            dailyPuzzleLoaded = false;
-            startTime = null;
-            completionTime = null;
-            updateDisplay();
-            updateDateDisplay();
-            updateStatus("Load today's puzzle to start!");
-            document.getElementById('shareBtn').style.display = 'none';
-        }
+    if (currentStep === 0) {
+      prevBtn.style.opacity = '0.4'; // dim at first step
+    } else {
+      prevBtn.style.opacity = '1';
+    }
 
-        // Update date display
-        function updateDateDisplay() {
-            const today = new Date();
-            const options = { 
-                weekday: 'short', 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
-            };
-            document.getElementById('dateDisplay').textContent = today.toLocaleDateString('en-US', options);
-            document.getElementById('puzzleNumber').textContent = getPuzzleNumber();
-        }
+    if (currentStep === totalSteps - 1) {
+      nextBtn.style.opacity = '0.4'; // dim at last step
+    } else {
+      nextBtn.style.opacity = '1';
+    }
 
-        // Create the visual grid
-        function createGrid() {
-            const grid = document.getElementById('puzzleGrid');
-            grid.innerHTML = '';
-            
-            for (let i = 0; i < 16; i++) {
-                const tile = document.createElement('button');
-                tile.className = 'tile';
-                tile.onclick = () => moveTile(i);
-                grid.appendChild(tile);
-            }
-        }
+    // Keep Play Now always visible & usable
+    playBtn.style.opacity = '1';
+  }
 
-        // Update the display
-        function updateDisplay() {
-            const tiles = document.querySelectorAll('.tile');
-            
-            tiles.forEach((tile, index) => {
-                if (puzzle[index] === null) {
-                    tile.textContent = '';
-                    tile.className = 'tile empty';
-                } else {
-                    tile.textContent = puzzle[index];
-                    tile.className = 'tile';
-                    
-                    // Highlight moveable tiles
-                    if (dailyPuzzleLoaded && !completionTime && canMove(index)) {
-                        tile.classList.add('moveable');
-                    }
-                }
-            });
-            
-            document.getElementById('moveCounter').textContent = moves;
-        }
+  function nextStep() {
+    if (currentStep < totalSteps - 1) {
+      currentStep++;
+      updateStep();
+    }
+  }
 
-        // Check if a tile can move
-        function canMove(index) {
-            const row = Math.floor(index / 4);
-            const col = index % 4;
-            const emptyRow = Math.floor(emptyIndex / 4);
-            const emptyCol = emptyIndex % 4;
-            
-            return (Math.abs(row - emptyRow) + Math.abs(col - emptyCol)) === 1;
-        }
+  function prevStep() {
+    if (currentStep > 0) {
+      currentStep--;
+      updateStep();
+    }
+  }
 
-        // Move a tile
-        function moveTile(index) {
-            if (!dailyPuzzleLoaded) {
-                updateStatus("Load today's puzzle to start playing!");
-                return;
-            }
-            
-            if (completionTime) {
-                updateStatus("You already completed today's puzzle!");
-                return;
-            }
-            
-            if (canMove(index)) {
-                // Start timing on first move
-                if (moves === 0) {
-                    startTime = Date.now();
-                }
-                
-                // Swap tile with empty space
-                puzzle[emptyIndex] = puzzle[index];
-                puzzle[index] = null;
-                emptyIndex = index;
-                moves++;
-                
-                updateDisplay();
-                saveProgress();
-                
-                if (isSolved()) {
-                    completionTime = Date.now();
-                    saveProgress(true);
-                    showWinMessage();
-                } else {
-                    updateStatus("You can do it!");
-                }
-            }
-        }
+  function playNow() {
+    // Always functional - users can play from any step
+    window.location.href = 'https://daily15.xyz';
+    // Or if hosted locally: window.location.href = './index.html';
+  }
 
-        // Check if puzzle is solved
-        function isSolved() {
-            for (let i = 0; i < 15; i++) {
-                if (puzzle[i] !== i + 1) {
-                    return false;
-                }
-            }
-            return puzzle[15] === null;
-        }
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' && currentStep < totalSteps - 1) {
+      nextStep();
+    } else if (e.key === 'ArrowLeft' && currentStep > 0) {
+      prevStep();
+    }
+  });
 
-        // Generate today's daily puzzle
-        function loadDailyPuzzle() {
-            // Track puzzle load
-            gtag('event', 'puzzle_load', {
-                'puzzle_number': getPuzzleNumber(),
-                'event_category': 'gameplay'
-            });
-            
-            // Check if already loaded
-            if (loadProgress()) {
-                updateDisplay();
-                return;
-            }
-            
-            // Generate new daily puzzle
-            initPuzzle();
-            
-            const seed = getTodaysSeed();
-            const rng = new SeededRandom(seed);
-            
-            // Perform seeded random valid moves to create the daily puzzle
-            const shuffleMoves = 1000;
-            for (let i = 0; i < shuffleMoves; i++) {
-                const validMoves = [];
-                
-                // Find all valid moves
-                for (let j = 0; j < 16; j++) {
-                    if (canMove(j)) {
-                        validMoves.push(j);
-                    }
-                }
-                
-                // Make a seeded random valid move
-                if (validMoves.length > 0) {
-                    const randomIndex = Math.floor(rng.next() * validMoves.length);
-                    const randomMove = validMoves[randomIndex];
-                    puzzle[emptyIndex] = puzzle[randomMove];
-                    puzzle[randomMove] = null;
-                    emptyIndex = randomMove;
-                }
-            }
-            
-            moves = 0;
-            dailyPuzzleLoaded = true;
-            startTime = null;
-            updateDisplay();
-            saveProgress();
-            updateStatus("Start solving!");
-        }
-
-        // Reset to today's starting position
-        function resetPuzzle() {
-            if (!dailyPuzzleLoaded) {
-                updateStatus("Load today's puzzle first!");
-                return;
-            }
-            
-            const today = getTodaysSeed();
-            localStorage.removeItem(`puzzle_${today}`);
-            loadDailyPuzzle();
-        }
-
-        // Update status message
-        function updateStatus(message) {
-            document.getElementById('status').textContent = message;
-        }
-
-        // Open tutorial
-        function openTutorial() {
-            // Track tutorial access
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'tutorial_open', {
-                    'event_category': 'engagement'
-                });
-            }
-            
-            // Option 1: Open in new tab (recommended)
-            window.open('./tutorial.html', '_blank');
-            
-            // Option 2: If you want to embed the tutorial inline, uncomment below:
-            // showInlineTutorial();
-        }
-
-        // Alternative: Inline tutorial modal (uncomment if you prefer this approach)
-        /*
-        function showInlineTutorial() {
-            const tutorialHTML = `
-                <div class="tutorial-modal" style="
-                    position: fixed;
-                    top: 0; left: 0; right: 0; bottom: 0;
-                    background: rgba(0,0,0,0.9);
-                    z-index: 2000;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 20px;
-                ">
-                    <div style="
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                        border-radius: 20px;
-                        padding: 30px;
-                        max-width: 600px;
-                        width: 100%;
-                        max-height: 80vh;
-                        overflow-y: auto;
-                        position: relative;
-                        color: white;
-                        text-align: center;
-                    ">
-                        <button onclick="closeTutorial()" style="
-                            position: absolute;
-                            top: 15px;
-                            right: 15px;
-                            background: none;
-                            border: none;
-                            color: white;
-                            font-size: 24px;
-                            cursor: pointer;
-                        ">×</button>
-                        
-                        <h2 style="margin-bottom: 20px;">🧩 How to Play Daily 15</h2>
-                        
-                        <div style="text-align: left; line-height: 1.6;">
-                            <h3>🎯 Goal</h3>
-                            <p style="margin-bottom: 15px;">Arrange the numbered tiles (1-15) in order with the empty space in the bottom-right corner.</p>
-                            
-                            <h3>🎮 How to Play</h3>
-                            <ul style="margin-bottom: 15px; padding-left: 20px;">
-                                <li>Click tiles next to the empty space to slide them</li>
-                                <li>On mobile: Tap tiles OR swipe to move the empty space</li>
-                                <li>Work row by row, starting from the top</li>
-                            </ul>
-                            
-                            <h3>📅 Daily Challenge</h3>
-                            <p style="margin-bottom: 15px;">Everyone gets the same puzzle each day. Your progress saves automatically!</p>
-                            
-                            <h3>🏆 Sharing</h3>
-                            <p style="margin-bottom: 15px;">Complete the puzzle to share your score with friends!</p>
-                        </div>
-                        
-                        <button onclick="closeTutorial()" style="
-                            background: linear-gradient(145deg, #4CAF50, #45a049);
-                            border: none;
-                            padding: 12px 24px;
-                            border-radius: 25px;
-                            color: white;
-                            font-weight: bold;
-                            cursor: pointer;
-                            margin-top: 20px;
-                        ">Got it! Let's Play</button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.insertAdjacentHTML('beforeend', tutorialHTML);
-        }
-        
-        function closeTutorial() {
-            const modal = document.querySelector('.tutorial-modal');
-            if (modal) {
-                modal.remove();
-            }
-        }
-        */
-        // Share result
-        function shareResult() {
-            if (!completionTime) {
-                return;
-            }
-            
-            // Track sharing event
-            gtag('event', 'share_result', {
-                'puzzle_number': getPuzzleNumber(),
-                'moves': moves,
-                'time_seconds': Math.round((completionTime - startTime) / 1000)
-            });
-            
-            const puzzleNum = getPuzzleNumber();
-            const timeInSeconds = Math.round((completionTime - startTime) / 1000);
-            const minutes = Math.floor(timeInSeconds / 60);
-            const seconds = timeInSeconds % 60;
-            const timeStr = minutes > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : `${seconds}s`;
-            
-            const shareText = `Daily 15 | Puzzle Game #${puzzleNum}
-Solved in ${moves} moves
-Time: ${timeStr}
-Try it yourself! 🧩
-daily15.xyz!`;
-
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Daily 15 Puzzle Game',
-                    text: shareText
-                });
-            } else {
-                // Fallback to clipboard
-                navigator.clipboard.writeText(shareText).then(() => {
-                    updateStatus("Result copied to clipboard!");
-                    setTimeout(() => updateStatus(`Completed in ${moves} moves!`), 2000);
-                }).catch(() => {
-                    // Fallback if clipboard fails
-                    alert(shareText);
-                });
-            }
-        }
-
-        // Show win message
-        function showWinMessage() {
-            dailyPuzzleLoaded = false; // Prevent further moves
-            
-            const timeInSeconds = Math.round((completionTime - startTime) / 1000);
-            const minutes = Math.floor(timeInSeconds / 60);
-            const seconds = timeInSeconds % 60;
-            const timeStr = minutes > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : `${seconds}s`;
-            
-            // Track puzzle completion
-            gtag('event', 'puzzle_complete', {
-                'puzzle_number': getPuzzleNumber(),
-                'moves': moves,
-                'time_seconds': timeInSeconds,
-                'event_category': 'gameplay',
-                'value': moves // Lower is better
-            });
-            
-            updateStatus(`Completed in ${moves} moves! 🎉`);
-            document.getElementById('shareBtn').style.display = 'inline-block';
-            document.getElementById('completionText').textContent = 
-                `You solved today's puzzle in ${moves} moves and ${timeStr}!`;
-            
-            const overlay = document.getElementById('overlay');
-            const winMessage = document.getElementById('winnerMessage');
-            
-            overlay.style.display = 'block';
-            winMessage.style.display = 'block';
-            
-            // Hide message when clicking anywhere
-            const hideMessage = () => {
-                overlay.style.display = 'none';
-                winMessage.style.display = 'none';
-                overlay.removeEventListener('click', hideMessage);
-                winMessage.removeEventListener('click', hideMessage);
-            };
-            
-            setTimeout(() => {
-                overlay.addEventListener('click', hideMessage);
-                winMessage.addEventListener('click', hideMessage);
-            }, 100);
-        }
-
-        // Initialize the game
-        createGrid();
-        initPuzzle();
-        
-        // Auto-load today's puzzle if returning user
-        if (localStorage.getItem(`puzzle_${getTodaysSeed()}`)) {
-            loadDailyPuzzle();
-        }
-
-        // Add touch support for mobile
-        let touchStartX = 0;
-        let touchStartY = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-
-        document.addEventListener('touchend', (e) => {
-            if (!dailyPuzzleLoaded || completionTime) return;
-            
-            const touchEndX = e.changedTouches[0].clientX;
-            const touchEndY = e.changedTouches[0].clientY;
-            const deltaX = touchEndX - touchStartX;
-            const deltaY = touchEndY - touchStartY;
-            
-            // Minimum swipe distance
-            const minSwipe = 50;
-            
-            if (Math.abs(deltaX) > minSwipe || Math.abs(deltaY) > minSwipe) {
-                const emptyRow = Math.floor(emptyIndex / 4);
-                const emptyCol = emptyIndex % 4;
-                let targetIndex = -1;
-                
-                if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                    // Horizontal swipe
-                    if (deltaX > 0 && emptyCol > 0) {
-                        // Swipe right - move tile from left
-                        targetIndex = emptyIndex - 1;
-                    } else if (deltaX < 0 && emptyCol < 3) {
-                        // Swipe left - move tile from right
-                        targetIndex = emptyIndex + 1;
-                    }
-                } else {
-                    // Vertical swipe
-                    if (deltaY > 0 && emptyRow > 0) {
-                        // Swipe down - move tile from above
-                        targetIndex = emptyIndex - 4;
-                    } else if (deltaY < 0 && emptyRow < 3) {
-                        // Swipe up - move tile from below
-                        targetIndex = emptyIndex + 4;
-                    }
-                }
-                
-                if (targetIndex >= 0 && targetIndex < 16) {
-                    moveTile(targetIndex);
-                }
-            }
-        }, { passive: true });
-    </script>
+  // Initialize
+  updateStep();
+</script>
 </body>
 </html>
