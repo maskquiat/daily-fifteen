@@ -38,7 +38,7 @@
     .puzzle-container {
       background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
       border-radius: 20px; padding: 15px; margin-bottom: 15px;
-      flex: 1; display: flex; align-items: center; justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     }
     .puzzle-grid {
@@ -321,14 +321,14 @@
 
     // Rankings & feedback
     function getRanking(moves) {
-        if (moves <= 80) return { tier: 'Grandmaster', emoji: '🥇', color: '#FFD700' };
-        if (moves <= 100) return { tier: 'Master', emoji: '🥈', color: '#C0C0C0' };
-        if (moves <= 130) return { tier: 'Expert', emoji: '🥉', color: '#CD7F32' };
-        if (moves <= 160) return { tier: 'Advanced', emoji: '💎', color: '#00CED1' };
-        if (moves <= 200) return { tier: 'Skilled', emoji: '⭐', color: '#9370DB' };
-        if (moves <= 250) return { tier: 'Intermediate', emoji: '🎯', color: '#32CD32' };
-        if (moves <= 350) return { tier: 'Beginner', emoji: '📚', color: '#FF6347' };
-        return { tier: 'Novice', emoji: '🌱', color: '#FFA500' };
+        if (moves <= 80) return { tier: 'Grandmaster', emoji: '🥇', color: '#000000' };
+        if (moves <= 100) return { tier: 'Master', emoji: '🥈', color: '#000000' };
+        if (moves <= 130) return { tier: 'Expert', emoji: '🥉', color: '#000000' };
+        if (moves <= 160) return { tier: 'Advanced', emoji: '💎', color: '#000000' };
+        if (moves <= 200) return { tier: 'Skilled', emoji: '⭐', color: '#000000' };
+        if (moves <= 250) return { tier: 'Intermediate', emoji: '🎯', color: '#000000' };
+        if (moves <= 350) return { tier: 'Beginner', emoji: '📚', color: '#000000' };
+        return { tier: 'Novice', emoji: '🌱', color: '#000000' };
     }
 
     function getMotivationalMessage(ranking) {
@@ -374,7 +374,7 @@
 ${ranking.emoji} ${ranking.tier} (${moves} moves)
 Time: ${timeStr}
 Try it yourself! 🧩
-daily15.xyz!`;
+daily15.xyz`;
 
         if (navigator.share) {
             navigator.share({ title: 'Daily 15 Puzzle Game', text: shareText });
