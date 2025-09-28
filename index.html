@@ -321,14 +321,14 @@
 
     // Rankings & feedback
     function getRanking(moves) {
-        if (moves <= 80) return { tier: 'Grandmaster', emoji: '🥇', color: '#000000' };
-        if (moves <= 100) return { tier: 'Master', emoji: '🥈', color: '#000000' };
-        if (moves <= 130) return { tier: 'Expert', emoji: '🥉', color: '#000000' };
-        if (moves <= 160) return { tier: 'Advanced', emoji: '💎', color: '#000000' };
-        if (moves <= 200) return { tier: 'Skilled', emoji: '⭐', color: '#000000' };
-        if (moves <= 250) return { tier: 'Intermediate', emoji: '🎯', color: '#000000' };
-        if (moves <= 350) return { tier: 'Beginner', emoji: '📚', color: '#000000' };
-        return { tier: 'Novice', emoji: '🌱', color: '#000000' };
+        if (moves <= 80) return { tier: 'Grandmaster', emoji: '🥇', color: '#FFFFFF' };
+        if (moves <= 100) return { tier: 'Master', emoji: '🥈', color: '#FFFFFF' };
+        if (moves <= 130) return { tier: 'Expert', emoji: '🥉', color: '#FFFFFF' };
+        if (moves <= 160) return { tier: 'Advanced', emoji: '💎', color: '#FFFFFF' };
+        if (moves <= 200) return { tier: 'Skilled', emoji: '⭐', color: '#FFFFFF' };
+        if (moves <= 250) return { tier: 'Intermediate', emoji: '🎯', color: '#FFFFFF' };
+        if (moves <= 350) return { tier: 'Beginner', emoji: '📚', color: '#FFFFFF' };
+        return { tier: 'Novice', emoji: '🌱', color: '#FFFFFF' };
     }
 
     function getMotivationalMessage(ranking) {
