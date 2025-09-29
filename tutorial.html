@@ -145,13 +145,13 @@
       border: none;
       border-radius: 20px;
       padding: 7px 12px; /* Reduced padding to fit 4 buttons */
-      font-size: clamp(9px, 1.8vw, 12px); /* Smaller font to fit 4 buttons */
+      font-size: clamp(9px, 1.8vw, 16px); /* Smaller font to fit 4 buttons */
       font-weight: 600;
       color: white;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      min-width: 50px; /* Smaller minimum width to fit 4 buttons */
+      min-width: 100px; /* Smaller minimum width to fit 4 buttons */
       flex: 1;
       max-width: 70px; /* Smaller max width to fit 4 buttons */
     }
@@ -173,7 +173,7 @@
 
     button.play-now {
       background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
-      font-size: clamp(9px, 1.8vw, 12px);
+      font-size: clamp(9px, 1.8vw, 16px);
       padding: 7px 12px;
     }
 
@@ -308,7 +308,7 @@
       <button onclick="prevStep()" id="prevBtn">← Back</button>
       <button onclick="nextStep()" id="nextBtn">Next →</button>
       <button onclick="showRankings()" class="rankings">Rankings 🏆</button>
-      <button onclick="playNow()" id="playBtn" class="play-now">Play Now!</button>
+      <button onclick="playNow()" id="playBtn" class="play-now">Play Now!🧩</button>
     </div>
   </div>
 
