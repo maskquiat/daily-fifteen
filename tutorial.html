@@ -27,85 +27,86 @@
     .container {
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; /* Changed from center to flex-start */
+      justify-content: flex-start;
       align-items: center;
       height: 100vh;
       text-align: center;
-      padding: 10px 20px 15px 20px; /* Reduced top padding, added bottom padding */
+      padding: 10px 20px 15px 20px;
       box-sizing: border-box;
-      padding-top: max(10px, env(safe-area-inset-top)); /* Handle notches */
-      padding-bottom: max(15px, env(safe-area-inset-bottom)); /* Handle home indicators */
+      padding-top: max(10px, env(safe-area-inset-top));
+      padding-bottom: max(15px, env(safe-area-inset-bottom));
     }
 
     h1 {
-      margin: 5px 0 5px 0; /* Reduced margins */
-      font-size: clamp(20px, 4vw, 32px); /* Slightly smaller max size */
+      margin: 5px 0 5px 0;
+      font-size: clamp(20px, 4vw, 32px);
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
 
     .step-content {
       background: rgba(255,255,255,0.1);
       backdrop-filter: blur(10px);
-      border-radius: 16px; /* Smaller radius */
-      padding: 20px; /* Reduced padding */
-      margin: 8px 0 12px 0; /* Reduced margins */
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Smaller shadow */
+      border-radius: 16px;
+      padding: 20px;
+      margin: 8px 0 12px 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       max-width: 600px;
-      min-height: 180px; /* Reduced minimum height */
+      min-height: 180px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: center;
+      flex: 1;
     }
 
     .step-number {
       display: inline-block;
       background: linear-gradient(145deg, #4CAF50, #45a049);
       color: white;
-      width: 32px; /* Smaller */
+      width: 32px;
       height: 32px;
       border-radius: 50%;
       line-height: 32px;
       font-size: 16px;
       font-weight: bold;
-      margin-bottom: 10px; /* Reduced margin */
+      margin-bottom: 10px;
     }
 
     .step-title {
-      font-size: clamp(18px, 3vw, 24px); /* Smaller sizes */
+      font-size: clamp(18px, 3vw, 24px);
       font-weight: bold;
-      margin-bottom: 8px; /* Reduced margin */
+      margin-bottom: 8px;
     }
 
     .step-description {
-      font-size: clamp(13px, 2.5vw, 16px); /* Smaller sizes */
-      line-height: 1.5; /* Tighter line height */
-      margin-bottom: 12px; /* Reduced margin */
+      font-size: clamp(13px, 2.5vw, 16px);
+      line-height: 1.5;
+      margin-bottom: 12px;
     }
 
     .demo-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: repeat(4, 1fr);
-      gap: 4px; /* Smaller gap */
+      gap: 4px;
       aspect-ratio: 1;
-      max-width: 160px; /* Smaller grid */
+      max-width: 160px;
       width: 100%;
-      margin: 8px auto 10px auto; /* Reduced margins */
+      margin: 8px auto 10px auto;
       background: rgba(0,0,0,0.2);
       border-radius: 10px;
-      padding: 8px; /* Reduced padding */
+      padding: 8px;
     }
 
     .demo-tile {
       background: linear-gradient(145deg, #ffffff, #e6e6e6);
-      border-radius: 6px; /* Smaller radius */
-      font-size: clamp(10px, 2.2vw, 14px); /* Smaller font */
+      border-radius: 6px;
+      font-size: clamp(10px, 2.2vw, 14px);
       font-weight: bold;
       color: #333;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.2); /* Smaller shadow */
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     }
 
     .demo-tile.empty {
@@ -126,35 +127,35 @@
     .tip-box {
       background: rgba(76, 175, 80, 0.2);
       border: 2px solid rgba(76, 175, 80, 0.5);
-      border-radius: 8px; /* Smaller radius */
-      padding: 8px; /* Reduced padding */
-      margin-top: 8px; /* Reduced margin */
-      font-size: clamp(11px, 2vw, 13px); /* Smaller font */
+      border-radius: 8px;
+      padding: 8px;
+      margin-top: 8px;
+      font-size: clamp(11px, 2vw, 13px);
     }
 
     .buttons {
-      margin-top: 10px; /* Reduced margin */
+      margin-top: 10px;
       display: flex;
-      gap: 8px; /* Smaller gap to fit 3 buttons */
+      gap: 5px; /* Smaller gap to fit 4 buttons */
       flex-wrap: wrap;
       justify-content: center;
-      padding-bottom: env(safe-area-inset-bottom, 0px); /* Handle safe areas */
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     button {
       background: linear-gradient(145deg, #4CAF50, #45a049);
       border: none;
-      border-radius: 20px; /* Smaller radius */
-      padding: 8px 16px; /* Further reduced padding to fit 3 buttons */
-      font-size: clamp(11px, 2.2vw, 13px); /* Smaller font to fit better */
+      border-radius: 20px;
+      padding: 7px 12px; /* Reduced padding to fit 4 buttons */
+      font-size: clamp(9px, 1.8vw, 12px); /* Smaller font to fit 4 buttons */
       font-weight: 600;
       color: white;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Smaller shadow */
-      min-width: 60px; /* Smaller minimum width */
-      flex: 1; /* Allow buttons to share space equally */
-      max-width: 100px; /* Prevent buttons from getting too wide */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      min-width: 50px; /* Smaller minimum width to fit 4 buttons */
+      flex: 1;
+      max-width: 70px; /* Smaller max width to fit 4 buttons */
     }
 
     button:hover:not(:disabled) {
@@ -174,17 +175,25 @@
 
     button.play-now {
       background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
-      font-size: clamp(16px, 3vw, 18px);
-      padding: 15px 30px;
+      font-size: clamp(9px, 1.8vw, 12px);
+      padding: 7px 12px;
+    }
+
+    button.rankings {
+      background: linear-gradient(145deg, #FF9800, #F57C00);
+    }
+
+    button.rankings:hover {
+      background: linear-gradient(145deg, #F57C00, #E65100);
     }
 
     .progress-bar {
       width: 100%;
       max-width: 400px;
-      height: 3px; /* Thinner */
+      height: 3px;
       background: rgba(255,255,255,0.2);
       border-radius: 2px;
-      margin: 8px 0 12px 0; /* Reduced margins */
+      margin: 8px 0 12px 0;
       overflow: hidden;
     }
 
@@ -221,7 +230,14 @@
       }
       
       .buttons {
-        gap: 8px;
+        gap: 4px; /* Even smaller gap for mobile */
+      }
+      
+      button {
+        padding: 6px 8px; /* Smaller padding on mobile */
+        font-size: clamp(8px, 1.6vw, 10px); /* Smaller font on mobile */
+        min-width: 42px;
+        max-width: 58px;
       }
       
       .step-content {
@@ -237,12 +253,19 @@
     /* iPhone SE and similar small screens */
     @media (max-width: 375px) and (max-height: 667px) {
       .container {
-        transform: scale(0.85);
+        transform: scale(0.9);
         padding: 5px 10px 8px 10px;
       }
       
       .demo-grid {
         max-width: 120px;
+      }
+      
+      button {
+        padding: 5px 7px;
+        font-size: 8px;
+        min-width: 38px;
+        max-width: 52px;
       }
     }
 
@@ -256,6 +279,17 @@
       .step-content {
         padding: 12px;
         min-height: 110px;
+      }
+      
+      button {
+        padding: 4px 6px;
+        font-size: 7px;
+        min-width: 34px;
+        max-width: 48px;
+      }
+      
+      .buttons {
+        gap: 3px;
       }
     }
   </style>
@@ -275,6 +309,7 @@
     <div class="buttons" id="buttonsContainer">
       <button onclick="prevStep()" id="prevBtn">← Back</button>
       <button onclick="nextStep()" id="nextBtn">Next →</button>
+      <button onclick="showRankings()" class="rankings">🏆 Rankings</button>
       <button onclick="playNow()" id="playBtn" class="play-now">Play Now!</button>
     </div>
   </div>
@@ -394,6 +429,11 @@
       currentStep--;
       updateStep();
     }
+  }
+
+  function showRankings() {
+    // Open rankings page in new tab
+    window.open('./rankings.html', '_blank');
   }
 
   function playNow() {
