@@ -75,6 +75,7 @@
     .btn.shuffle { background: linear-gradient(145deg, #4CAF50, #45a049); }
     .btn.share { background: linear-gradient(145deg, #2196F3, #1976D2); }
     .btn.tutorial { background: linear-gradient(145deg, #9C27B0, #7B1FA2); }
+    .btn.stats { background: linear-gradient(145deg, #FF9800, #F57C00); }
     .winner-message {
       position: fixed; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
@@ -90,6 +91,219 @@
       width: 100%; height: 100%;
       background: rgba(0,0,0,0.5);
       z-index: 999; display: none;
+    }
+    
+    /* Stats Modal Styles */
+    .stats-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 24px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      z-index: 1001;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .stats-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 24px;
+      border-radius: 24px 24px 0 0;
+      position: relative;
+    }
+    .stats-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.2s;
+    }
+    .stats-close:hover {
+      background: rgba(255,255,255,0.3);
+      transform: rotate(90deg);
+    }
+    .stats-content {
+      padding: 24px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+    }
+    .stat-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #333;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: #666;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+    .stats-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .stats-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+    }
+    .stats-btn.export {
+      background: linear-gradient(145deg, #2196F3, #1976D2);
+      color: white;
+    }
+    .stats-btn.reset {
+      background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
+      color: white;
+    }
+    .stats-note {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      background: #fff3cd;
+      padding: 12px;
+      border-radius: 12px;
+      margin-top: 16px;
+      border: 1px solid #ffc107;
+    }
+    .quick-stats {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    .quick-stats h3 {
+      color: #333;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .quick-stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 14px;
+    }
+    .quick-stat-row:last-child {
+      border-bottom: none;
+    }
+    .quick-stat-label {
+      color: #666;
+    }
+    .quick-stat-value {
+      color: #333;
+      font-weight: bold;
+    }
+    
+    /* Daily Tier Distribution Styles */
+    .tier-distribution {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    .tier-distribution h3 {
+      color: #333;
+      font-size: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tier-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+    .tier-bar:last-child {
+      margin-bottom: 0;
+    }
+    .tier-label {
+      min-width: 110px;
+      font-size: 13px;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tier-bar-container {
+      flex: 1;
+      height: 20px;
+      background: #e9ecef;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .tier-bar-fill {
+      height: 100%;
+      transition: width 0.3s ease;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+    }
+    .tier-count {
+      min-width: 20px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+      color: #333;
+    }
+    .tier-grandmaster { background: linear-gradient(90deg, #FFD700, #FFA500); }
+    .tier-master { background: linear-gradient(90deg, #C0C0C0, #A8A8A8); }
+    .tier-expert { background: linear-gradient(90deg, #CD7F32, #B87333); }
+    .tier-advanced { background: linear-gradient(90deg, #667eea, #764ba2); }
+    .tier-skilled { background: linear-gradient(90deg, #4CAF50, #45a049); }
+    .tier-intermediate { background: linear-gradient(90deg, #2196F3, #1976D2); }
+    .tier-beginner { background: linear-gradient(90deg, #FF9800, #F57C00); }
+    .tier-novice { background: linear-gradient(90deg, #9E9E9E, #757575); }
+    .today-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+      border-radius: 8px;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -112,6 +326,7 @@
     <div class="controls">
       <button class="btn shuffle" onclick="loadDailyPuzzle()">Today's Puzzle</button>
       <button class="btn" onclick="resetPuzzle()">Reset</button>
+      <button class="btn stats" onclick="openStatsModal()">📊 Stats</button>
       <button class="btn tutorial" onclick="window.open('./tutorial.html','_blank')">How to Play</button>
       <button class="btn share" onclick="shareResult()" id="shareBtn" style="display: none;">Share Result</button>
     </div>
@@ -123,7 +338,291 @@
     <span id="completionText">You solved today's puzzle!</span><br>
     <small>Click anywhere to continue</small>
   </div>
-    <script>
+
+  <!-- Stats Modal -->
+  <div class="stats-modal" id="statsModal">
+    <div class="stats-header">
+      <button class="stats-close" onclick="closeStatsModal()">×</button>
+      <h2 style="font-size: 24px; margin-bottom: 4px;">📊 Your Statistics</h2>
+      <p style="font-size: 14px; opacity: 0.9;">Track your Daily15 progress</p>
+    </div>
+    <div class="stats-content">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-value" id="statGamesPlayed">0</div>
+          <div class="stat-label">Games Played</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-value" id="statBestPerformance">-</div>
+          <div class="stat-label">Best Performance</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-value" id="statCurrentStreak">0</div>
+          <div class="stat-label">Current Streak</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-value" id="statMaxStreak">0</div>
+          <div class="stat-label">Best Streak</div>
+        </div>
+      </div>
+
+      <!-- Daily Tier Distribution -->
+      <div class="tier-distribution" id="tierDistribution">
+        <h3>
+          <span>Today's Performance</span>
+          <span class="today-badge" id="todayTotal">0 solves</span>
+        </h3>
+        <div class="tier-bar">
+          <div class="tier-label">🥇 Grandmaster</div>
+          <div class="tier-bar-container">
+            <div class="tier-bar-fill tier-grandmaster" id="bar-grandmaster" style="width: 0%"></div>
+          </div>
+          <div class="tier-count" id="count-grandmaster">0</div>
+        </div>
+        <div class="tier-bar">
+          <div class="tier-label">🥈 Master</div>
+          <div class="tier-bar-container">
+            <div class="tier-bar-fill tier-master" id="bar-master" style="width: 0%"></div>
+          </div>
+          <div class="tier-count" id="count-master">0</div>
+        </div>
+        <div class="tier-bar">
+          <div class="tier-label">🥉 Expert</div>
+          <div class="tier-bar-container">
+            <div class="tier-bar-fill tier-expert" id="bar-expert" style="width: 0%"></div>
+          </div>
+          <div class="tier-count" id="count-expert">0</div>
+        </div>
+        <div class="tier-bar">
+          <div class="tier-label">💎 Advanced</div>
+          <div class="tier-bar-container">
+            <div class="tier-bar-fill tier-advanced" id="bar-advanced" style="width: 0%"></div>
+          </div>
+          <div class="tier-count" id="count-advanced">0</div>
+        </div>
+        <div class="tier-bar">
+          <div class="tier-label">⭐ Skilled</div>
+          <div class="tier-bar-container">
+            <div class="tier-bar-fill tier-skilled" id="bar-skilled" style="width: 0%"></div>
+          </div>
+          <div class="tier-count" id="count-skilled">0</div>
+        </div>
+        <div class="tier-bar">
+          <div class="tier-label">🎯 Intermediate</div>
+          <div class="tier-bar-container">
+            <div class="tier-bar-fill tier-intermediate" id="bar-intermediate" style="width: 0%"></div>
+          </div>
+          <div class="tier-count" id="count-intermediate">0</div>
+        </div>
+        <div class="tier-bar">
+          <div class="tier-label">📚 Beginner</div>
+          <div class="tier-bar-container">
+            <div class="tier-bar-fill tier-beginner" id="bar-beginner" style="width: 0%"></div>
+          </div>
+          <div class="tier-count" id="count-beginner">0</div>
+        </div>
+        <div class="tier-bar">
+          <div class="tier-label">🌱 Novice</div>
+          <div class="tier-bar-container">
+            <div class="tier-bar-fill tier-novice" id="bar-novice" style="width: 0%"></div>
+          </div>
+          <div class="tier-count" id="count-novice">0</div>
+        </div>
+      </div>
+
+      <div class="quick-stats">
+        <h3>My Stats</h3>
+        <div class="quick-stat-row">
+          <span class="quick-stat-label">Total Wins:</span>
+          <span class="quick-stat-value" id="statTotalWins">0</span>
+        </div>
+        <div class="quick-stat-row">
+          <span class="quick-stat-label">Average Moves:</span>
+          <span class="quick-stat-value" id="statAvgMoves">0</span>
+        </div>
+        <div class="quick-stat-row">
+          <span class="quick-stat-label">Best Moves:</span>
+          <span class="quick-stat-value" id="statBestMoves">-</span>
+        </div>
+      </div>
+
+      <div class="stats-actions">
+        <button class="stats-btn export" onclick="exportStats()">💾 Backup</button>
+        <button class="stats-btn reset" onclick="resetStats()">🗑️ Reset</button>
+      </div>
+
+      <div class="stats-note">
+        📱 Stats are saved locally on this device
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Stats Manager
+    class Daily15StatsManager {
+      constructor() {
+        this.storageKey = 'daily15_game_stats';
+        this.dailyTiersKey = 'daily15_daily_tiers';
+        this.loadStats();
+        this.loadDailyTiers();
+      }
+
+      loadStats() {
+        const stored = localStorage.getItem(this.storageKey);
+        if (stored) {
+          this.stats = JSON.parse(stored);
+        } else {
+          this.stats = {
+            gamesPlayed: 0,
+            gamesWon: 0,
+            currentStreak: 0,
+            maxStreak: 0,
+            lastPlayedDate: null,
+            puzzleHistory: {}
+          };
+        }
+      }
+
+      saveStats() {
+        localStorage.setItem(this.storageKey, JSON.stringify(this.stats));
+      }
+
+      loadDailyTiers() {
+        const stored = localStorage.getItem(this.dailyTiersKey);
+        const today = new Date().toISOString().split('T')[0];
+        
+        if (stored) {
+          const data = JSON.parse(stored);
+          if (data.date === today) {
+            this.dailyTiers = data;
+          } else {
+            this.dailyTiers = this.initializeDailyTiers(today);
+          }
+        } else {
+          this.dailyTiers = this.initializeDailyTiers(today);
+        }
+      }
+
+      initializeDailyTiers(date) {
+        return {
+          date: date,
+          counts: {
+            'Grandmaster': 0,
+            'Master': 0,
+            'Expert': 0,
+            'Advanced': 0,
+            'Skilled': 0,
+            'Intermediate': 0,
+            'Beginner': 0,
+            'Novice': 0
+          }
+        };
+      }
+
+      saveDailyTiers() {
+        localStorage.setItem(this.dailyTiersKey, JSON.stringify(this.dailyTiers));
+      }
+
+      recordGame(puzzleId, won, moves) {
+        const today = new Date().toISOString().split('T')[0];
+        
+        this.stats.gamesPlayed++;
+        if (won) this.stats.gamesWon++;
+
+        if (won) {
+          if (this.isConsecutiveDay(this.stats.lastPlayedDate, today)) {
+            this.stats.currentStreak++;
+          } else {
+            this.stats.currentStreak = 1;
+          }
+          this.stats.maxStreak = Math.max(this.stats.maxStreak, this.stats.currentStreak);
+        } else {
+          this.stats.currentStreak = 0;
+        }
+
+        this.stats.puzzleHistory[puzzleId] = {
+          date: today,
+          won: won,
+          moves: moves,
+          timestamp: Date.now()
+        };
+
+        this.stats.lastPlayedDate = today;
+        this.saveStats();
+      }
+
+      recordTier(tier) {
+        const today = new Date().toISOString().split('T')[0];
+        if (this.dailyTiers.date !== today) {
+          this.dailyTiers = this.initializeDailyTiers(today);
+        }
+        this.dailyTiers.counts[tier]++;
+        this.saveDailyTiers();
+      }
+
+      getDailyTiers() {
+        const today = new Date().toISOString().split('T')[0];
+        if (this.dailyTiers.date !== today) {
+          this.dailyTiers = this.initializeDailyTiers(today);
+          this.saveDailyTiers();
+        }
+        return this.dailyTiers.counts;
+      }
+
+      isConsecutiveDay(lastDate, currentDate) {
+        if (!lastDate) return false;
+        const last = new Date(lastDate);
+        const current = new Date(currentDate);
+        const diffTime = current - last;
+        const diffDays = diffTime / (1000 * 60 * 60 * 24);
+        return diffDays === 1;
+      }
+
+      getStats() {
+        const winningGames = Object.values(this.stats.puzzleHistory).filter(g => g.won);
+        const avgMoves = winningGames.length > 0 
+          ? Math.round(winningGames.reduce((sum, g) => sum + g.moves, 0) / winningGames.length)
+          : 0;
+        const bestMoves = winningGames.length > 0
+          ? Math.min(...winningGames.map(g => g.moves))
+          : null;
+
+        return {
+          gamesPlayed: this.stats.gamesPlayed,
+          gamesWon: this.stats.gamesWon,
+          winRate: this.stats.gamesPlayed > 0 
+            ? Math.round((this.stats.gamesWon / this.stats.gamesPlayed) * 100) 
+            : 0,
+          currentStreak: this.stats.currentStreak,
+          maxStreak: this.stats.maxStreak,
+          avgMoves: avgMoves,
+          bestMoves: bestMoves
+        };
+      }
+
+      hasPlayedPuzzle(puzzleId) {
+        return this.stats.puzzleHistory.hasOwnProperty(puzzleId);
+      }
+
+      exportStats() {
+        return JSON.stringify(this.stats);
+      }
+
+      resetStats() {
+        localStorage.removeItem(this.storageKey);
+        localStorage.removeItem(this.dailyTiersKey);
+        this.loadStats();
+        this.loadDailyTiers();
+      }
+    }
+
+    const statsManager = new Daily15StatsManager();
+
+    // Original Game Code
     let puzzle = [];
     let emptyIndex = 15;
     let moves = 0;
@@ -131,7 +630,6 @@
     let startTime = null;
     let completionTime = null;
 
-    // Get today's date as a seed
     function getTodaysSeed() {
         const today = new Date();
         return today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
@@ -139,12 +637,11 @@
 
     function getPuzzleNumber() {
         const today = new Date();
-        const epoch = new Date('2025-09-20'); // adjust if needed
+        const epoch = new Date('2025-09-20');
         const diffTime = Math.abs(today - epoch);
         return Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
     }
 
-    // Seeded random
     class SeededRandom {
         constructor(seed) {
             this.seed = seed % 2147483647;
@@ -156,7 +653,6 @@
         }
     }
 
-    // Load & save progress
     function loadProgress() {
         const today = getTodaysSeed();
         const saved = localStorage.getItem(`puzzle_${today}`);
@@ -189,7 +685,6 @@
         }));
     }
 
-    // Puzzle setup
     function initPuzzle() {
         puzzle = [];
         for (let i = 1; i <= 15; i++) puzzle.push(i);
@@ -211,7 +706,6 @@
         document.getElementById('puzzleNumber').textContent = getPuzzleNumber();
     }
 
-    // Grid rendering
     function createGrid() {
         const grid = document.getElementById('puzzleGrid');
         grid.innerHTML = '';
@@ -240,7 +734,6 @@
         document.getElementById('moveCounter').textContent = moves;
     }
 
-    // Game logic
     function canMove(index) {
         const row = Math.floor(index / 4), col = index % 4;
         const emptyRow = Math.floor(emptyIndex / 4), emptyCol = emptyIndex % 4;
@@ -270,6 +763,14 @@
             if (isSolved()) {
                 completionTime = Date.now();
                 saveProgress(true);
+                
+                const ranking = getRanking(moves);
+                
+                // Record stats
+                const puzzleId = `puzzle-${getPuzzleNumber()}`;
+                statsManager.recordGame(puzzleId, true, moves);
+                statsManager.recordTier(ranking.tier);
+                
                 showWinMessage();
             } else {
                 updateStatus("You can do it!");
@@ -319,7 +820,6 @@
         document.getElementById('status').textContent = msg;
     }
 
-    // Rankings & feedback
     function getRanking(moves) {
         if (moves <= 80) return { tier: 'Grandmaster', emoji: '🥇', color: '#FFFFFF' };
         if (moves <= 100) return { tier: 'Master', emoji: '🥈', color: '#FFFFFF' };
@@ -357,7 +857,6 @@
         return null;
     }
 
-    // Share results
     function shareResult() {
         if (!completionTime) {
             updateStatus("Complete the puzzle first!");
@@ -386,7 +885,6 @@ daily15.xyz`;
         }
     }
 
-    // Win screen
     function showWinMessage() {
         dailyPuzzleLoaded = false;
         const timeInSeconds = Math.round((completionTime - startTime) / 1000);
@@ -435,11 +933,84 @@ daily15.xyz`;
         }, 100);
     }
 
+    // Stats Modal Functions
+    function openStatsModal() {
+        const stats = statsManager.getStats();
+        
+        document.getElementById('statGamesPlayed').textContent = stats.gamesPlayed;
+        document.getElementById('statBestPerformance').textContent = stats.bestMoves ? stats.bestMoves + ' moves' : '-';
+        document.getElementById('statCurrentStreak').textContent = stats.currentStreak;
+        document.getElementById('statMaxStreak').textContent = stats.maxStreak;
+        document.getElementById('statTotalWins').textContent = stats.gamesWon;
+        document.getElementById('statAvgMoves').textContent = stats.avgMoves || 0;
+        document.getElementById('statBestMoves').textContent = stats.bestMoves || '-';
+        
+        updateTierDistribution();
+        
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('statsModal').style.display = 'block';
+    }
+
+    function updateTierDistribution() {
+        const tiers = statsManager.getDailyTiers();
+        const tierOrder = ['Grandmaster', 'Master', 'Expert', 'Advanced', 'Skilled', 'Intermediate', 'Beginner', 'Novice'];
+        
+        const totalSolves = Object.values(tiers).reduce((sum, count) => sum + count, 0);
+        const maxCount = Math.max(...Object.values(tiers), 1);
+        
+        document.getElementById('todayTotal').textContent = totalSolves === 1 ? '1 solve' : `${totalSolves} solves`;
+        
+        tierOrder.forEach(tier => {
+            const count = tiers[tier];
+            const percentage = maxCount > 0 ? (count / maxCount) * 100 : 0;
+            const barId = `bar-${tier.toLowerCase()}`;
+            const countId = `count-${tier.toLowerCase()}`;
+            
+            const barElement = document.getElementById(barId);
+            const countElement = document.getElementById(countId);
+            
+            if (barElement && countElement) {
+                barElement.style.width = percentage + '%';
+                countElement.textContent = count;
+            }
+        });
+    }
+
+    function closeStatsModal() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('statsModal').style.display = 'none';
+    }
+
+    function exportStats() {
+        const data = statsManager.exportStats();
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `daily15-stats-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        updateStatus('Stats exported!');
+    }
+
+    function resetStats() {
+        if (confirm('Are you sure you want to reset all statistics? This cannot be undone.')) {
+            statsManager.resetStats();
+            closeStatsModal();
+            updateStatus('Stats reset!');
+        }
+    }
+
+    // Click overlay to close stats modal
+    document.getElementById('overlay').addEventListener('click', function(e) {
+        if (document.getElementById('statsModal').style.display === 'block') {
+            closeStatsModal();
+        }
+    });
+
     // Init
     createGrid();
     initPuzzle();
-
-    // 👇 Auto-load today's puzzle always
     loadDailyPuzzle();
 
     // Touch support
