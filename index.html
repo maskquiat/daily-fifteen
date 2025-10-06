@@ -766,8 +766,8 @@
                 
                 const ranking = getRanking(moves);
                 
-                // Record stats
-                const puzzleId = `puzzle-${getPuzzleNumber()}`;
+                // Record stats - use timestamp to ensure each attempt is unique
+                const puzzleId = `puzzle-${getPuzzleNumber()}-${Date.now()}`;
                 statsManager.recordGame(puzzleId, true, moves);
                 statsManager.recordTier(ranking.tier);
                 
