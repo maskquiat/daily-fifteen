@@ -763,10 +763,6 @@
             updateStatus("Load today's puzzle to start playing!");
             return;
         }
-        if (completionTime) {
-            updateStatus("You already completed today's puzzle!");
-            return;
-        }
 
         if (canMove(index)) {
             if (moves === 0) startTime = Date.now();
