@@ -230,7 +230,7 @@
       font-weight: bold;
     }
     
-    /* Daily Tier Distribution Styles */
+    /* Monthly Tier Distribution Styles */
     .tier-distribution {
       background: #f8f9fa;
       padding: 16px;
@@ -297,13 +297,23 @@
     .tier-intermediate { background: linear-gradient(90deg, #2196F3, #1976D2); }
     .tier-beginner { background: linear-gradient(90deg, #FF9800, #F57C00); }
     .tier-novice { background: linear-gradient(90deg, #9E9E9E, #757575); }
-    .today-badge {
+    .month-badge {
       font-size: 11px;
       padding: 2px 8px;
       background: rgba(102, 126, 234, 0.1);
       color: #667eea;
       border-radius: 8px;
       font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+      line-height: 1.3;
+    }
+    .month-name {
+      font-size: 10px;
+      opacity: 0.8;
+      font-weight: normal;
     }
   </style>
 </head>
@@ -370,11 +380,14 @@
         </div>
       </div>
 
-      <!-- Daily Tier Distribution -->
+      <!-- Monthly Tier Distribution -->
       <div class="tier-distribution" id="tierDistribution">
         <h3>
-          <span>Today's Performance</span>
-          <span class="today-badge" id="todayTotal">0 solves</span>
+          <span>This Month's Performance</span>
+          <span class="month-badge" id="monthTotal">
+            <span class="month-name" id="monthName">October 2024</span>
+            <span id="solveCount">0 solves</span>
+          </span>
         </h3>
         <div class="tier-bar">
           <div class="tier-label">🥇 Grandmaster</div>
@@ -462,13 +475,13 @@
   </div>
 
   <script>
-    // Stats Manager
+    // Stats Manager with Monthly Tracking
     class Daily15StatsManager {
       constructor() {
         this.storageKey = 'daily15_game_stats';
-        this.dailyTiersKey = 'daily15_daily_tiers';
+        this.monthlyTiersKey = 'daily15_monthly_tiers';
         this.loadStats();
-        this.loadDailyTiers();
+        this.loadMonthlyTiers();
       }
 
       loadStats() {
@@ -491,25 +504,30 @@
         localStorage.setItem(this.storageKey, JSON.stringify(this.stats));
       }
 
-      loadDailyTiers() {
-        const stored = localStorage.getItem(this.dailyTiersKey);
-        const today = new Date().toISOString().split('T')[0];
+      loadMonthlyTiers() {
+        const stored = localStorage.getItem(this.monthlyTiersKey);
+        const currentMonth = this.getCurrentMonth();
         
         if (stored) {
           const data = JSON.parse(stored);
-          if (data.date === today) {
-            this.dailyTiers = data;
+          if (data.month === currentMonth) {
+            this.monthlyTiers = data;
           } else {
-            this.dailyTiers = this.initializeDailyTiers(today);
+            this.monthlyTiers = this.initializeMonthlyTiers(currentMonth);
           }
         } else {
-          this.dailyTiers = this.initializeDailyTiers(today);
+          this.monthlyTiers = this.initializeMonthlyTiers(currentMonth);
         }
       }
 
-      initializeDailyTiers(date) {
+      getCurrentMonth() {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      }
+
+      initializeMonthlyTiers(month) {
         return {
-          date: date,
+          month: month,
           counts: {
             'Grandmaster': 0,
             'Master': 0,
@@ -523,8 +541,8 @@
         };
       }
 
-      saveDailyTiers() {
-        localStorage.setItem(this.dailyTiersKey, JSON.stringify(this.dailyTiers));
+      saveMonthlyTiers() {
+        localStorage.setItem(this.monthlyTiersKey, JSON.stringify(this.monthlyTiers));
       }
 
       recordGame(puzzleId, won, moves) {
@@ -556,21 +574,21 @@
       }
 
       recordTier(tier) {
-        const today = new Date().toISOString().split('T')[0];
-        if (this.dailyTiers.date !== today) {
-          this.dailyTiers = this.initializeDailyTiers(today);
+        const currentMonth = this.getCurrentMonth();
+        if (this.monthlyTiers.month !== currentMonth) {
+          this.monthlyTiers = this.initializeMonthlyTiers(currentMonth);
         }
-        this.dailyTiers.counts[tier]++;
-        this.saveDailyTiers();
+        this.monthlyTiers.counts[tier]++;
+        this.saveMonthlyTiers();
       }
 
-      getDailyTiers() {
-        const today = new Date().toISOString().split('T')[0];
-        if (this.dailyTiers.date !== today) {
-          this.dailyTiers = this.initializeDailyTiers(today);
-          this.saveDailyTiers();
+      getMonthlyTiers() {
+        const currentMonth = this.getCurrentMonth();
+        if (this.monthlyTiers.month !== currentMonth) {
+          this.monthlyTiers = this.initializeMonthlyTiers(currentMonth);
+          this.saveMonthlyTiers();
         }
-        return this.dailyTiers.counts;
+        return this.monthlyTiers.counts;
       }
 
       isConsecutiveDay(lastDate, currentDate) {
@@ -614,9 +632,9 @@
 
       resetStats() {
         localStorage.removeItem(this.storageKey);
-        localStorage.removeItem(this.dailyTiersKey);
+        localStorage.removeItem(this.monthlyTiersKey);
         this.loadStats();
-        this.loadDailyTiers();
+        this.loadMonthlyTiers();
       }
     }
 
@@ -952,13 +970,18 @@ daily15.xyz`;
     }
 
     function updateTierDistribution() {
-        const tiers = statsManager.getDailyTiers();
+        const tiers = statsManager.getMonthlyTiers();
         const tierOrder = ['Grandmaster', 'Master', 'Expert', 'Advanced', 'Skilled', 'Intermediate', 'Beginner', 'Novice'];
         
         const totalSolves = Object.values(tiers).reduce((sum, count) => sum + count, 0);
         const maxCount = Math.max(...Object.values(tiers), 1);
         
-        document.getElementById('todayTotal').textContent = totalSolves === 1 ? '1 solve' : `${totalSolves} solves`;
+        // Format month name
+        const now = new Date();
+        const monthName = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        
+        document.getElementById('monthName').textContent = monthName;
+        document.getElementById('solveCount').textContent = totalSolves === 1 ? '1 solve' : `${totalSolves} solves`;
         
         tierOrder.forEach(tier => {
             const count = tiers[tier];
