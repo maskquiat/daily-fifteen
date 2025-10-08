@@ -546,32 +546,44 @@
       }
 
       recordGame(puzzleId, won, moves) {
-        const today = new Date().toISOString().split('T')[0];
-        
-        this.stats.gamesPlayed++;
-        if (won) this.stats.gamesWon++;
+    const today = new Date().toISOString().split('T')[0];
+    
+    this.stats.gamesPlayed++;
+    if (won) this.stats.gamesWon++;
 
-        if (won) {
-          if (this.isConsecutiveDay(this.stats.lastPlayedDate, today)) {
-            this.stats.currentStreak++;
-          } else {
-            this.stats.currentStreak = 1;
-          }
-          this.stats.maxStreak = Math.max(this.stats.maxStreak, this.stats.currentStreak);
+    if (won) {
+      // Check if this is the first win of the day
+      const alreadyWonToday = Object.values(this.stats.puzzleHistory).some(
+        game => game.date === today && game.won
+      );
+      
+      if (!alreadyWonToday) {
+        // Only update streak if this is the first win today
+        if (this.isConsecutiveDay(this.stats.lastPlayedDate, today)) {
+          this.stats.currentStreak++;
+        } else if (this.stats.lastPlayedDate === today) {
+          // Already played today, don't change streak
         } else {
-          this.stats.currentStreak = 0;
+          // Gap in days, reset to 1
+          this.stats.currentStreak = 1;
         }
-
-        this.stats.puzzleHistory[puzzleId] = {
-          date: today,
-          won: won,
-          moves: moves,
-          timestamp: Date.now()
-        };
-
+        this.stats.maxStreak = Math.max(this.stats.maxStreak, this.stats.currentStreak);
         this.stats.lastPlayedDate = today;
-        this.saveStats();
       }
+    } else {
+      this.stats.currentStreak = 0;
+      this.stats.lastPlayedDate = today;
+    }
+
+    this.stats.puzzleHistory[puzzleId] = {
+      date: today,
+      won: won,
+      moves: moves,
+      timestamp: Date.now()
+    };
+
+    this.saveStats();
+}
 
       recordTier(tier) {
         const currentMonth = this.getCurrentMonth();
