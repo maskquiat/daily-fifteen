@@ -163,20 +163,7 @@
       0%, 100% { box-shadow: 0 4px 15px rgba(255,215,0,0.4); }
       50% { box-shadow: 0 4px 25px rgba(255,215,0,0.8); }
     }
-    
-    /* Live Stats Banner */
-    .live-stats {
-      background: rgba(255,255,255,0.1);
-      padding: 10px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      font-size: 13px;
-      backdrop-filter: blur(10px);
-    }
-    .live-stats-item {
-      display: inline-block;
-      margin: 0 10px;
-    }
+
     
     .winner-message {
       position: fixed; top: 50%; left: 50%;
@@ -566,8 +553,8 @@
       <!-- Hourly Leaderboard -->
       <div class="leaderboard" id="leaderboardSection">
         <h3>
-          <span>🏆 This Hour's Leaders</span>
-          <span style="font-size: 11px; opacity: 0.7;">Resets :00</span>
+          <span>🏆 This Hour's Top 5</span>
+          <span style="font-size: 11px; opacity: 0.7;" id="leaderboardTimer">Resets in --:--</span>
         </h3>
         <div id="leaderboardEntries">
           <div style="text-align: center; padding: 20px; color: #999;">
@@ -1183,17 +1170,7 @@
         document.getElementById('winnerMessage').style.display = 'block';
     }
 
-    // Update Live Stats
-    function updateLiveStats() {
-        // Simulate active players (in real app, this would be from server)
-        const activePlayers = Math.floor(Math.random() * 50) + 80;
-        const todaySolves = Math.floor(Math.random() * 200) + 500;
-        
-        document.getElementById('activePlayers').textContent = activePlayers;
-        document.getElementById('todaySolves').textContent = todaySolves;
-    }
-
-    // Original functions adapted for both modes
+// Original functions adapted for both modes
     function loadProgress() {
         if (currentMode !== 'daily') return false;
         const today = getTodaysSeed();
@@ -1630,10 +1607,6 @@ daily15.xyz`;
     createGrid();
     initPuzzle();
     loadDailyPuzzle();
-    updateLiveStats();
-    
-    // Update live stats every 30 seconds
-    setInterval(updateLiveStats, 30000);
 
     // Touch support
     let touchStartX = 0, touchStartY = 0;
