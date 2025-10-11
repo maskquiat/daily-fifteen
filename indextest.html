@@ -4,30 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daily 15 | Puzzle Game</title>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyA_m-qCUU8OTTQvnTZnn6kftnvONYgLgJs",
-    authDomain: "daily15-game.firebaseapp.com",
-    databaseURL: "https://daily15-game-default-rtdb.firebaseio.com",
-    projectId: "daily15-game",
-    storageBucket: "daily15-game.firebasestorage.app",
-    messagingSenderId: "590103930851",
-    appId: "1:590103930851:web:f09f094c419f2d12bc62d6",
-    measurementId: "G-Z3VV5W8619"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNLVGXD9M4"></script>
 <script>
@@ -36,7 +12,8 @@
   gtag('js', new Date());
 
   gtag('config', 'G-ZNLVGXD9M4');
-<style>
+</script>
+  <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1206,7 +1183,17 @@
         document.getElementById('winnerMessage').style.display = 'block';
     }
 
-// Original functions adapted for both modes
+    // Update Live Stats
+    function updateLiveStats() {
+        // Simulate active players (in real app, this would be from server)
+        const activePlayers = Math.floor(Math.random() * 50) + 80;
+        const todaySolves = Math.floor(Math.random() * 200) + 500;
+        
+        document.getElementById('activePlayers').textContent = activePlayers;
+        document.getElementById('todaySolves').textContent = todaySolves;
+    }
+
+    // Original functions adapted for both modes
     function loadProgress() {
         if (currentMode !== 'daily') return false;
         const today = getTodaysSeed();
@@ -1643,6 +1630,10 @@ daily15.xyz`;
     createGrid();
     initPuzzle();
     loadDailyPuzzle();
+    updateLiveStats();
+    
+    // Update live stats every 30 seconds
+    setInterval(updateLiveStats, 30000);
 
     // Touch support
     let touchStartX = 0, touchStartY = 0;
