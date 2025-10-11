@@ -18,19 +18,82 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      height: 90vh;
-      overflow: hidden;
+      min-height: 100vh;
+      overflow-x: hidden;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       padding: 15px; color: white;
     }
     .container {
       text-align: center;
-      max-width: 500px; width: 100%; height: 100vh;
+      max-width: 500px; width: 100%;
       display: flex; flex-direction: column; justify-content: center;
     }
     h1 { font-size: clamp(20px, 4vw, 32px); margin-bottom: 15px;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+    
+    /* Mode Toggle */
+    .mode-toggle {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: rgba(255,255,255,0.1);
+      padding: 8px;
+      border-radius: 50px;
+      backdrop-filter: blur(10px);
+    }
+    .mode-btn {
+      flex: 1;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+    }
+    .mode-btn.active {
+      background: white;
+      color: #667eea;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .mode-btn:hover:not(.active) {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    
+    /* Quick Play Timer */
+    .timer-container {
+      background: rgba(255,255,255,0.15);
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      display: none;
+      backdrop-filter: blur(10px);
+    }
+    .timer-container.active {
+      display: block;
+    }
+    .timer-display {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .timer-display.warning {
+      color: #ff6b6b;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .timer-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
     .game-info {
       display: flex; justify-content: space-between; margin-bottom: 15px;
       font-size: clamp(14px, 3vw, 18px); font-weight: 600;
@@ -42,11 +105,21 @@
       box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     }
     .puzzle-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(4, 1fr); gap: 8px;
-      aspect-ratio: 1; max-width: min(350px, 70vw);
+      display: grid;
+      gap: 8px;
+      aspect-ratio: 1;
       width: 100%; margin: 0 auto;
       background: rgba(0,0,0,0.2); border-radius: 15px; padding: 15px;
+    }
+    .puzzle-grid.grid-4x4 {
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      max-width: min(350px, 70vw);
+    }
+    .puzzle-grid.grid-3x3 {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      max-width: min(300px, 70vw);
     }
     .tile {
       background: linear-gradient(145deg, #ffffff, #e6e6e6);
@@ -62,7 +135,7 @@
       background: linear-gradient(145deg, #f0f0f0, #d0d0d0); }
     .tile.empty { background: transparent; box-shadow: none; cursor: default; pointer-events: none; }
     .tile.moveable { background: linear-gradient(145deg, #4CAF50, #45a049); color: white; }
-    .controls { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    .controls { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px; }
     .btn {
       background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
       border: none; border-radius: 25px; padding: 10px 20px;
@@ -72,10 +145,39 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       min-width: 80px;
     }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
     .btn.shuffle { background: linear-gradient(145deg, #4CAF50, #45a049); }
     .btn.share { background: linear-gradient(145deg, #2196F3, #1976D2); }
     .btn.tutorial { background: linear-gradient(145deg, #9C27B0, #7B1FA2); }
     .btn.stats { background: linear-gradient(145deg, #FF9800, #F57C00); }
+    .btn.quickplay { 
+      background: linear-gradient(145deg, #FFD700, #FFA500);
+      font-size: clamp(14px, 3vw, 18px);
+      padding: 14px 28px;
+      animation: glow 2s infinite;
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 4px 15px rgba(255,215,0,0.4); }
+      50% { box-shadow: 0 4px 25px rgba(255,215,0,0.8); }
+    }
+    
+    /* Live Stats Banner */
+    .live-stats {
+      background: rgba(255,255,255,0.1);
+      padding: 10px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      font-size: 13px;
+      backdrop-filter: blur(10px);
+    }
+    .live-stats-item {
+      display: inline-block;
+      margin: 0 10px;
+    }
+    
     .winner-message {
       position: fixed; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
@@ -230,6 +332,50 @@
       font-weight: bold;
     }
     
+    /* Leaderboard */
+    .leaderboard {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    .leaderboard h3 {
+      color: #333;
+      font-size: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .leaderboard-entry {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      margin-bottom: 8px;
+      background: white;
+      border-radius: 8px;
+      align-items: center;
+    }
+    .leaderboard-entry.current-user {
+      background: #e3f2fd;
+      border: 2px solid #2196F3;
+    }
+    .leaderboard-rank {
+      font-weight: bold;
+      color: #667eea;
+      min-width: 30px;
+    }
+    .leaderboard-name {
+      flex: 1;
+      text-align: left;
+      margin-left: 10px;
+      color: #333;
+    }
+    .leaderboard-score {
+      font-weight: bold;
+      color: #4CAF50;
+    }
+    
     /* Monthly Tier Distribution Styles */
     .tier-distribution {
       background: #f8f9fa;
@@ -320,9 +466,24 @@
 <body>
   <div class="container">
     <h1>🧩 Daily 15 | Puzzle Game</h1>
+    
+    <!-- Mode Toggle -->
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="switchMode('daily')">📅 Daily Puzzle</button>
+      <button class="mode-btn" onclick="switchMode('quickplay')">⚡ Quick Play</button>
+    </div>
+    
+    <!-- Timer (Quick Play only) -->
+    <div class="timer-container" id="timerContainer">
+      <div class="timer-display" id="timerDisplay">60</div>
+      <div class="timer-label">seconds remaining</div>
+    </div>
+    
+
+    
     <div class="game-info">
       <div>
-        <div style="font-size: 14px; opacity: 0.9;">Daily Puzzle #<span id="puzzleNumber"></span></div>
+        <div style="font-size: 14px; opacity: 0.9;" id="puzzleLabel">Daily Puzzle #<span id="puzzleNumber"></span></div>
         <div>Moves: <span id="moveCounter">0</span></div>
       </div>
       <div style="text-align: right;">
@@ -331,10 +492,11 @@
       </div>
     </div>
     <div class="puzzle-container">
-      <div class="puzzle-grid" id="puzzleGrid"></div>
+      <div class="puzzle-grid grid-4x4" id="puzzleGrid"></div>
     </div>
     <div class="controls">
-      <button class="btn shuffle" onclick="loadDailyPuzzle()">Today's Puzzle</button>
+      <button class="btn shuffle" onclick="loadDailyPuzzle()" id="dailyBtn">Today's Puzzle</button>
+      <button class="btn quickplay" onclick="startQuickPlay()" id="quickplayBtn" style="display: none;">⚡ START (60s)</button>
       <button class="btn" onclick="resetPuzzle()">Reset</button>
       <button class="btn stats" onclick="openStatsModal()">📊 Stats</button>
       <button class="btn tutorial" onclick="window.open('./tutorial.html','_blank')">How to Play</button>
@@ -380,12 +542,46 @@
         </div>
       </div>
 
+      <!-- Quick Play Stats -->
+      <div class="quick-stats" id="quickplayStats">
+        <h3>⚡ Quick Play Stats</h3>
+        <div class="quick-stat-row">
+          <span class="quick-stat-label">Games Played:</span>
+          <span class="quick-stat-value" id="qpGamesPlayed">0</span>
+        </div>
+        <div class="quick-stat-row">
+          <span class="quick-stat-label">Games Won:</span>
+          <span class="quick-stat-value" id="qpGamesWon">0</span>
+        </div>
+        <div class="quick-stat-row">
+          <span class="quick-stat-label">Best Time:</span>
+          <span class="quick-stat-value" id="qpBestTime">-</span>
+        </div>
+        <div class="quick-stat-row">
+          <span class="quick-stat-label">Avg Moves:</span>
+          <span class="quick-stat-value" id="qpAvgMoves">-</span>
+        </div>
+      </div>
+
+      <!-- Hourly Leaderboard -->
+      <div class="leaderboard" id="leaderboardSection">
+        <h3>
+          <span>🏆 This Hour's Leaders</span>
+          <span style="font-size: 11px; opacity: 0.7;">Resets :00</span>
+        </h3>
+        <div id="leaderboardEntries">
+          <div style="text-align: center; padding: 20px; color: #999;">
+            Complete a Quick Play to join!
+          </div>
+        </div>
+      </div>
+
       <!-- Monthly Tier Distribution -->
       <div class="tier-distribution" id="tierDistribution">
         <h3>
           <span>This Month's Performance</span>
           <span class="month-badge" id="monthTotal">
-            <span class="month-name" id="monthName">October 2024</span>
+            <span class="month-name" id="monthName">October 2025</span>
             <span id="solveCount">0 solves</span>
           </span>
         </h3>
@@ -475,13 +671,23 @@
   </div>
 
   <script>
+    // Game State
+    let currentMode = 'daily'; // 'daily' or 'quickplay'
+    let quickPlayTimer = null;
+    let quickPlayTimeLeft = 60;
+    let quickPlayActive = false;
+    
     // Stats Manager with Monthly Tracking
     class Daily15StatsManager {
       constructor() {
         this.storageKey = 'daily15_game_stats';
         this.monthlyTiersKey = 'daily15_monthly_tiers';
+        this.quickPlayKey = 'daily15_quickplay_stats';
+        this.leaderboardKey = 'daily15_leaderboard';
         this.loadStats();
         this.loadMonthlyTiers();
+        this.loadQuickPlayStats();
+        this.loadLeaderboard();
       }
 
       loadStats() {
@@ -502,6 +708,133 @@
 
       saveStats() {
         localStorage.setItem(this.storageKey, JSON.stringify(this.stats));
+      }
+
+      loadQuickPlayStats() {
+        const stored = localStorage.getItem(this.quickPlayKey);
+        if (stored) {
+          this.quickPlayStats = JSON.parse(stored);
+        } else {
+          this.quickPlayStats = {
+            gamesPlayed: 0,
+            gamesWon: 0,
+            bestTime: null,
+            totalMoves: 0,
+            gameHistory: []
+          };
+        }
+      }
+
+      saveQuickPlayStats() {
+        localStorage.setItem(this.quickPlayKey, JSON.stringify(this.quickPlayStats));
+      }
+
+      recordQuickPlayGame(won, moves, timeUsed) {
+        this.quickPlayStats.gamesPlayed++;
+        if (won) {
+          this.quickPlayStats.gamesWon++;
+          this.quickPlayStats.totalMoves += moves;
+          
+          if (!this.quickPlayStats.bestTime || timeUsed < this.quickPlayStats.bestTime) {
+            this.quickPlayStats.bestTime = timeUsed;
+          }
+          
+          this.quickPlayStats.gameHistory.push({
+            moves: moves,
+            time: timeUsed,
+            timestamp: Date.now()
+          });
+          
+          // Add to leaderboard
+          this.addToLeaderboard(moves, timeUsed);
+        }
+        this.saveQuickPlayStats();
+      }
+
+      getQuickPlayStats() {
+        const avgMoves = this.quickPlayStats.gamesWon > 0 
+          ? Math.round(this.quickPlayStats.totalMoves / this.quickPlayStats.gamesWon)
+          : 0;
+        
+        return {
+          gamesPlayed: this.quickPlayStats.gamesPlayed,
+          gamesWon: this.quickPlayStats.gamesWon,
+          bestTime: this.quickPlayStats.bestTime,
+          avgMoves: avgMoves
+        };
+      }
+
+      loadLeaderboard() {
+        const stored = localStorage.getItem(this.leaderboardKey);
+        const currentHour = this.getCurrentHour();
+        
+        if (stored) {
+          const data = JSON.parse(stored);
+          if (data.hour === currentHour) {
+            this.leaderboard = data;
+          } else {
+            this.leaderboard = this.initializeLeaderboard(currentHour);
+          }
+        } else {
+          this.leaderboard = this.initializeLeaderboard(currentHour);
+        }
+      }
+
+      getCurrentHour() {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}`;
+      }
+
+      initializeLeaderboard(hour) {
+        return {
+          hour: hour,
+          entries: []
+        };
+      }
+
+      addToLeaderboard(moves, time) {
+        const currentHour = this.getCurrentHour();
+        if (this.leaderboard.hour !== currentHour) {
+          this.leaderboard = this.initializeLeaderboard(currentHour);
+        }
+
+        const username = this.getUsername();
+        const score = time; // Lower is better
+        
+        this.leaderboard.entries.push({
+          username: username,
+          moves: moves,
+          time: time,
+          timestamp: Date.now()
+        });
+        
+        // Sort by time (fastest first), keep top 10
+        this.leaderboard.entries.sort((a, b) => a.time - b.time);
+        this.leaderboard.entries = this.leaderboard.entries.slice(0, 10);
+        
+        this.saveLeaderboard();
+      }
+
+      getUsername() {
+        let username = localStorage.getItem('daily15_username');
+        if (!username) {
+          username = 'Player' + Math.floor(Math.random() * 10000);
+          localStorage.setItem('daily15_username', username);
+        }
+        return username;
+      }
+
+      saveLeaderboard() {
+        localStorage.setItem(this.leaderboardKey, JSON.stringify(this.leaderboard));
+      }
+
+      getLeaderboard() {
+        const currentHour = this.getCurrentHour();
+        if (this.leaderboard.hour !== currentHour) {
+          this.leaderboard = this.initializeLeaderboard(currentHour);
+          this.saveLeaderboard();
+        }
+        return this.leaderboard.entries;
       }
 
       loadMonthlyTiers() {
@@ -546,44 +879,41 @@
       }
 
       recordGame(puzzleId, won, moves) {
-    const today = new Date().toISOString().split('T')[0];
-    
-    this.stats.gamesPlayed++;
-    if (won) this.stats.gamesWon++;
+        const today = new Date().toISOString().split('T')[0];
+        
+        this.stats.gamesPlayed++;
+        if (won) this.stats.gamesWon++;
 
-    if (won) {
-      // Check if this is the first win of the day
-      const alreadyWonToday = Object.values(this.stats.puzzleHistory).some(
-        game => game.date === today && game.won
-      );
-      
-      if (!alreadyWonToday) {
-        // Only update streak if this is the first win today
-        if (this.isConsecutiveDay(this.stats.lastPlayedDate, today)) {
-          this.stats.currentStreak++;
-        } else if (this.stats.lastPlayedDate === today) {
-          // Already played today, don't change streak
+        if (won) {
+          const alreadyWonToday = Object.values(this.stats.puzzleHistory).some(
+            game => game.date === today && game.won
+          );
+          
+          if (!alreadyWonToday) {
+            if (this.isConsecutiveDay(this.stats.lastPlayedDate, today)) {
+              this.stats.currentStreak++;
+            } else if (this.stats.lastPlayedDate === today) {
+              // Already played today, don't change streak
+            } else {
+              this.stats.currentStreak = 1;
+            }
+            this.stats.maxStreak = Math.max(this.stats.maxStreak, this.stats.currentStreak);
+            this.stats.lastPlayedDate = today;
+          }
         } else {
-          // Gap in days, reset to 1
-          this.stats.currentStreak = 1;
+          this.stats.currentStreak = 0;
+          this.stats.lastPlayedDate = today;
         }
-        this.stats.maxStreak = Math.max(this.stats.maxStreak, this.stats.currentStreak);
-        this.stats.lastPlayedDate = today;
+
+        this.stats.puzzleHistory[puzzleId] = {
+          date: today,
+          won: won,
+          moves: moves,
+          timestamp: Date.now()
+        };
+
+        this.saveStats();
       }
-    } else {
-      this.stats.currentStreak = 0;
-      this.stats.lastPlayedDate = today;
-    }
-
-    this.stats.puzzleHistory[puzzleId] = {
-      date: today,
-      won: won,
-      moves: moves,
-      timestamp: Date.now()
-    };
-
-    this.saveStats();
-}
 
       recordTier(tier) {
         const currentMonth = this.getCurrentMonth();
@@ -639,14 +969,22 @@
       }
 
       exportStats() {
-        return JSON.stringify(this.stats);
+        return JSON.stringify({
+          stats: this.stats,
+          quickPlay: this.quickPlayStats,
+          monthlyTiers: this.monthlyTiers
+        });
       }
 
       resetStats() {
         localStorage.removeItem(this.storageKey);
         localStorage.removeItem(this.monthlyTiersKey);
+        localStorage.removeItem(this.quickPlayKey);
+        localStorage.removeItem(this.leaderboardKey);
         this.loadStats();
         this.loadMonthlyTiers();
+        this.loadQuickPlayStats();
+        this.loadLeaderboard();
       }
     }
 
@@ -659,6 +997,7 @@
     let dailyPuzzleLoaded = false;
     let startTime = null;
     let completionTime = null;
+    let gridSize = 4; // 4x4 for daily, 3x3 for quickplay
 
     function getTodaysSeed() {
         const today = new Date();
@@ -683,7 +1022,180 @@
         }
     }
 
+    // Mode Switching
+    function switchMode(mode) {
+        currentMode = mode;
+        const buttons = document.querySelectorAll('.mode-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        if (mode === 'daily') {
+            document.getElementById('timerContainer').classList.remove('active');
+            document.getElementById('dailyBtn').style.display = 'inline-block';
+            document.getElementById('quickplayBtn').style.display = 'none';
+            document.getElementById('puzzleLabel').innerHTML = 'Daily Puzzle #<span id="puzzleNumber"></span>';
+            gridSize = 4;
+            loadDailyPuzzle();
+        } else {
+            document.getElementById('timerContainer').classList.add('active');
+            document.getElementById('dailyBtn').style.display = 'none';
+            document.getElementById('quickplayBtn').style.display = 'inline-block';
+            document.getElementById('puzzleLabel').textContent = 'Quick Play (3x3)';
+            gridSize = 3;
+            initQuickPlayPuzzle();
+        }
+    }
+
+    // Quick Play Functions
+    function startQuickPlay() {
+        quickPlayActive = true;
+        quickPlayTimeLeft = 60;
+        startTime = Date.now();
+        updateTimer();
+        startQuickPlayTimer();
+        generateQuickPlayPuzzle();
+        document.getElementById('quickplayBtn').disabled = true;
+        updateStatus("GO! Solve it fast! ⚡");
+    }
+
+    function startQuickPlayTimer() {
+        if (quickPlayTimer) clearInterval(quickPlayTimer);
+        
+        quickPlayTimer = setInterval(() => {
+            quickPlayTimeLeft--;
+            updateTimer();
+            
+            if (quickPlayTimeLeft <= 10) {
+                document.getElementById('timerDisplay').classList.add('warning');
+            }
+            
+            if (quickPlayTimeLeft <= 0) {
+                endQuickPlay(false);
+            }
+        }, 1000);
+    }
+
+    function updateTimer() {
+        document.getElementById('timerDisplay').textContent = quickPlayTimeLeft;
+    }
+
+    function endQuickPlay(won) {
+        clearInterval(quickPlayTimer);
+        quickPlayActive = false;
+        document.getElementById('quickplayBtn').disabled = false;
+        document.getElementById('timerDisplay').classList.remove('warning');
+        
+        const timeUsed = 60 - quickPlayTimeLeft;
+        statsManager.recordQuickPlayGame(won, moves, timeUsed);
+        
+        if (won) {
+            showQuickPlayWinMessage(timeUsed);
+        } else {
+            updateStatus("Time's up! Try again! 🔄");
+            setTimeout(() => {
+                if (confirm("Time's up! Want to try again?")) {
+                    startQuickPlay();
+                }
+            }, 500);
+        }
+    }
+
+    function generateQuickPlayPuzzle() {
+        initPuzzle();
+        gridSize = 3;
+        puzzle = [];
+        for (let i = 1; i <= 8; i++) puzzle.push(i);
+        puzzle.push(null);
+        emptyIndex = 8;
+        
+        // Generate solvable 3x3 puzzle with fewer scrambles (easier)
+        const rng = new SeededRandom(Date.now());
+        for (let i = 0; i < 50; i++) {  // Only 50 moves for easier puzzle
+            const validMoves = [];
+            for (let j = 0; j < 9; j++) if (canMove(j)) validMoves.push(j);
+            if (validMoves.length > 0) {
+                const randomMove = validMoves[Math.floor(rng.next() * validMoves.length)];
+                puzzle[emptyIndex] = puzzle[randomMove];
+                puzzle[randomMove] = null;
+                emptyIndex = randomMove;
+            }
+        }
+        
+        moves = 0;
+        dailyPuzzleLoaded = true;
+        const grid = document.getElementById('puzzleGrid');
+        grid.className = 'puzzle-grid grid-3x3';
+        createGrid();
+        updateDisplay();
+    }
+
+    function initQuickPlayPuzzle() {
+        initPuzzle();
+        gridSize = 3;
+        puzzle = [];
+        for (let i = 1; i <= 8; i++) puzzle.push(i);
+        puzzle.push(null);
+        emptyIndex = 8;
+        moves = 0;
+        dailyPuzzleLoaded = false;
+        const grid = document.getElementById('puzzleGrid');
+        grid.className = 'puzzle-grid grid-3x3';
+        createGrid();
+        updateDisplay();
+        updateStatus("Click START to begin! ⚡");
+    }
+
+    function showQuickPlayWinMessage(timeUsed) {
+        dailyPuzzleLoaded = false;
+        
+        let award = '';
+        if (timeUsed <= 15) {
+            award = '⚡ SPEED DEMON! ⚡';
+        } else if (timeUsed <= 30) {
+            award = '🏆 LIGHTNING CHAMPION! 🏆';
+        } else if (timeUsed <= 45) {
+            award = '⭐ QUICK SOLVER! ⭐';
+        } else {
+            award = '🎯 PUZZLE MASTER! 🎯';
+        }
+
+        updateStatus(`Solved in ${timeUsed}s! ${award}`);
+
+        let completionHTML = `
+            <div style="color: #FFFFFF; font-size: 24px; margin-bottom: 10px;">
+                ${award}
+            </div>
+            <div style="font-size: 18px; margin-bottom: 10px;">
+                ⏱️ ${timeUsed} seconds<br>
+                📊 ${moves} moves
+            </div>
+            <div style="font-size: 14px; margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                <button onclick="startQuickPlay(); document.getElementById('overlay').style.display='none'; document.getElementById('winnerMessage').style.display='none';" style="background: white; color: #667eea; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-right: 10px;">
+                    🔄 Play Again
+                </button>
+                <button onclick="document.getElementById('overlay').style.display='none'; document.getElementById('winnerMessage').style.display='none'; openStatsModal();" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer;">
+                    📊 View Stats
+                </button>
+            </div>`;
+
+        document.getElementById('completionText').innerHTML = completionHTML;
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('winnerMessage').style.display = 'block';
+    }
+
+    // Update Live Stats
+    function updateLiveStats() {
+        // Simulate active players (in real app, this would be from server)
+        const activePlayers = Math.floor(Math.random() * 50) + 80;
+        const todaySolves = Math.floor(Math.random() * 200) + 500;
+        
+        document.getElementById('activePlayers').textContent = activePlayers;
+        document.getElementById('todaySolves').textContent = todaySolves;
+    }
+
+    // Original functions adapted for both modes
     function loadProgress() {
+        if (currentMode !== 'daily') return false;
         const today = getTodaysSeed();
         const saved = localStorage.getItem(`puzzle_${today}`);
         if (saved) {
@@ -692,6 +1204,7 @@
             emptyIndex = data.emptyIndex;
             moves = data.moves;
             dailyPuzzleLoaded = true;
+            gridSize = 4;
 
             if (data.completed) {
                 completionTime = data.completionTime;
@@ -707,6 +1220,7 @@
     }
 
     function saveProgress(completed = false) {
+        if (currentMode !== 'daily') return;
         const today = getTodaysSeed();
         localStorage.setItem(`puzzle_${today}`, JSON.stringify({
             puzzle, emptyIndex, moves,
@@ -717,9 +1231,10 @@
 
     function initPuzzle() {
         puzzle = [];
-        for (let i = 1; i <= 15; i++) puzzle.push(i);
+        const size = gridSize * gridSize;
+        for (let i = 1; i < size; i++) puzzle.push(i);
         puzzle.push(null);
-        emptyIndex = 15;
+        emptyIndex = size - 1;
         moves = 0;
         dailyPuzzleLoaded = false;
         startTime = null;
@@ -733,13 +1248,16 @@
         const today = new Date();
         const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
         document.getElementById('dateDisplay').textContent = today.toLocaleDateString('en-US', options);
-        document.getElementById('puzzleNumber').textContent = getPuzzleNumber();
+        if (currentMode === 'daily') {
+            document.getElementById('puzzleNumber').textContent = getPuzzleNumber();
+        }
     }
 
     function createGrid() {
         const grid = document.getElementById('puzzleGrid');
         grid.innerHTML = '';
-        for (let i = 0; i < 16; i++) {
+        const size = gridSize * gridSize;
+        for (let i = 0; i < size; i++) {
             const tile = document.createElement('button');
             tile.className = 'tile';
             tile.onclick = () => moveTile(i);
@@ -765,56 +1283,77 @@
     }
 
     function canMove(index) {
-        const row = Math.floor(index / 4), col = index % 4;
-        const emptyRow = Math.floor(emptyIndex / 4), emptyCol = emptyIndex % 4;
+        const row = Math.floor(index / gridSize);
+        const col = index % gridSize;
+        const emptyRow = Math.floor(emptyIndex / gridSize);
+        const emptyCol = emptyIndex % gridSize;
         return (Math.abs(row - emptyRow) + Math.abs(col - emptyCol)) === 1;
     }
 
     function moveTile(index) {
         if (!dailyPuzzleLoaded) {
-            updateStatus("Load today's puzzle to start playing!");
+            if (currentMode === 'daily') {
+                updateStatus("Load today's puzzle to start playing!");
+            } else {
+                updateStatus("Click START to begin!");
+            }
+            return;
+        }
+        if (completionTime && currentMode === 'daily') {
+            updateStatus("You already completed today's puzzle!");
             return;
         }
 
         if (canMove(index)) {
-            if (moves === 0) startTime = Date.now();
+            if (moves === 0 && currentMode === 'daily') startTime = Date.now();
             puzzle[emptyIndex] = puzzle[index];
             puzzle[index] = null;
             emptyIndex = index;
             moves++;
 
             updateDisplay();
-            saveProgress();
+            if (currentMode === 'daily') saveProgress();
 
             if (isSolved()) {
-                completionTime = Date.now();
-                saveProgress(true);
-                
-                const ranking = getRanking(moves);
-                
-                // Record stats - use timestamp to ensure each attempt is unique
-                const puzzleId = `puzzle-${getPuzzleNumber()}-${Date.now()}`;
-                statsManager.recordGame(puzzleId, true, moves);
-                statsManager.recordTier(ranking.tier);
-                
-                showWinMessage();
+                if (currentMode === 'quickplay') {
+                    endQuickPlay(true);
+                } else {
+                    completionTime = Date.now();
+                    saveProgress(true);
+                    
+                    const ranking = getRanking(moves);
+                    const puzzleId = `puzzle-${getPuzzleNumber()}-${Date.now()}`;
+                    statsManager.recordGame(puzzleId, true, moves);
+                    statsManager.recordTier(ranking.tier);
+                    
+                    showWinMessage();
+                }
             } else {
-                updateStatus("You can do it!");
+                if (currentMode === 'daily') {
+                    updateStatus("You can do it!");
+                }
             }
         }
     }
 
     function isSolved() {
-        for (let i = 0; i < 15; i++) if (puzzle[i] !== i + 1) return false;
-        return puzzle[15] === null;
+        const size = gridSize * gridSize;
+        for (let i = 0; i < size - 1; i++) {
+            if (puzzle[i] !== i + 1) return false;
+        }
+        return puzzle[size - 1] === null;
     }
 
     function loadDailyPuzzle() {
         if (loadProgress()) {
+            const grid = document.getElementById('puzzleGrid');
+            grid.className = 'puzzle-grid grid-4x4';
+            createGrid();
             updateDisplay();
             return;
         }
         initPuzzle();
+        gridSize = 4;
         const rng = new SeededRandom(getTodaysSeed());
         for (let i = 0; i < 1000; i++) {
             const validMoves = [];
@@ -828,6 +1367,9 @@
         }
         moves = 0;
         dailyPuzzleLoaded = true;
+        const grid = document.getElementById('puzzleGrid');
+        grid.className = 'puzzle-grid grid-4x4';
+        createGrid();
         updateDisplay();
         saveProgress();
         updateStatus("Start solving!");
@@ -835,11 +1377,20 @@
 
     function resetPuzzle() {
         if (!dailyPuzzleLoaded) {
-            updateStatus("Load today's puzzle first!");
+            updateStatus(currentMode === 'daily' ? "Load today's puzzle first!" : "Click START to begin!");
             return;
         }
-        localStorage.removeItem(`puzzle_${getTodaysSeed()}`);
-        loadDailyPuzzle();
+        
+        if (currentMode === 'quickplay') {
+            if (quickPlayActive) {
+                if (confirm("Reset current game? Timer will continue.")) {
+                    generateQuickPlayPuzzle();
+                }
+            }
+        } else {
+            localStorage.removeItem(`puzzle_${getTodaysSeed()}`);
+            loadDailyPuzzle();
+        }
     }
 
     function updateStatus(msg) {
@@ -962,6 +1513,7 @@ daily15.xyz`;
     // Stats Modal Functions
     function openStatsModal() {
         const stats = statsManager.getStats();
+        const qpStats = statsManager.getQuickPlayStats();
         
         document.getElementById('statGamesPlayed').textContent = stats.gamesPlayed;
         document.getElementById('statBestPerformance').textContent = stats.bestMoves ? stats.bestMoves + ' moves' : '-';
@@ -971,10 +1523,46 @@ daily15.xyz`;
         document.getElementById('statAvgMoves').textContent = stats.avgMoves || 0;
         document.getElementById('statBestMoves').textContent = stats.bestMoves || '-';
         
+        // Quick Play Stats
+        document.getElementById('qpGamesPlayed').textContent = qpStats.gamesPlayed;
+        document.getElementById('qpGamesWon').textContent = qpStats.gamesWon;
+        document.getElementById('qpBestTime').textContent = qpStats.bestTime ? qpStats.bestTime + 's' : '-';
+        document.getElementById('qpAvgMoves').textContent = qpStats.avgMoves || '-';
+        
         updateTierDistribution();
+        updateLeaderboard();
         
         document.getElementById('overlay').style.display = 'block';
         document.getElementById('statsModal').style.display = 'block';
+    }
+
+    function updateLeaderboard() {
+        const entries = statsManager.getLeaderboard();
+        const container = document.getElementById('leaderboardEntries');
+        const currentUser = statsManager.getUsername();
+        
+        if (entries.length === 0) {
+            container.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">Complete a Quick Play to join!</div>';
+            return;
+        }
+        
+        container.innerHTML = '';
+        entries.forEach((entry, index) => {
+            const div = document.createElement('div');
+            div.className = 'leaderboard-entry';
+            if (entry.username === currentUser) {
+                div.classList.add('current-user');
+            }
+            
+            const rankEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`;
+            
+            div.innerHTML = `
+                <span class="leaderboard-rank">${rankEmoji}</span>
+                <span class="leaderboard-name">${entry.username}</span>
+                <span class="leaderboard-score">${entry.time}s</span>
+            `;
+            container.appendChild(div);
+        });
     }
 
     function updateTierDistribution() {
@@ -984,7 +1572,6 @@ daily15.xyz`;
         const totalSolves = Object.values(tiers).reduce((sum, count) => sum + count, 0);
         const maxCount = Math.max(...Object.values(tiers), 1);
         
-        // Format month name
         const now = new Date();
         const monthName = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
         
@@ -1043,6 +1630,10 @@ daily15.xyz`;
     createGrid();
     initPuzzle();
     loadDailyPuzzle();
+    updateLiveStats();
+    
+    // Update live stats every 30 seconds
+    setInterval(updateLiveStats, 30000);
 
     // Touch support
     let touchStartX = 0, touchStartY = 0;
@@ -1056,16 +1647,17 @@ daily15.xyz`;
         const deltaY = e.changedTouches[0].clientY - touchStartY;
         const minSwipe = 30;
         if (Math.abs(deltaX) > minSwipe || Math.abs(deltaY) > minSwipe) {
-            const emptyRow = Math.floor(emptyIndex / 4), emptyCol = emptyIndex % 4;
+            const emptyRow = Math.floor(emptyIndex / gridSize);
+            const emptyCol = emptyIndex % gridSize;
             let targetIndex = -1;
             if (Math.abs(deltaX) > Math.abs(deltaY)) {
                 if (deltaX > 0 && emptyCol > 0) targetIndex = emptyIndex - 1;
-                else if (deltaX < 0 && emptyCol < 3) targetIndex = emptyIndex + 1;
+                else if (deltaX < 0 && emptyCol < gridSize - 1) targetIndex = emptyIndex + 1;
             } else {
-                if (deltaY > 0 && emptyRow > 0) targetIndex = emptyIndex - 4;
-                else if (deltaY < 0 && emptyRow < 3) targetIndex = emptyIndex + 4;
+                if (deltaY > 0 && emptyRow > 0) targetIndex = emptyIndex - gridSize;
+                else if (deltaY < 0 && emptyRow < gridSize - 1) targetIndex = emptyIndex + gridSize;
             }
-            if (targetIndex >= 0 && targetIndex < 16) moveTile(targetIndex);
+            if (targetIndex >= 0 && targetIndex < gridSize * gridSize) moveTile(targetIndex);
         }
     }, { passive: true });
   </script>
