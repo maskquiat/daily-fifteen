@@ -795,9 +795,9 @@
           timestamp: Date.now()
         });
         
-        // Sort by time (fastest first), keep top 10
+        // Sort by time (fastest first), keep top 5
         this.leaderboard.entries.sort((a, b) => a.time - b.time);
-        this.leaderboard.entries = this.leaderboard.entries.slice(0, 10);
+        this.leaderboard.entries = this.leaderboard.entries.slice(0, 5);
         
         this.saveLeaderboard();
       }
@@ -1168,6 +1168,17 @@
         document.getElementById('completionText').innerHTML = completionHTML;
         document.getElementById('overlay').style.display = 'block';
         document.getElementById('winnerMessage').style.display = 'block';
+
+        const hideMessage = () => {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('winnerMessage').style.display = 'none';
+            document.getElementById('overlay').removeEventListener('click', hideMessage);
+            document.getElementById('winnerMessage').removeEventListener('click', hideMessage);
+        };
+        setTimeout(() => {
+            document.getElementById('overlay').addEventListener('click', hideMessage);
+            document.getElementById('winnerMessage').addEventListener('click', hideMessage);
+        }, 100);
     }
 
 // Original functions adapted for both modes
@@ -1487,6 +1498,24 @@ daily15.xyz`;
         }, 100);
     }
 
+    // Leaderboard Timer
+    let leaderboardTimerInterval = null;
+
+    function updateLeaderboardTimer() {
+        const now = new Date();
+        const nextHour = new Date(now);
+        nextHour.setHours(now.getHours() + 1, 0, 0, 0);
+        
+        const timeRemaining = nextHour - now;
+        const minutes = Math.floor(timeRemaining / 60000);
+        const seconds = Math.floor((timeRemaining % 60000) / 1000);
+        
+        const timerElement = document.getElementById('leaderboardTimer');
+        if (timerElement) {
+            timerElement.textContent = `Resets in ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+    }
+
     // Stats Modal Functions
     function openStatsModal() {
         const stats = statsManager.getStats();
@@ -1508,6 +1537,11 @@ daily15.xyz`;
         
         updateTierDistribution();
         updateLeaderboard();
+        updateLeaderboardTimer();
+        
+        // Start timer countdown
+        if (leaderboardTimerInterval) clearInterval(leaderboardTimerInterval);
+        leaderboardTimerInterval = setInterval(updateLeaderboardTimer, 1000);
         
         document.getElementById('overlay').style.display = 'block';
         document.getElementById('statsModal').style.display = 'block';
@@ -1572,6 +1606,10 @@ daily15.xyz`;
     }
 
     function closeStatsModal() {
+        if (leaderboardTimerInterval) {
+            clearInterval(leaderboardTimerInterval);
+            leaderboardTimerInterval = null;
+        }
         document.getElementById('overlay').style.display = 'none';
         document.getElementById('statsModal').style.display = 'none';
     }
