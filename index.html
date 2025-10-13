@@ -22,7 +22,7 @@
       overflow-x: hidden;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      padding: 15px; color: white;
+      padding: 0px; color: white;
     }
     .container {
       text-align: center;
@@ -67,7 +67,7 @@
     /* Quick Play Timer */
     .timer-container {
       background: rgba(255,255,255,0.15);
-      padding: 15px;
+      padding: 5px;
       border-radius: 15px;
       margin-bottom: 15px;
       display: none;
@@ -79,7 +79,7 @@
     .timer-display {
       font-size: 36px;
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 0px;
     }
     .timer-display.warning {
       color: #ff6b6b;
@@ -119,7 +119,7 @@
     .puzzle-grid.grid-3x3 {
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(3, 1fr);
-      max-width: min(300px, 70vw);
+      max-width: min(260px, 70vw);
     }
     .tile {
       background: linear-gradient(145deg, #ffffff, #e6e6e6);
@@ -156,7 +156,7 @@
     .btn.quickplay { 
       background: linear-gradient(145deg, #FFD700, #FFA500);
       font-size: clamp(14px, 3vw, 18px);
-      padding: 14px 28px;
+      padding: 7px 7px;
       animation: glow 2s infinite;
     }
     @keyframes glow {
@@ -482,8 +482,8 @@
       <div class="puzzle-grid grid-4x4" id="puzzleGrid"></div>
     </div>
     <div class="controls">
-      <button class="btn shuffle" onclick="loadDailyPuzzle()" id="dailyBtn">Today's Puzzle</button>
-      <button class="btn quickplay" onclick="startQuickPlay()" id="quickplayBtn" style="display: none;">⚡ START (60s)</button>
+      <button class="btn shuffle" onclick="loadDailyPuzzle()" id="dailyBtn">Today's 🧩</button>
+      <button class="btn quickplay" onclick="startQuickPlay()" id="quickplayBtn" style="display: none;">⚡START⚡</button>
       <button class="btn" onclick="resetPuzzle()">Reset</button>
       <button class="btn stats" onclick="openStatsModal()">📊 Stats</button>
       <button class="btn tutorial" onclick="window.open('./tutorial.html','_blank')">How to Play</button>
