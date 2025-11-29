@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily 15 | Puzzle Game</title>
-<!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNLVGXD9M4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -13,1664 +10,991 @@
 
   gtag('config', 'G-ZNLVGXD9M4');
 </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily15.xyz - Daily Puzzle Games</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1; 
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c1c1c1; 
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8; 
+    }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      overflow-x: hidden;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 15px; color: white;
+      background-color: #F9F8F4;
+      color: #121212;
     }
-    .container {
-      text-align: center;
-      max-width: 500px; width: 100%;
-      display: flex; flex-direction: column; justify-content: center;
-    }
-    h1 { font-size: clamp(20px, 4vw, 32px); margin-bottom: 15px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-    
-    /* Mode Toggle */
-    .mode-toggle {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      background: rgba(255,255,255,0.1);
-      padding: 8px;
-      border-radius: 50px;
-      backdrop-filter: blur(10px);
-    }
-    .mode-btn {
-      flex: 1;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 50px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      background: transparent;
-      color: rgba(255,255,255,0.7);
-      font-size: 14px;
-    }
-    .mode-btn.active {
-      background: white;
-      color: #667eea;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-    .mode-btn:hover:not(.active) {
-      background: rgba(255,255,255,0.1);
-      color: white;
-    }
-    
-    /* Quick Play Timer */
-    .timer-container {
-      background: rgba(255,255,255,0.15);
-      padding: 5px;
-      border-radius: 15px;
-      margin-bottom: 15px;
-      display: none;
-      backdrop-filter: blur(10px);
-    }
-    .timer-container.active {
-      display: block;
-    }
-    .timer-display {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 0px;
-    }
-    .timer-display.warning {
-      color: #ff6b6b;
-      animation: pulse 1s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-    .timer-label {
-      font-size: 14px;
-      opacity: 0.9;
-    }
-    
-    .game-info {
-      display: flex; justify-content: space-between; margin-bottom: 15px;
-      font-size: clamp(14px, 3vw, 18px); font-weight: 600;
-    }
-    .puzzle-container {
-      background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
-      border-radius: 20px; padding: 15px; margin-bottom: 15px;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-    }
-    .puzzle-grid {
-      display: grid;
-      gap: 8px;
-      aspect-ratio: 1;
-      width: 100%; margin: 0 auto;
-      background: rgba(0,0,0,0.2); border-radius: 15px; padding: 15px;
-    }
-    .puzzle-grid.grid-4x4 {
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(4, 1fr);
-      max-width: min(350px, 70vw);
-    }
-    .puzzle-grid.grid-3x3 {
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      max-width: min(250px, 70vw);
-    }
-    .tile {
-      background: linear-gradient(145deg, #ffffff, #e6e6e6);
-      border: none; border-radius: 12px;
-      font-size: clamp(18px, 4vw, 28px); font-weight: bold;
-      color: #333; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      user-select: none; transition: all 0.2s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-    .tile:hover { transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-      background: linear-gradient(145deg, #f0f0f0, #d0d0d0); }
-    .tile.empty { background: transparent; box-shadow: none; cursor: default; pointer-events: none; }
-    .tile.moveable { background: linear-gradient(145deg, #4CAF50, #45a049); color: white; }
-    .controls { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px; }
-    .btn {
-      background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
-      border: none; border-radius: 25px; padding: 10px 20px;
-      font-size: clamp(12px, 2.5vw, 16px); font-weight: 600;
-      color: white; cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      min-width: 80px;
-    }
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    }
-    .btn.shuffle { background: linear-gradient(145deg, #4CAF50, #45a049); }
-    .btn.share { background: linear-gradient(145deg, #2196F3, #1976D2); }
-    .btn.tutorial { background: linear-gradient(145deg, #9C27B0, #7B1FA2); }
-    .btn.stats { background: linear-gradient(145deg, #FF9800, #F57C00); }
-    .btn.quickplay { 
-      background: linear-gradient(145deg, #FFD700, #FFA500);
-      font-size: clamp(10px, 3vw, 14px);
-      padding: 7px 7px;
-      animation: glow 2s infinite;
-    }
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 4px 15px rgba(255,215,0,0.4); }
-      50% { box-shadow: 0 4px 25px rgba(255,215,0,0.8); }
-    }
-
-    
-    .winner-message {
-      position: fixed; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      background: linear-gradient(145deg, #4CAF50, #45a049);
-      color: white; padding: 25px; border-radius: 20px;
-      font-size: clamp(18px, 4vw, 22px); font-weight: bold;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      z-index: 1000; display: none; text-align: center;
-      max-width: 90vw;
-    }
-    .overlay {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 999; display: none;
-    }
-    
-    /* Stats Modal Styles */
-    .stats-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      border-radius: 24px;
-      max-width: 500px;
-      width: 90%;
-      max-height: 85vh;
-      overflow-y: auto;
-      z-index: 1001;
-      display: none;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    }
-    .stats-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 24px;
-      border-radius: 24px 24px 0 0;
-      position: relative;
-    }
-    .stats-close {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: rgba(255,255,255,0.2);
-      border: none;
-      color: white;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 20px;
-      transition: all 0.2s;
-    }
-    .stats-close:hover {
-      background: rgba(255,255,255,0.3);
-      transform: rotate(90deg);
-    }
-    .stats-content {
-      padding: 24px;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .stat-card {
-      background: linear-gradient(145deg, #f8f9fa, #e9ecef);
-      padding: 20px;
-      border-radius: 16px;
-      text-align: center;
-      transition: transform 0.2s;
-    }
-    .stat-card:hover {
-      transform: translateY(-4px);
-    }
-    .stat-icon {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-    .stat-value {
-      font-size: 32px;
-      font-weight: bold;
-      color: #333;
-    }
-    .stat-label {
-      font-size: 13px;
-      color: #666;
-      margin-top: 4px;
-      font-weight: 600;
-    }
-    .stats-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 16px;
-    }
-    .stats-btn {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 14px;
-    }
-    .stats-btn.export {
-      background: linear-gradient(145deg, #2196F3, #1976D2);
-      color: white;
-    }
-    .stats-btn.reset {
-      background: linear-gradient(145deg, #ff6b6b, #ee5a5a);
-      color: white;
-    }
-    .stats-note {
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-      background: #fff3cd;
-      padding: 12px;
-      border-radius: 12px;
-      margin-top: 16px;
-      border: 1px solid #ffc107;
-    }
-    .quick-stats {
-      background: #f8f9fa;
-      padding: 16px;
-      border-radius: 12px;
-      margin-bottom: 16px;
-    }
-    .quick-stats h3 {
-      color: #333;
-      font-size: 16px;
-      margin-bottom: 12px;
-    }
-    .quick-stat-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid #e0e0e0;
-      font-size: 14px;
-    }
-    .quick-stat-row:last-child {
-      border-bottom: none;
-    }
-    .quick-stat-label {
-      color: #666;
-    }
-    .quick-stat-value {
-      color: #333;
-      font-weight: bold;
-    }
-    
-    /* Leaderboard */
-    .leaderboard {
-      background: #f8f9fa;
-      padding: 16px;
-      border-radius: 12px;
-      margin-bottom: 16px;
-    }
-    .leaderboard h3 {
-      color: #333;
-      font-size: 16px;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .leaderboard-entry {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      margin-bottom: 8px;
-      background: white;
-      border-radius: 8px;
-      align-items: center;
-    }
-    .leaderboard-entry.current-user {
-      background: #e3f2fd;
-      border: 2px solid #2196F3;
-    }
-    .leaderboard-rank {
-      font-weight: bold;
-      color: #667eea;
-      min-width: 30px;
-    }
-    .leaderboard-name {
-      flex: 1;
-      text-align: left;
-      margin-left: 10px;
-      color: #333;
-    }
-    .leaderboard-score {
-      font-weight: bold;
-      color: #4CAF50;
-    }
-    
-    /* Monthly Tier Distribution Styles */
-    .tier-distribution {
-      background: #f8f9fa;
-      padding: 16px;
-      border-radius: 12px;
-      margin-bottom: 16px;
-    }
-    .tier-distribution h3 {
-      color: #333;
-      font-size: 16px;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .tier-bar {
-      display: flex;
-      align-items: center;
-      margin-bottom: 8px;
-      gap: 8px;
-    }
-    .tier-bar:last-child {
-      margin-bottom: 0;
-    }
-    .tier-label {
-      min-width: 110px;
-      font-size: 13px;
-      color: #666;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .tier-bar-container {
-      flex: 1;
-      height: 20px;
-      background: #e9ecef;
-      border-radius: 10px;
-      overflow: hidden;
-      position: relative;
-    }
-    .tier-bar-fill {
-      height: 100%;
-      transition: width 0.3s ease;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      color: white;
-    }
-    .tier-count {
-      min-width: 20px;
-      text-align: center;
-      font-size: 13px;
-      font-weight: bold;
-      color: #333;
-    }
-    .tier-grandmaster { background: linear-gradient(90deg, #FFD700, #FFA500); }
-    .tier-master { background: linear-gradient(90deg, #C0C0C0, #A8A8A8); }
-    .tier-expert { background: linear-gradient(90deg, #CD7F32, #B87333); }
-    .tier-advanced { background: linear-gradient(90deg, #667eea, #764ba2); }
-    .tier-skilled { background: linear-gradient(90deg, #4CAF50, #45a049); }
-    .tier-intermediate { background: linear-gradient(90deg, #2196F3, #1976D2); }
-    .tier-beginner { background: linear-gradient(90deg, #FF9800, #F57C00); }
-    .tier-novice { background: linear-gradient(90deg, #9E9E9E, #757575); }
-    .month-badge {
-      font-size: 11px;
-      padding: 2px 8px;
-      background: rgba(102, 126, 234, 0.1);
-      color: #667eea;
-      border-radius: 8px;
-      font-weight: 600;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      text-align: right;
-      line-height: 1.3;
-    }
-    .month-name {
-      font-size: 10px;
-      opacity: 0.8;
-      font-weight: normal;
+    .pattern-diagonal-stripes {
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.1) 10px,
+        rgba(255, 255, 255, 0.1) 20px
+      );
     }
   </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Libre Baskerville"', 'serif'],
+            sans: ['"Source Sans 3"', 'sans-serif'],
+          },
+          colors: {
+            'paper': '#F9F8F4',
+            'ink': '#121212',
+            'ink-light': '#4A4A4A',
+            'border-subtle': '#E5E5E5',
+            'accent': '#2C3E50',
+            'accent-hover': '#1A252F',
+            'highlight': '#C0392B',
+            'success': '#27AE60',
+            'tile': '#FFFFFF',
+            'tile-dark': '#F0F0F0',
+          },
+          boxShadow: {
+            'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+            'elevated': '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025)',
+          }
+        }
+      }
+    }
+  </script>
 </head>
 <body>
-  <div class="container">
-    <h1>🧩 Daily 15 | Puzzle Game</h1>
-    
-    <!-- Mode Toggle -->
-    <div class="mode-toggle">
-      <button class="mode-btn active" onclick="switchMode('daily')">📅 Daily Puzzle</button>
-      <button class="mode-btn" onclick="switchMode('quickplay')">⚡ Quick Play</button>
-    </div>
-    
-    <!-- Timer (Quick Play only) -->
-    <div class="timer-container" id="timerContainer">
-      <div class="timer-display" id="timerDisplay">60</div>
-      <div class="timer-label">seconds remaining</div>
-    </div>
-    
-
-    
-    <div class="game-info">
-      <div>
-        <div style="font-size: 14px; opacity: 0.9;" id="puzzleLabel">Daily Puzzle #<span id="puzzleNumber"></span></div>
-        <div>Moves: <span id="moveCounter">0</span></div>
-      </div>
-      <div style="text-align: right;">
-        <div style="font-size: 14px; opacity: 0.9;" id="dateDisplay"></div>
-        <div id="status">Ready to play!</div>
-      </div>
-    </div>
-    <div class="puzzle-container">
-      <div class="puzzle-grid grid-4x4" id="puzzleGrid"></div>
-    </div>
-    <div class="controls">
-      <button class="btn shuffle" onclick="loadDailyPuzzle()" id="dailyBtn">Today's 🧩</button>
-      <button class="btn quickplay" onclick="startQuickPlay()" id="quickplayBtn" style="display: none;">⚡START⚡</button>
-      <button class="btn" onclick="resetPuzzle()">Reset</button>
-      <button class="btn stats" onclick="openStatsModal()">📊 Stats</button>
-      <button class="btn tutorial" onclick="window.open('./tutorial.html','_blank')">ⓘ</button>
-      <button class="btn share" onclick="shareResult()" id="shareBtn" style="display: none;">Share Result</button>
-    </div>
-  </div>
-
-  <div class="overlay" id="overlay"></div>
-  <div class="winner-message" id="winnerMessage">
-    🎉 Congratulations! 🎉<br>
-    <span id="completionText">You solved today's puzzle!</span><br>
-    <small>Click anywhere to continue</small>
-  </div>
-
-  <!-- Stats Modal -->
-  <div class="stats-modal" id="statsModal">
-    <div class="stats-header">
-      <button class="stats-close" onclick="closeStatsModal()">×</button>
-      <h2 style="font-size: 24px; margin-bottom: 4px;">📊 Your Statistics</h2>
-      <p style="font-size: 14px; opacity: 0.9;">Track your Daily15 progress</p>
-    </div>
-    <div class="stats-content">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">📅</div>
-          <div class="stat-value" id="statGamesPlayed">0</div>
-          <div class="stat-label">Games Played</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">⚡</div>
-          <div class="stat-value" id="statBestPerformance">-</div>
-          <div class="stat-label">Best Performance</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">🔥</div>
-          <div class="stat-value" id="statCurrentStreak">0</div>
-          <div class="stat-label">Current Streak</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon">🏆</div>
-          <div class="stat-value" id="statMaxStreak">0</div>
-          <div class="stat-label">Best Streak</div>
-        </div>
-      </div>
-
-      <!-- Quick Play Stats -->
-      <div class="quick-stats" id="quickplayStats">
-        <h3>⚡ Quick Play Stats</h3>
-        <div class="quick-stat-row">
-          <span class="quick-stat-label">Games Played:</span>
-          <span class="quick-stat-value" id="qpGamesPlayed">0</span>
-        </div>
-        <div class="quick-stat-row">
-          <span class="quick-stat-label">Games Won:</span>
-          <span class="quick-stat-value" id="qpGamesWon">0</span>
-        </div>
-        <div class="quick-stat-row">
-          <span class="quick-stat-label">Best Time:</span>
-          <span class="quick-stat-value" id="qpBestTime">-</span>
-        </div>
-        <div class="quick-stat-row">
-          <span class="quick-stat-label">Avg Moves:</span>
-          <span class="quick-stat-value" id="qpAvgMoves">-</span>
-        </div>
-      </div>
-
-      <!-- Hourly Leaderboard -->
-      <div class="leaderboard" id="leaderboardSection">
-        <h3>
-          <span>🏆 This Hour's Top 5</span>
-          <span style="font-size: 11px; opacity: 0.7;" id="leaderboardTimer">Resets in --:--</span>
-        </h3>
-        <div id="leaderboardEntries">
-          <div style="text-align: center; padding: 20px; color: #999;">
-            Complete a Quick Play to join!
-          </div>
-        </div>
-      </div>
-
-      <!-- Monthly Tier Distribution -->
-      <div class="tier-distribution" id="tierDistribution">
-        <h3>
-          <span>This Month's Performance</span>
-          <span class="month-badge" id="monthTotal">
-            <span class="month-name" id="monthName">October 2025</span>
-            <span id="solveCount">0 solves</span>
-          </span>
-        </h3>
-        <div class="tier-bar">
-          <div class="tier-label">🥇 Grandmaster</div>
-          <div class="tier-bar-container">
-            <div class="tier-bar-fill tier-grandmaster" id="bar-grandmaster" style="width: 0%"></div>
-          </div>
-          <div class="tier-count" id="count-grandmaster">0</div>
-        </div>
-        <div class="tier-bar">
-          <div class="tier-label">🥈 Master</div>
-          <div class="tier-bar-container">
-            <div class="tier-bar-fill tier-master" id="bar-master" style="width: 0%"></div>
-          </div>
-          <div class="tier-count" id="count-master">0</div>
-        </div>
-        <div class="tier-bar">
-          <div class="tier-label">🥉 Expert</div>
-          <div class="tier-bar-container">
-            <div class="tier-bar-fill tier-expert" id="bar-expert" style="width: 0%"></div>
-          </div>
-          <div class="tier-count" id="count-expert">0</div>
-        </div>
-        <div class="tier-bar">
-          <div class="tier-label">💎 Advanced</div>
-          <div class="tier-bar-container">
-            <div class="tier-bar-fill tier-advanced" id="bar-advanced" style="width: 0%"></div>
-          </div>
-          <div class="tier-count" id="count-advanced">0</div>
-        </div>
-        <div class="tier-bar">
-          <div class="tier-label">⭐ Skilled</div>
-          <div class="tier-bar-container">
-            <div class="tier-bar-fill tier-skilled" id="bar-skilled" style="width: 0%"></div>
-          </div>
-          <div class="tier-count" id="count-skilled">0</div>
-        </div>
-        <div class="tier-bar">
-          <div class="tier-label">🎯 Intermediate</div>
-          <div class="tier-bar-container">
-            <div class="tier-bar-fill tier-intermediate" id="bar-intermediate" style="width: 0%"></div>
-          </div>
-          <div class="tier-count" id="count-intermediate">0</div>
-        </div>
-        <div class="tier-bar">
-          <div class="tier-label">📚 Beginner</div>
-          <div class="tier-bar-container">
-            <div class="tier-bar-fill tier-beginner" id="bar-beginner" style="width: 0%"></div>
-          </div>
-          <div class="tier-count" id="count-beginner">0</div>
-        </div>
-        <div class="tier-bar">
-          <div class="tier-label">🌱 Novice</div>
-          <div class="tier-bar-container">
-            <div class="tier-bar-fill tier-novice" id="bar-novice" style="width: 0%"></div>
-          </div>
-          <div class="tier-count" id="count-novice">0</div>
-        </div>
-      </div>
-
-      <div class="quick-stats">
-        <h3>My Stats</h3>
-        <div class="quick-stat-row">
-          <span class="quick-stat-label">Total Wins:</span>
-          <span class="quick-stat-value" id="statTotalWins">0</span>
-        </div>
-        <div class="quick-stat-row">
-          <span class="quick-stat-label">Average Moves:</span>
-          <span class="quick-stat-value" id="statAvgMoves">0</span>
-        </div>
-        <div class="quick-stat-row">
-          <span class="quick-stat-label">Best Moves:</span>
-          <span class="quick-stat-value" id="statBestMoves">-</span>
-        </div>
-      </div>
-
-      <div class="stats-actions">
-        <button class="stats-btn export" onclick="exportStats()">💾 Backup</button>
-        <button class="stats-btn reset" onclick="resetStats()">🗑️ Reset</button>
-      </div>
-
-      <div class="stats-note">
-        📱 Stats are saved locally on this device
-      </div>
-    </div>
-  </div>
+  <div id="root"></div>
 
   <script>
-    // Game State
-    let currentMode = 'daily'; // 'daily' or 'quickplay'
-    let quickPlayTimer = null;
-    let quickPlayTimeLeft = 60;
-    let quickPlayActive = false;
-    
-    // Stats Manager with Monthly Tracking
-    class Daily15StatsManager {
-      constructor() {
-        this.storageKey = 'daily15_game_stats';
-        this.monthlyTiersKey = 'daily15_monthly_tiers';
-        this.quickPlayKey = 'daily15_quickplay_stats';
-        this.leaderboardKey = 'daily15_leaderboard';
-        this.loadStats();
-        this.loadMonthlyTiers();
-        this.loadQuickPlayStats();
-        this.loadLeaderboard();
-      }
-
-      loadStats() {
-        const stored = localStorage.getItem(this.storageKey);
-        if (stored) {
-          this.stats = JSON.parse(stored);
-        } else {
-          this.stats = {
-            gamesPlayed: 0,
-            gamesWon: 0,
-            currentStreak: 0,
-            maxStreak: 0,
-            lastPlayedDate: null,
-            puzzleHistory: {}
-          };
-        }
-      }
-
-      saveStats() {
-        localStorage.setItem(this.storageKey, JSON.stringify(this.stats));
-      }
-
-      loadQuickPlayStats() {
-        const stored = localStorage.getItem(this.quickPlayKey);
-        if (stored) {
-          this.quickPlayStats = JSON.parse(stored);
-        } else {
-          this.quickPlayStats = {
-            gamesPlayed: 0,
-            gamesWon: 0,
-            bestTime: null,
-            totalMoves: 0,
-            gameHistory: []
-          };
-        }
-      }
-
-      saveQuickPlayStats() {
-        localStorage.setItem(this.quickPlayKey, JSON.stringify(this.quickPlayStats));
-      }
-
-      recordQuickPlayGame(won, moves, timeUsed) {
-        this.quickPlayStats.gamesPlayed++;
-        if (won) {
-          this.quickPlayStats.gamesWon++;
-          this.quickPlayStats.totalMoves += moves;
-          
-          if (!this.quickPlayStats.bestTime || timeUsed < this.quickPlayStats.bestTime) {
-            this.quickPlayStats.bestTime = timeUsed;
-          }
-          
-          this.quickPlayStats.gameHistory.push({
-            moves: moves,
-            time: timeUsed,
-            timestamp: Date.now()
-          });
-          
-          // Add to leaderboard
-          this.addToLeaderboard(moves, timeUsed);
-        }
-        this.saveQuickPlayStats();
-      }
-
-      getQuickPlayStats() {
-        const avgMoves = this.quickPlayStats.gamesWon > 0 
-          ? Math.round(this.quickPlayStats.totalMoves / this.quickPlayStats.gamesWon)
-          : 0;
-        
-        return {
-          gamesPlayed: this.quickPlayStats.gamesPlayed,
-          gamesWon: this.quickPlayStats.gamesWon,
-          bestTime: this.quickPlayStats.bestTime,
-          avgMoves: avgMoves
-        };
-      }
-
-      loadLeaderboard() {
-        const stored = localStorage.getItem(this.leaderboardKey);
-        const currentHour = this.getCurrentHour();
-        
-        if (stored) {
-          const data = JSON.parse(stored);
-          if (data.hour === currentHour) {
-            this.leaderboard = data;
-          } else {
-            this.leaderboard = this.initializeLeaderboard(currentHour);
-          }
-        } else {
-          this.leaderboard = this.initializeLeaderboard(currentHour);
-        }
-      }
-
-      getCurrentHour() {
-        const now = new Date();
-        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}-${String(now.getHours()).padStart(2, '0')}`;
-      }
-
-      initializeLeaderboard(hour) {
-        return {
-          hour: hour,
-          entries: []
-        };
-      }
-
-      addToLeaderboard(moves, time) {
-        const currentHour = this.getCurrentHour();
-        if (this.leaderboard.hour !== currentHour) {
-          this.leaderboard = this.initializeLeaderboard(currentHour);
-        }
-
-        const username = this.getUsername();
-        const score = time; // Lower is better
-        
-        this.leaderboard.entries.push({
-          username: username,
-          moves: moves,
-          time: time,
-          timestamp: Date.now()
-        });
-        
-        // Sort by time (fastest first), keep top 5
-        this.leaderboard.entries.sort((a, b) => a.time - b.time);
-        this.leaderboard.entries = this.leaderboard.entries.slice(0, 5);
-        
-        this.saveLeaderboard();
-      }
-
-      getUsername() {
-        let username = localStorage.getItem('daily15_username');
-        if (!username) {
-          username = 'Player' + Math.floor(Math.random() * 10000);
-          localStorage.setItem('daily15_username', username);
-        }
-        return username;
-      }
-
-      saveLeaderboard() {
-        localStorage.setItem(this.leaderboardKey, JSON.stringify(this.leaderboard));
-      }
-
-      getLeaderboard() {
-        const currentHour = this.getCurrentHour();
-        if (this.leaderboard.hour !== currentHour) {
-          this.leaderboard = this.initializeLeaderboard(currentHour);
-          this.saveLeaderboard();
-        }
-        return this.leaderboard.entries;
-      }
-
-      loadMonthlyTiers() {
-        const stored = localStorage.getItem(this.monthlyTiersKey);
-        const currentMonth = this.getCurrentMonth();
-        
-        if (stored) {
-          const data = JSON.parse(stored);
-          if (data.month === currentMonth) {
-            this.monthlyTiers = data;
-          } else {
-            this.monthlyTiers = this.initializeMonthlyTiers(currentMonth);
-          }
-        } else {
-          this.monthlyTiers = this.initializeMonthlyTiers(currentMonth);
-        }
-      }
-
-      getCurrentMonth() {
-        const now = new Date();
-        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-      }
-
-      initializeMonthlyTiers(month) {
-        return {
-          month: month,
-          counts: {
-            'Grandmaster': 0,
-            'Master': 0,
-            'Expert': 0,
-            'Advanced': 0,
-            'Skilled': 0,
-            'Intermediate': 0,
-            'Beginner': 0,
-            'Novice': 0
-          }
-        };
-      }
-
-      saveMonthlyTiers() {
-        localStorage.setItem(this.monthlyTiersKey, JSON.stringify(this.monthlyTiers));
-      }
-
-      recordGame(puzzleId, won, moves) {
-        const today = new Date().toISOString().split('T')[0];
-        
-        this.stats.gamesPlayed++;
-        if (won) this.stats.gamesWon++;
-
-        if (won) {
-          const alreadyWonToday = Object.values(this.stats.puzzleHistory).some(
-            game => game.date === today && game.won
-          );
-          
-          if (!alreadyWonToday) {
-            if (this.isConsecutiveDay(this.stats.lastPlayedDate, today)) {
-              this.stats.currentStreak++;
-            } else if (this.stats.lastPlayedDate === today) {
-              // Already played today, don't change streak
-            } else {
-              this.stats.currentStreak = 1;
-            }
-            this.stats.maxStreak = Math.max(this.stats.maxStreak, this.stats.currentStreak);
-            this.stats.lastPlayedDate = today;
-          }
-        } else {
-          this.stats.currentStreak = 0;
-          this.stats.lastPlayedDate = today;
-        }
-
-        this.stats.puzzleHistory[puzzleId] = {
-          date: today,
-          won: won,
-          moves: moves,
-          timestamp: Date.now()
-        };
-
-        this.saveStats();
-      }
-
-      recordTier(tier) {
-        const currentMonth = this.getCurrentMonth();
-        if (this.monthlyTiers.month !== currentMonth) {
-          this.monthlyTiers = this.initializeMonthlyTiers(currentMonth);
-        }
-        this.monthlyTiers.counts[tier]++;
-        this.saveMonthlyTiers();
-      }
-
-      getMonthlyTiers() {
-        const currentMonth = this.getCurrentMonth();
-        if (this.monthlyTiers.month !== currentMonth) {
-          this.monthlyTiers = this.initializeMonthlyTiers(currentMonth);
-          this.saveMonthlyTiers();
-        }
-        return this.monthlyTiers.counts;
-      }
-
-      isConsecutiveDay(lastDate, currentDate) {
-        if (!lastDate) return false;
-        const last = new Date(lastDate);
-        const current = new Date(currentDate);
-        const diffTime = current - last;
-        const diffDays = diffTime / (1000 * 60 * 60 * 24);
-        return diffDays === 1;
-      }
-
-      getStats() {
-        const winningGames = Object.values(this.stats.puzzleHistory).filter(g => g.won);
-        const avgMoves = winningGames.length > 0 
-          ? Math.round(winningGames.reduce((sum, g) => sum + g.moves, 0) / winningGames.length)
-          : 0;
-        const bestMoves = winningGames.length > 0
-          ? Math.min(...winningGames.map(g => g.moves))
-          : null;
-
-        return {
-          gamesPlayed: this.stats.gamesPlayed,
-          gamesWon: this.stats.gamesWon,
-          winRate: this.stats.gamesPlayed > 0 
-            ? Math.round((this.stats.gamesWon / this.stats.gamesPlayed) * 100) 
-            : 0,
-          currentStreak: this.stats.currentStreak,
-          maxStreak: this.stats.maxStreak,
-          avgMoves: avgMoves,
-          bestMoves: bestMoves
-        };
-      }
-
-      hasPlayedPuzzle(puzzleId) {
-        return this.stats.puzzleHistory.hasOwnProperty(puzzleId);
-      }
-
-      exportStats() {
-        return JSON.stringify({
-          stats: this.stats,
-          quickPlay: this.quickPlayStats,
-          monthlyTiers: this.monthlyTiers
-        });
-      }
-
-      resetStats() {
-        localStorage.removeItem(this.storageKey);
-        localStorage.removeItem(this.monthlyTiersKey);
-        localStorage.removeItem(this.quickPlayKey);
-        localStorage.removeItem(this.leaderboardKey);
-        this.loadStats();
-        this.loadMonthlyTiers();
-        this.loadQuickPlayStats();
-        this.loadLeaderboard();
-      }
-    }
-
-    const statsManager = new Daily15StatsManager();
-
-    // Original Game Code
-    let puzzle = [];
-    let emptyIndex = 15;
-    let moves = 0;
-    let dailyPuzzleLoaded = false;
-    let startTime = null;
-    let completionTime = null;
-    let gridSize = 4; // 4x4 for daily, 3x3 for quickplay
-
-    function getTodaysSeed() {
-        const today = new Date();
-        return today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-    }
-
-    function getPuzzleNumber() {
-        const today = new Date();
-        const epoch = new Date('2025-09-20');
-        const diffTime = Math.abs(today - epoch);
-        return Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-    }
-
+    // ========== GAME LOGIC & UTILITIES ==========
     class SeededRandom {
-        constructor(seed) {
-            this.seed = seed % 2147483647;
-            if (this.seed <= 0) this.seed += 2147483646;
+      constructor(seed) {
+        this.seed = seed % 2147483647;
+        if (this.seed <= 0) this.seed += 2147483646;
+      }
+
+      next() {
+        this.seed = (this.seed * 16807) % 2147483647;
+        return (this.seed - 1) / 2147483646;
+      }
+    }
+
+    const getDailySeed = () => {
+      const today = new Date();
+      return today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    };
+
+    const getPuzzleNumber = () => {
+      const start = new Date('2025-09-19T00:00:00');
+      const now = new Date();
+      const diffTime = Math.abs(now.getTime() - start.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+      return diffDays;
+    };
+
+    const getBlockPuzzleNumber = () => {
+      const start = new Date('2025-11-28T00:00:00');
+      const now = new Date();
+      const diffTime = Math.abs(now.getTime() - start.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+      return diffDays;
+    };
+
+    const DAILY_15_RANKINGS = [
+      { title: "Grandmaster", maxMoves: 60, description: "A flawless display of logic." },
+      { title: "Strategist", maxMoves: 90, description: "Highly efficient problem solving." },
+      { title: "Tactician", maxMoves: 130, description: "A strong, calculated approach." },
+      { title: "Apprentice", maxMoves: 180, description: "A solid effort with room to optimize." },
+      { title: "Novice", maxMoves: Infinity, description: "Persistence is the path to mastery." },
+    ];
+
+    const getRanking = (moves) => {
+      return DAILY_15_RANKINGS.find(r => moves <= r.maxMoves) || DAILY_15_RANKINGS[DAILY_15_RANKINGS.length - 1];
+    };
+
+    const formatTime = (ms) => {
+      const totalSeconds = Math.floor(ms / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    };
+
+    // Block Logic Shapes
+    const SHAPES = {
+      'I1': [[1]],
+      'I2': [[1, 1]],
+      'I3': [[1, 1, 1]],
+      'L3': [[1, 0], [1, 1]],
+      'O4': [[1, 1], [1, 1]],
+      'T4': [[1, 1, 1], [0, 1, 0]],
+      'Z4': [[1, 1, 0], [0, 1, 1]],
+      'L4': [[1, 0, 0], [1, 1, 1]],
+      'I4': [[1, 1, 1, 1]]
+    };
+
+    const COLORS = [
+      '#5D6D7E', '#A569BD', '#E74C3C', '#3498DB', '#1ABC9C', 
+      '#F39C12', '#D35400', '#2E86C1', '#27AE60'
+    ];
+
+    // ========== APP STATE ==========
+    let currentMode = 'DAILY_15'; // DAILY_15, QUICK_BLITZ, BLOCK_LOGIC
+    let showInfoModal = false;
+    let showWinModal = false;
+
+    // Fifteen Puzzle State
+    let fifteenState = {
+      grid: [],
+      emptyIndex: 15,
+      moves: 0,
+      isComplete: false,
+      startTime: null,
+      endTime: null,
+    };
+
+    // Quick Blitz Timer State
+    let blitzTimerInterval = null;
+    let blitzTimeRemaining = 60;
+    let blitzTimerStarted = false;
+
+    // Block Logic State
+    let blockState = {
+      grid: [],
+      pieces: [],
+      selectedPieceId: null,
+      isComplete: false,
+      moves: 0,
+      startTime: null,
+      endTime: null
+    };
+
+    // ========== FIFTEEN PUZZLE LOGIC ==========
+    function startBlitzTimer() {
+      if (blitzTimerInterval) return; // Already running
+      
+      blitzTimerStarted = true;
+      blitzTimerInterval = setInterval(() => {
+        blitzTimeRemaining--;
+        render();
+        
+        if (blitzTimeRemaining <= 0) {
+          stopBlitzTimer();
+          // Time's up!
+          alert("Time's up! Try again.");
+          initFifteenPuzzle('BLITZ');
         }
-        next() {
-            this.seed = this.seed * 16807 % 2147483647;
-            return (this.seed - 1) / 2147483646;
-        }
+      }, 1000);
     }
 
-    // Mode Switching
-    function switchMode(mode) {
-        currentMode = mode;
-        const buttons = document.querySelectorAll('.mode-btn');
-        buttons.forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        
-        if (mode === 'daily') {
-            document.getElementById('timerContainer').classList.remove('active');
-            document.getElementById('dailyBtn').style.display = 'inline-block';
-            document.getElementById('quickplayBtn').style.display = 'none';
-            document.getElementById('puzzleLabel').innerHTML = 'Daily Puzzle #<span id="puzzleNumber"></span>';
-            gridSize = 4;
-            loadDailyPuzzle();
-        } else {
-            document.getElementById('timerContainer').classList.add('active');
-            document.getElementById('dailyBtn').style.display = 'none';
-            document.getElementById('quickplayBtn').style.display = 'inline-block';
-            document.getElementById('puzzleLabel').textContent = 'Quick Play (3x3)';
-            gridSize = 3;
-            initQuickPlayPuzzle();
-        }
+    function stopBlitzTimer() {
+      if (blitzTimerInterval) {
+        clearInterval(blitzTimerInterval);
+        blitzTimerInterval = null;
+      }
     }
 
-    // Quick Play Functions
-    function startQuickPlay() {
-        quickPlayActive = true;
-        quickPlayTimeLeft = 60;
-        startTime = Date.now();
-        updateTimer();
-        startQuickPlayTimer();
-        generateQuickPlayPuzzle();
-        document.getElementById('quickplayBtn').disabled = true;
-        updateStatus("GO! Solve it fast! ⚡");
+    function resetBlitzTimer() {
+      stopBlitzTimer();
+      blitzTimeRemaining = 60;
+      blitzTimerStarted = false;
     }
 
-    function startQuickPlayTimer() {
-        if (quickPlayTimer) clearInterval(quickPlayTimer);
-        
-        quickPlayTimer = setInterval(() => {
-            quickPlayTimeLeft--;
-            updateTimer();
-            
-            if (quickPlayTimeLeft <= 10) {
-                document.getElementById('timerDisplay').classList.add('warning');
-            }
-            
-            if (quickPlayTimeLeft <= 0) {
-                endQuickPlay(false);
-            }
-        }, 1000);
-    }
+    function initFifteenPuzzle(mode) {
+      // Reset blitz timer if switching to blitz mode
+      if (mode === 'BLITZ') {
+        resetBlitzTimer();
+      }
 
-    function updateTimer() {
-        document.getElementById('timerDisplay').textContent = quickPlayTimeLeft;
-    }
-
-    function endQuickPlay(won) {
-        clearInterval(quickPlayTimer);
-        quickPlayActive = false;
-        document.getElementById('quickplayBtn').disabled = false;
-        document.getElementById('timerDisplay').classList.remove('warning');
-        
-        const timeUsed = 60 - quickPlayTimeLeft;
-        statsManager.recordQuickPlayGame(won, moves, timeUsed);
-        
-        if (won) {
-            showQuickPlayWinMessage(timeUsed);
-        } else {
-            updateStatus("Time's up! Try again! 🔄");
-            setTimeout(() => {
-                if (confirm("Time's up! Want to try again?")) {
-                    startQuickPlay();
-                }
-            }, 500);
-        }
-    }
-
-    function generateQuickPlayPuzzle() {
-        initPuzzle();
-        gridSize = 3;
-        puzzle = [];
-        for (let i = 1; i <= 8; i++) puzzle.push(i);
-        puzzle.push(null);
-        emptyIndex = 8;
-        
-        // Generate solvable 3x3 puzzle with fewer scrambles (easier)
-        const rng = new SeededRandom(Date.now());
-        for (let i = 0; i < 50; i++) {  // Only 50 moves for easier puzzle
-            const validMoves = [];
-            for (let j = 0; j < 9; j++) if (canMove(j)) validMoves.push(j);
-            if (validMoves.length > 0) {
-                const randomMove = validMoves[Math.floor(rng.next() * validMoves.length)];
-                puzzle[emptyIndex] = puzzle[randomMove];
-                puzzle[randomMove] = null;
-                emptyIndex = randomMove;
-            }
-        }
-        
-        moves = 0;
-        dailyPuzzleLoaded = true;
-        const grid = document.getElementById('puzzleGrid');
-        grid.className = 'puzzle-grid grid-3x3';
-        createGrid();
-        updateDisplay();
-    }
-
-    function initQuickPlayPuzzle() {
-        initPuzzle();
-        gridSize = 3;
-        puzzle = [];
-        for (let i = 1; i <= 8; i++) puzzle.push(i);
-        puzzle.push(null);
-        emptyIndex = 8;
-        moves = 0;
-        dailyPuzzleLoaded = false;
-        const grid = document.getElementById('puzzleGrid');
-        grid.className = 'puzzle-grid grid-3x3';
-        createGrid();
-        updateDisplay();
-        updateStatus("Click START to begin! ⚡");
-    }
-
-    function showQuickPlayWinMessage(timeUsed) {
-        dailyPuzzleLoaded = false;
-        
-        let award = '';
-        if (timeUsed <= 15) {
-            award = '⚡ SPEED DEMON! ⚡';
-        } else if (timeUsed <= 30) {
-            award = '🏆 LIGHTNING CHAMPION! 🏆';
-        } else if (timeUsed <= 45) {
-            award = '⭐ QUICK SOLVER! ⭐';
-        } else {
-            award = '🎯 PUZZLE MASTER! 🎯';
-        }
-
-        updateStatus(`Solved in ${timeUsed}s! ${award}`);
-
-        let completionHTML = `
-            <div style="color: #FFFFFF; font-size: 24px; margin-bottom: 10px;">
-                ${award}
-            </div>
-            <div style="font-size: 18px; margin-bottom: 10px;">
-                ⏱️ ${timeUsed} seconds<br>
-                📊 ${moves} moves
-            </div>
-            <div style="font-size: 14px; margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 10px;">
-                <button onclick="startQuickPlay(); document.getElementById('overlay').style.display='none'; document.getElementById('winnerMessage').style.display='none';" style="background: white; color: #667eea; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-right: 10px;">
-                    🔄 Play Again
-                </button>
-                <button onclick="document.getElementById('overlay').style.display='none'; document.getElementById('winnerMessage').style.display='none'; openStatsModal();" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer;">
-                    📊 View Stats
-                </button>
-            </div>`;
-
-        document.getElementById('completionText').innerHTML = completionHTML;
-        document.getElementById('overlay').style.display = 'block';
-        document.getElementById('winnerMessage').style.display = 'block';
-
-        const hideMessage = () => {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('winnerMessage').style.display = 'none';
-            document.getElementById('overlay').removeEventListener('click', hideMessage);
-            document.getElementById('winnerMessage').removeEventListener('click', hideMessage);
-        };
-        setTimeout(() => {
-            document.getElementById('overlay').addEventListener('click', hideMessage);
-            document.getElementById('winnerMessage').addEventListener('click', hideMessage);
-        }, 100);
-    }
-
-// Original functions adapted for both modes
-    function loadProgress() {
-        if (currentMode !== 'daily') return false;
-        const today = getTodaysSeed();
-        const saved = localStorage.getItem(`puzzle_${today}`);
+      const seed = mode === 'DAILY' ? getDailySeed() : Date.now();
+      const gridSize = mode === 'DAILY' ? 4 : 3;
+      const targetSize = gridSize * gridSize;
+      const storageKey = mode === 'DAILY' ? `daily15_${seed}` : null;
+      
+      // Try loading from storage
+      if (storageKey) {
+        const saved = localStorage.getItem(storageKey);
         if (saved) {
-            const data = JSON.parse(saved);
-            puzzle = data.puzzle;
-            emptyIndex = data.emptyIndex;
-            moves = data.moves;
-            dailyPuzzleLoaded = true;
-            gridSize = 4;
-
-            if (data.completed) {
-                completionTime = data.completionTime;
-                document.getElementById('shareBtn').style.display = 'inline-block';
-                updateStatus(`Completed in ${moves} moves!`);
-            } else {
-                startTime = data.startTime || Date.now();
-                updateStatus("Continue today's puzzle!");
-            }
-            return true;
+          fifteenState = JSON.parse(saved);
+          render();
+          return;
         }
-        return false;
+      }
+
+      const rng = new SeededRandom(seed);
+      const newGrid = Array.from({ length: targetSize - 1 }, (_, i) => i + 1);
+      newGrid.push(null);
+      
+      let currentGrid = [...newGrid];
+      let emptyIdx = targetSize - 1;
+      const shuffleMoves = mode === 'DAILY' ? 250 : 50;
+      let lastMoveIndex = -1;
+
+      for (let i = 0; i < shuffleMoves; i++) {
+        const validMoves = [];
+        const row = Math.floor(emptyIdx / gridSize);
+        const col = emptyIdx % gridSize;
+
+        if (row > 0) validMoves.push(emptyIdx - gridSize);
+        if (row < gridSize - 1) validMoves.push(emptyIdx + gridSize);
+        if (col > 0) validMoves.push(emptyIdx - 1);
+        if (col < gridSize - 1) validMoves.push(emptyIdx + 1);
+
+        const filteredMoves = validMoves.filter(m => m !== lastMoveIndex);
+        const move = filteredMoves.length > 0 
+          ? filteredMoves[Math.floor(rng.next() * filteredMoves.length)]
+          : validMoves[0];
+
+        currentGrid[emptyIdx] = currentGrid[move];
+        currentGrid[move] = null;
+        lastMoveIndex = emptyIdx;
+        emptyIdx = move;
+      }
+
+      fifteenState = {
+        grid: currentGrid,
+        emptyIndex: emptyIdx,
+        moves: 0,
+        isComplete: false,
+        startTime: null,
+        endTime: null,
+      };
+
+      render();
     }
 
-    function saveProgress(completed = false) {
-        if (currentMode !== 'daily') return;
-        const today = getTodaysSeed();
-        localStorage.setItem(`puzzle_${today}`, JSON.stringify({
-            puzzle, emptyIndex, moves,
-            startTime, completed,
-            completionTime: completed ? Date.now() : null
-        }));
-    }
+    function handleFifteenTileClick(index) {
+      if (fifteenState.isComplete) return;
 
-    function initPuzzle() {
-        puzzle = [];
-        const size = gridSize * gridSize;
-        for (let i = 1; i < size; i++) puzzle.push(i);
-        puzzle.push(null);
-        emptyIndex = size - 1;
-        moves = 0;
-        dailyPuzzleLoaded = false;
-        startTime = null;
-        completionTime = null;
-        updateDisplay();
-        updateDateDisplay();
-        document.getElementById('shareBtn').style.display = 'none';
-    }
+      const mode = currentMode === 'DAILY_15' ? 'DAILY' : 'BLITZ';
+      const gridSize = mode === 'DAILY' ? 4 : 3;
+      const targetSize = gridSize * gridSize;
 
-    function updateDateDisplay() {
-        const today = new Date();
-        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-        document.getElementById('dateDisplay').textContent = today.toLocaleDateString('en-US', options);
-        if (currentMode === 'daily') {
-            document.getElementById('puzzleNumber').textContent = getPuzzleNumber();
-        }
-    }
+      const { emptyIndex, grid } = fifteenState;
+      const row = Math.floor(index / gridSize);
+      const col = index % gridSize;
+      const emptyRow = Math.floor(emptyIndex / gridSize);
+      const emptyCol = emptyIndex % gridSize;
 
-    function createGrid() {
-        const grid = document.getElementById('puzzleGrid');
-        grid.innerHTML = '';
-        const size = gridSize * gridSize;
-        for (let i = 0; i < size; i++) {
-            const tile = document.createElement('button');
-            tile.className = 'tile';
-            tile.onclick = () => moveTile(i);
-            grid.appendChild(tile);
-        }
-    }
+      const isAdjacent = Math.abs(row - emptyRow) + Math.abs(col - emptyCol) === 1;
 
-    function updateDisplay() {
-        const tiles = document.querySelectorAll('.tile');
-        tiles.forEach((tile, index) => {
-            if (puzzle[index] === null) {
-                tile.textContent = '';
-                tile.className = 'tile empty';
-            } else {
-                tile.textContent = puzzle[index];
-                tile.className = 'tile';
-                if (dailyPuzzleLoaded && !completionTime && canMove(index)) {
-                    tile.classList.add('moveable');
-                }
-            }
-        });
-        document.getElementById('moveCounter').textContent = moves;
-    }
-
-    function canMove(index) {
-        const row = Math.floor(index / gridSize);
-        const col = index % gridSize;
-        const emptyRow = Math.floor(emptyIndex / gridSize);
-        const emptyCol = emptyIndex % gridSize;
-        return (Math.abs(row - emptyRow) + Math.abs(col - emptyCol)) === 1;
-    }
-
-    function moveTile(index) {
-        if (!dailyPuzzleLoaded) {
-            if (currentMode === 'daily') {
-                updateStatus("Load today's puzzle to start playing!");
-            } else {
-                updateStatus("Click START to begin!");
-            }
-            return;
-        }
-        if (completionTime && currentMode === 'daily') {
-            updateStatus("You already completed today's puzzle!");
-            return;
+      if (isAdjacent) {
+        // Start blitz timer on first move
+        if (mode === 'BLITZ' && fifteenState.moves === 0 && !blitzTimerStarted) {
+          startBlitzTimer();
         }
 
-        if (canMove(index)) {
-            if (moves === 0 && currentMode === 'daily') startTime = Date.now();
-            puzzle[emptyIndex] = puzzle[index];
-            puzzle[index] = null;
-            emptyIndex = index;
-            moves++;
+        const newGrid = [...grid];
+        newGrid[emptyIndex] = newGrid[index];
+        newGrid[index] = null;
 
-            updateDisplay();
-            if (currentMode === 'daily') saveProgress();
-
-            if (isSolved()) {
-                if (currentMode === 'quickplay') {
-                    endQuickPlay(true);
-                } else {
-                    completionTime = Date.now();
-                    saveProgress(true);
-                    
-                    const ranking = getRanking(moves);
-                    const puzzleId = `puzzle-${getPuzzleNumber()}-${Date.now()}`;
-                    statsManager.recordGame(puzzleId, true, moves);
-                    statsManager.recordTier(ranking.tier);
-                    
-                    showWinMessage();
-                }
-            } else {
-                if (currentMode === 'daily') {
-                    updateStatus("You can do it!");
-                }
-            }
-        }
-    }
-
-    function isSolved() {
-        const size = gridSize * gridSize;
-        for (let i = 0; i < size - 1; i++) {
-            if (puzzle[i] !== i + 1) return false;
-        }
-        return puzzle[size - 1] === null;
-    }
-
-    function loadDailyPuzzle() {
-        if (loadProgress()) {
-            const grid = document.getElementById('puzzleGrid');
-            grid.className = 'puzzle-grid grid-4x4';
-            createGrid();
-            updateDisplay();
-            return;
-        }
-        initPuzzle();
-        gridSize = 4;
-        const rng = new SeededRandom(getTodaysSeed());
-        for (let i = 0; i < 1000; i++) {
-            const validMoves = [];
-            for (let j = 0; j < 16; j++) if (canMove(j)) validMoves.push(j);
-            if (validMoves.length > 0) {
-                const randomMove = validMoves[Math.floor(rng.next() * validMoves.length)];
-                puzzle[emptyIndex] = puzzle[randomMove];
-                puzzle[randomMove] = null;
-                emptyIndex = randomMove;
-            }
-        }
-        moves = 0;
-        dailyPuzzleLoaded = true;
-        const grid = document.getElementById('puzzleGrid');
-        grid.className = 'puzzle-grid grid-4x4';
-        createGrid();
-        updateDisplay();
-        saveProgress();
-        updateStatus("Start solving!");
-    }
-
-    function resetPuzzle() {
-        if (!dailyPuzzleLoaded) {
-            updateStatus(currentMode === 'daily' ? "Load today's puzzle first!" : "Click START to begin!");
-            return;
-        }
+        const isSolved = newGrid.slice(0, targetSize - 1).every((val, i) => val === i + 1);
         
-        if (currentMode === 'quickplay') {
-            if (quickPlayActive) {
-                if (confirm("Reset current game? Timer will continue.")) {
-                    generateQuickPlayPuzzle();
-                }
-            }
-        } else {
-            localStorage.removeItem(`puzzle_${getTodaysSeed()}`);
-            loadDailyPuzzle();
-        }
-    }
-
-    function updateStatus(msg) {
-        document.getElementById('status').textContent = msg;
-    }
-
-    function getRanking(moves) {
-        if (moves <= 80) return { tier: 'Grandmaster', emoji: '🥇', color: '#FFFFFF' };
-        if (moves <= 100) return { tier: 'Master', emoji: '🥈', color: '#FFFFFF' };
-        if (moves <= 130) return { tier: 'Expert', emoji: '🥉', color: '#FFFFFF' };
-        if (moves <= 160) return { tier: 'Advanced', emoji: '💎', color: '#FFFFFF' };
-        if (moves <= 200) return { tier: 'Skilled', emoji: '⭐', color: '#FFFFFF' };
-        if (moves <= 250) return { tier: 'Intermediate', emoji: '🎯', color: '#FFFFFF' };
-        if (moves <= 350) return { tier: 'Beginner', emoji: '📚', color: '#FFFFFF' };
-        return { tier: 'Novice', emoji: '🌱', color: '#FFFFFF' };
-    }
-
-    function getMotivationalMessage(ranking) {
-        const messages = {
-            'Grandmaster': ['Incredible! You\'re a puzzle legend! 🏆', 'Masterful solving! You\'re in the top 1%! ✨'],
-            'Master': ['Outstanding! Master-level performance! 🎖️', 'Excellent work! You\'re among the elite! 💫'],
-            'Expert': ['Great job! Expert-level skills showing! 🎓', 'Well done! You\'re an expert puzzle solver! 🧠'],
-            'Advanced': ['Nice work! Advanced solver! 💪', 'Good job! You\'re getting really good at this! 🚀'],
-            'Skilled': ['Solid performance! You\'re skilled! ⭐', 'Good solving! Your skills are improving! 📈'],
-            'Intermediate': ['Good work! You\'re getting the hang of it! 👍', 'Nice job! Intermediate level reached! 🎯'],
-            'Beginner': ['Great job completing the puzzle! 🎉', 'Well done! Every expert was once a beginner! 🌟'],
-            'Novice': ['Congratulations on finishing! 🎉', 'Great job! Practice makes perfect! 🌱']
+        fifteenState = {
+          ...fifteenState,
+          grid: newGrid,
+          emptyIndex: index,
+          moves: fifteenState.moves + 1,
+          startTime: fifteenState.startTime || Date.now(),
+          isComplete: isSolved,
+          endTime: isSolved ? Date.now() : null,
         };
-        const tierMessages = messages[ranking.tier];
-        return tierMessages[Math.floor(Math.random() * tierMessages.length)];
-    }
 
-    function getNextTierGoal(moves) {
-        if (moves > 350) return { target: 350, tier: 'Beginner', improvement: moves - 350 };
-        if (moves > 250) return { target: 250, tier: 'Intermediate', improvement: moves - 250 };
-        if (moves > 200) return { target: 200, tier: 'Skilled', improvement: moves - 200 };
-        if (moves > 160) return { target: 160, tier: 'Advanced', improvement: moves - 160 };
-        if (moves > 130) return { target: 130, tier: 'Expert', improvement: moves - 130 };
-        if (moves > 100) return { target: 100, tier: 'Master', improvement: moves - 100 };
-        if (moves > 80) return { target: 80, tier: 'Grandmaster', improvement: moves - 80 };
-        return null;
-    }
-
-    function shareResult() {
-        if (!completionTime) {
-            updateStatus("Complete the puzzle first!");
-            return;
-        }
-        const puzzleNum = getPuzzleNumber();
-        const timeInSeconds = Math.round((completionTime - startTime) / 1000);
-        const minutes = Math.floor(timeInSeconds / 60);
-        const seconds = timeInSeconds % 60;
-        const timeStr = minutes > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : `${seconds}s`;
-
-        const ranking = getRanking(moves);
-        const shareText = `Daily 15 | Puzzle Game #${puzzleNum}
-${ranking.emoji} ${ranking.tier} (${moves} moves)
-Time: ${timeStr}
-Try it yourself! 🧩
-daily15.xyz`;
-
-        if (navigator.share) {
-            navigator.share({ title: 'Daily 15 Puzzle Game', text: shareText });
-        } else {
-            navigator.clipboard.writeText(shareText).then(() => {
-                updateStatus("Result copied to clipboard!");
-                setTimeout(() => updateStatus(`Completed in ${moves} moves!`), 2000);
-            }).catch(() => alert(shareText));
-        }
-    }
-
-    function showWinMessage() {
-        dailyPuzzleLoaded = false;
-        const timeInSeconds = Math.round((completionTime - startTime) / 1000);
-        const minutes = Math.floor(timeInSeconds / 60);
-        const seconds = timeInSeconds % 60;
-        const timeStr = minutes > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : `${seconds}s`;
-
-        const ranking = getRanking(moves);
-        const motivationalMsg = getMotivationalMessage(ranking);
-        const nextGoal = getNextTierGoal(moves);
-
-        updateStatus(`${ranking.emoji} ${ranking.tier} in ${moves} moves! 🎉`);
-        document.getElementById('shareBtn').style.display = 'inline-block';
-
-        let completionHTML = `
-            <div style="color: ${ranking.color}; font-size: 28px; margin-bottom: 10px;">
-                ${ranking.emoji} ${ranking.tier}
-            </div>
-            <div style="font-size: 18px; margin-bottom: 10px;">
-                ${moves} moves • ${timeStr}
-            </div>
-            <div style="font-size: 16px; margin-bottom: 15px; opacity: 0.9;">
-                ${motivationalMsg}
-            </div>`;
-        if (nextGoal) {
-            completionHTML += `
-                <div style="font-size: 14px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; margin-top: 10px;">
-                    🎯 Next Goal: ${nextGoal.tier} tier<br>
-                    (Need ${nextGoal.improvement} fewer moves)
-                </div>`;
+        // Save to localStorage for daily mode
+        if (mode === 'DAILY') {
+          const seed = getDailySeed();
+          localStorage.setItem(`daily15_${seed}`, JSON.stringify(fifteenState));
         }
 
-        document.getElementById('completionText').innerHTML = completionHTML;
-        document.getElementById('overlay').style.display = 'block';
-        document.getElementById('winnerMessage').style.display = 'block';
+        // Stop blitz timer on completion
+        if (isSolved && mode === 'BLITZ') {
+          stopBlitzTimer();
+        }
 
-        const hideMessage = () => {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('winnerMessage').style.display = 'none';
-            document.getElementById('overlay').removeEventListener('click', hideMessage);
-            document.getElementById('winnerMessage').removeEventListener('click', hideMessage);
+        render();
+        if (isSolved) {
+          showWinModal = true;
+          render();
+        }
+      }
+    }
+
+    // ========== BLOCK LOGIC ==========
+    function initBlockLogic() {
+      const seed = getDailySeed();
+      const rng = new SeededRandom(seed);
+      
+      const initialGrid = Array(6).fill(null).map(() => 
+        Array(6).fill(null).map(() => ({ value: null, isBlocker: false }))
+      );
+
+      const blockers = [];
+      while (blockers.length < 7) {
+        const r = Math.floor(rng.next() * 6);
+        const c = Math.floor(rng.next() * 6);
+        const key = `${r},${c}`;
+        if (!blockers.includes(key)) {
+          blockers.push(key);
+          initialGrid[r][c] = { value: 'blocker', isBlocker: true };
+        }
+      }
+
+      const pieces = Object.entries(SHAPES).map(([key, shape], idx) => ({
+        id: key,
+        shape: shape,
+        color: COLORS[idx],
+        rotation: 0,
+        placed: false
+      }));
+
+      blockState = {
+        grid: initialGrid,
+        pieces,
+        selectedPieceId: null,
+        isComplete: false,
+        moves: 0,
+        startTime: null,
+        endTime: null
+      };
+
+      render();
+    }
+
+    function rotateShape(shape) {
+      const rows = shape.length;
+      const cols = shape[0].length;
+      const rotated = Array(cols).fill(0).map(() => Array(rows).fill(0));
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          rotated[c][rows - 1 - r] = shape[r][c];
+        }
+      }
+      return rotated;
+    }
+
+    function handleBlockPieceSelect(id) {
+      if (blockState.isComplete) return;
+      
+      if (blockState.selectedPieceId === id) {
+        const newPieces = blockState.pieces.map(p => {
+          if (p.id === id) {
+            return { ...p, shape: rotateShape(p.shape), rotation: (p.rotation + 1) % 4 };
+          }
+          return p;
+        });
+        blockState = { ...blockState, pieces: newPieces };
+      } else {
+        const piece = blockState.pieces.find(p => p.id === id);
+        if (!piece?.placed) {
+          blockState = { ...blockState, selectedPieceId: id };
+        }
+      }
+      render();
+    }
+
+    function handleBlockGridClick(row, col) {
+      if (blockState.isComplete) return;
+
+      const clickedCell = blockState.grid[row][col];
+
+      // Remove existing piece
+      if (clickedCell.value && !clickedCell.isBlocker) {
+        const pieceId = clickedCell.value;
+        
+        const newGrid = blockState.grid.map(r => r.map(c => 
+          c.value === pieceId ? { ...c, value: null } : c
+        ));
+        
+        const newPieces = blockState.pieces.map(p => 
+          p.id === pieceId ? { ...p, placed: false } : p
+        );
+
+        blockState = {
+          ...blockState,
+          grid: newGrid,
+          pieces: newPieces,
+          moves: blockState.moves + 1,
+          selectedPieceId: null 
         };
-        setTimeout(() => {
-            document.getElementById('overlay').addEventListener('click', hideMessage);
-            document.getElementById('winnerMessage').addEventListener('click', hideMessage);
-        }, 100);
-    }
+        render();
+        return;
+      }
 
-    // Leaderboard Timer
-    let leaderboardTimerInterval = null;
+      // Place new piece
+      if (!blockState.selectedPieceId) return;
 
-    function updateLeaderboardTimer() {
-        const now = new Date();
-        const nextHour = new Date(now);
-        nextHour.setHours(now.getHours() + 1, 0, 0, 0);
-        
-        const timeRemaining = nextHour - now;
-        const minutes = Math.floor(timeRemaining / 60000);
-        const seconds = Math.floor((timeRemaining % 60000) / 1000);
-        
-        const timerElement = document.getElementById('leaderboardTimer');
-        if (timerElement) {
-            timerElement.textContent = `Resets in ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      const piece = blockState.pieces.find(p => p.id === blockState.selectedPieceId);
+      if (!piece || piece.placed) return; 
+
+      const shape = piece.shape;
+      const sRows = shape.length;
+      const sCols = shape[0].length;
+
+      let anchorR = 0;
+      let anchorC = 0;
+      let found = false;
+      
+      for(let r=0; r<sRows; r++) {
+        for(let c=0; c<sCols; c++) {
+          if (shape[r][c] === 1) {
+            anchorR = r;
+            anchorC = c;
+            found = true;
+            break;
+          }
         }
-    }
+        if(found) break;
+      }
 
-    // Stats Modal Functions
-    function openStatsModal() {
-        const stats = statsManager.getStats();
-        const qpStats = statsManager.getQuickPlayStats();
-        
-        document.getElementById('statGamesPlayed').textContent = stats.gamesPlayed;
-        document.getElementById('statBestPerformance').textContent = stats.bestMoves ? stats.bestMoves + ' moves' : '-';
-        document.getElementById('statCurrentStreak').textContent = stats.currentStreak;
-        document.getElementById('statMaxStreak').textContent = stats.maxStreak;
-        document.getElementById('statTotalWins').textContent = stats.gamesWon;
-        document.getElementById('statAvgMoves').textContent = stats.avgMoves || 0;
-        document.getElementById('statBestMoves').textContent = stats.bestMoves || '-';
-        
-        // Quick Play Stats
-        document.getElementById('qpGamesPlayed').textContent = qpStats.gamesPlayed;
-        document.getElementById('qpGamesWon').textContent = qpStats.gamesWon;
-        document.getElementById('qpBestTime').textContent = qpStats.bestTime ? qpStats.bestTime + 's' : '-';
-        document.getElementById('qpAvgMoves').textContent = qpStats.avgMoves || '-';
-        
-        updateTierDistribution();
-        updateLeaderboard();
-        updateLeaderboardTimer();
-        
-        // Start timer countdown
-        if (leaderboardTimerInterval) clearInterval(leaderboardTimerInterval);
-        leaderboardTimerInterval = setInterval(updateLeaderboardTimer, 1000);
-        
-        document.getElementById('overlay').style.display = 'block';
-        document.getElementById('statsModal').style.display = 'block';
-    }
+      const startR = row - anchorR;
+      const startC = col - anchorC;
+      
+      let canPlace = true;
+      const cellsToFill = [];
 
-    function updateLeaderboard() {
-        const entries = statsManager.getLeaderboard();
-        const container = document.getElementById('leaderboardEntries');
-        const currentUser = statsManager.getUsername();
-        
-        if (entries.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">Complete a Quick Play to join!</div>';
-            return;
-        }
-        
-        container.innerHTML = '';
-        entries.forEach((entry, index) => {
-            const div = document.createElement('div');
-            div.className = 'leaderboard-entry';
-            if (entry.username === currentUser) {
-                div.classList.add('current-user');
-            }
-            
-            const rankEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`;
-            
-            div.innerHTML = `
-                <span class="leaderboard-rank">${rankEmoji}</span>
-                <span class="leaderboard-name">${entry.username}</span>
-                <span class="leaderboard-score">${entry.time}s</span>
-            `;
-            container.appendChild(div);
-        });
-    }
+      for (let r = 0; r < sRows; r++) {
+        for (let c = 0; c < sCols; c++) {
+          if (shape[r][c] === 1) {
+            const gridR = startR + r;
+            const gridC = startC + c;
 
-    function updateTierDistribution() {
-        const tiers = statsManager.getMonthlyTiers();
-        const tierOrder = ['Grandmaster', 'Master', 'Expert', 'Advanced', 'Skilled', 'Intermediate', 'Beginner', 'Novice'];
-        
-        const totalSolves = Object.values(tiers).reduce((sum, count) => sum + count, 0);
-        const maxCount = Math.max(...Object.values(tiers), 1);
-        
-        const now = new Date();
-        const monthName = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-        
-        document.getElementById('monthName').textContent = monthName;
-        document.getElementById('solveCount').textContent = totalSolves === 1 ? '1 solve' : `${totalSolves} solves`;
-        
-        tierOrder.forEach(tier => {
-            const count = tiers[tier];
-            const percentage = maxCount > 0 ? (count / maxCount) * 100 : 0;
-            const barId = `bar-${tier.toLowerCase()}`;
-            const countId = `count-${tier.toLowerCase()}`;
-            
-            const barElement = document.getElementById(barId);
-            const countElement = document.getElementById(countId);
-            
-            if (barElement && countElement) {
-                barElement.style.width = percentage + '%';
-                countElement.textContent = count;
-            }
-        });
-    }
-
-    function closeStatsModal() {
-        if (leaderboardTimerInterval) {
-            clearInterval(leaderboardTimerInterval);
-            leaderboardTimerInterval = null;
-        }
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('statsModal').style.display = 'none';
-    }
-
-    function exportStats() {
-        const data = statsManager.exportStats();
-        const blob = new Blob([data], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `daily15-stats-${new Date().toISOString().split('T')[0]}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        updateStatus('Stats exported!');
-    }
-
-    function resetStats() {
-        if (confirm('Are you sure you want to reset all statistics? This cannot be undone.')) {
-            statsManager.resetStats();
-            closeStatsModal();
-            updateStatus('Stats reset!');
-        }
-    }
-
-    // Click overlay to close stats modal
-    document.getElementById('overlay').addEventListener('click', function(e) {
-        if (document.getElementById('statsModal').style.display === 'block') {
-            closeStatsModal();
-        }
-    });
-
-    // Init
-    createGrid();
-    initPuzzle();
-    loadDailyPuzzle();
-
-    // Touch support
-    let touchStartX = 0, touchStartY = 0;
-    document.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-    document.addEventListener('touchend', (e) => {
-        if (!dailyPuzzleLoaded || completionTime) return;
-        const deltaX = e.changedTouches[0].clientX - touchStartX;
-        const deltaY = e.changedTouches[0].clientY - touchStartY;
-        const minSwipe = 30;
-        if (Math.abs(deltaX) > minSwipe || Math.abs(deltaY) > minSwipe) {
-            const emptyRow = Math.floor(emptyIndex / gridSize);
-            const emptyCol = emptyIndex % gridSize;
-            let targetIndex = -1;
-            if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                if (deltaX > 0 && emptyCol > 0) targetIndex = emptyIndex - 1;
-                else if (deltaX < 0 && emptyCol < gridSize - 1) targetIndex = emptyIndex + 1;
+            if (
+              gridR < 0 || gridR >= 6 || 
+              gridC < 0 || gridC >= 6 || 
+              blockState.grid[gridR][gridC].value !== null
+            ) {
+              canPlace = false;
             } else {
-                if (deltaY > 0 && emptyRow > 0) targetIndex = emptyIndex - gridSize;
-                else if (deltaY < 0 && emptyRow < gridSize - 1) targetIndex = emptyIndex + gridSize;
+              cellsToFill.push({r: gridR, c: gridC});
             }
-            if (targetIndex >= 0 && targetIndex < gridSize * gridSize) moveTile(targetIndex);
+          }
         }
-    }, { passive: true });
+      }
+
+      if (canPlace) {
+        const newGrid = blockState.grid.map(r => r.map(c => ({...c})));
+        cellsToFill.forEach(({r, c}) => {
+          newGrid[r][c].value = piece.id;
+        });
+
+        const newPieces = blockState.pieces.map(p => 
+          p.id === piece.id ? { ...p, placed: true } : p
+        );
+
+        const isFull = newGrid.every(r => r.every(c => c.value !== null));
+
+        blockState = {
+          ...blockState,
+          grid: newGrid,
+          pieces: newPieces,
+          selectedPieceId: null,
+          moves: blockState.moves + 1,
+          isComplete: isFull,
+          startTime: blockState.startTime || Date.now(),
+          endTime: isFull ? Date.now() : null
+        };
+
+        render();
+        if (isFull) {
+          showWinModal = true;
+          render();
+        }
+      }
+    }
+
+    // ========== RENDERING ==========
+    function render() {
+      const root = document.getElementById('root');
+      root.innerHTML = `
+        ${renderHeader()}
+        ${renderMain()}
+        ${renderInfoModal()}
+        ${renderWinModal()}
+        ${renderFooter()}
+      `;
+      attachEventListeners();
+    }
+
+    function renderHeader() {
+      const dateStr = new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+
+      return `
+        <header class="w-full flex flex-col items-center pt-8 pb-6 px-4 border-b border-border-subtle bg-paper relative">
+          <div class="absolute right-4 top-8 md:right-8">
+            <button 
+              id="infoBtn"
+              class="w-8 h-8 flex items-center justify-center rounded-full border border-ink-light/30 text-ink hover:bg-ink hover:text-white transition-colors"
+            >
+              <span class="font-serif italic font-bold text-sm">i</span>
+            </button>
+          </div>
+
+          <div class="mb-2 font-sans text-xs font-bold tracking-widest uppercase text-ink-light">
+            ${dateStr}
+          </div>
+          <h1 class="font-serif text-4xl md:text-5xl font-bold text-ink mb-8 tracking-tight">
+            Daily15.xyz
+          </h1>
+          
+          <nav class="flex space-x-8 md:space-x-12">
+            <button
+              id="navDaily"
+              class="pb-2 text-sm md:text-base font-sans font-semibold tracking-wide uppercase transition-all duration-300 ${
+                currentMode === 'DAILY_15' 
+                  ? 'text-ink border-b-2 border-ink' 
+                  : 'text-ink-light border-b-2 border-transparent hover:text-accent hover:border-accent/30'
+              }"
+            >
+              The Fifteen
+            </button>
+            <button
+              id="navBlitz"
+              class="pb-2 text-sm md:text-base font-sans font-semibold tracking-wide uppercase transition-all duration-300 ${
+                currentMode === 'QUICK_BLITZ' 
+                  ? 'text-ink border-b-2 border-ink' 
+                  : 'text-ink-light border-b-2 border-transparent hover:text-accent hover:border-accent/30'
+              }"
+            >
+              Quick Blitz
+            </button>
+            <button
+              id="navBlock"
+              class="pb-2 text-sm md:text-base font-sans font-semibold tracking-wide uppercase transition-all duration-300 ${
+                currentMode === 'BLOCK_LOGIC' 
+                  ? 'text-ink border-b-2 border-ink' 
+                  : 'text-ink-light border-b-2 border-transparent hover:text-accent hover:border-accent/30'
+              }"
+            >
+              Block Logic
+            </button>
+          </nav>
+        </header>
+      `;
+    }
+
+    function renderMain() {
+      return `
+        <main class="w-full max-w-4xl px-4 py-8 md:py-12 flex-grow flex flex-col items-center mx-auto">
+          ${currentMode === 'DAILY_15' ? renderFifteenPuzzle('DAILY') : ''}
+          ${currentMode === 'QUICK_BLITZ' ? renderFifteenPuzzle('BLITZ') : ''}
+          ${currentMode === 'BLOCK_LOGIC' ? renderBlockLogic() : ''}
+        </main>
+      `;
+    }
+
+    function renderFifteenPuzzle(mode) {
+      const gridSize = mode === 'DAILY' ? 4 : 3;
+      const puzzleNum = getPuzzleNumber();
+      
+      return `
+        <div class="flex flex-col items-center max-w-xl mx-auto w-full">
+          ${mode === 'BLITZ' ? `
+            <div class="w-full mb-6 bg-gradient-to-r from-accent to-accent-hover rounded-lg p-4 text-center">
+              <div class="text-white/80 text-sm uppercase tracking-widest mb-1">Time Remaining</div>
+              <div class="text-white text-5xl font-bold font-serif tabular-nums ${blitzTimeRemaining <= 10 ? 'animate-pulse text-highlight' : ''}">
+                ${blitzTimeRemaining}s
+              </div>
+              ${!blitzTimerStarted ? '<div class="text-white/70 text-xs mt-2">Make your first move to start!</div>' : ''}
+            </div>
+          ` : ''}
+          
+          <div class="w-full flex justify-between items-end mb-6 border-b border-border-subtle pb-4">
+            <div>
+              <h2 class="font-serif text-3xl text-ink font-bold">
+                ${mode === 'DAILY' ? 'The Fifteen' : 'Quick Blitz'}
+              </h2>
+              ${mode === 'DAILY' ? `
+                <p class="font-sans text-sm text-ink-light tracking-wide uppercase mt-1">
+                  No. ${puzzleNum}
+                </p>
+              ` : ''}
+            </div>
+            <div class="text-right font-sans">
+              <div class="text-sm text-ink-light uppercase tracking-wider">Moves</div>
+              <div class="text-2xl font-light text-ink tabular-nums">${fifteenState.moves}</div>
+            </div>
+          </div>
+
+          <div 
+            class="grid gap-2 bg-[#EAE8E3] p-3 rounded-sm shadow-inner"
+            style="grid-template-columns: repeat(${gridSize}, 1fr); width: 100%; aspect-ratio: 1/1; max-width: 450px;"
+          >
+            ${fifteenState.grid.map((val, idx) => {
+              const isEmpty = val === null;
+              const row = Math.floor(idx / gridSize);
+              const col = idx % gridSize;
+              const emptyRow = Math.floor(fifteenState.emptyIndex / gridSize);
+              const emptyCol = fifteenState.emptyIndex % gridSize;
+              const isMoveable = !fifteenState.isComplete && !isEmpty && (Math.abs(row - emptyRow) + Math.abs(col - emptyCol) === 1);
+
+              return `
+                <button
+                  data-tile-index="${idx}"
+                  class="relative flex items-center justify-center text-2xl md:text-3xl font-serif font-bold transition-all duration-200 ${
+                    isEmpty ? 'invisible' : 'visible'
+                  } ${
+                    fifteenState.isComplete 
+                      ? 'bg-success text-white shadow-none' 
+                      : 'bg-tile text-ink shadow-soft hover:shadow-md'
+                  } ${
+                    isMoveable && !fifteenState.isComplete ? 'cursor-pointer hover:-translate-y-[2px] hover:bg-white' : 'cursor-default'
+                  } rounded-sm border border-black/5"
+                  style="aspect-ratio: 1/1;"
+                  ${isEmpty || fifteenState.isComplete ? 'disabled' : ''}
+                >
+                  ${val || ''}
+                </button>
+              `;
+            }).join('')}
+          </div>
+          
+          ${mode === 'BLITZ' ? `
+            <button 
+              id="resetBlitz"
+              class="mt-8 text-sm font-sans font-semibold uppercase tracking-widest text-ink-light hover:text-accent transition-colors"
+            >
+              Reset Puzzle
+            </button>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function renderBlockLogic() {
+      const puzzleNum = getBlockPuzzleNumber();
+
+      return `
+        <div class="flex flex-col items-center max-w-2xl mx-auto w-full">
+          <div class="w-full flex justify-between items-end mb-6 border-b border-border-subtle pb-4">
+            <div>
+              <h2 class="font-serif text-3xl text-ink font-bold">Block Logic</h2>
+              <p class="font-sans text-sm text-ink-light tracking-wide uppercase mt-1">
+                No. ${puzzleNum}
+              </p>
+            </div>
+            <div class="text-right font-sans">
+              <button 
+                id="resetBlock"
+                class="text-sm uppercase tracking-widest text-ink-light hover:text-accent transition-colors"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <div class="flex flex-col md:flex-row gap-8 w-full">
+            <div class="flex-1 flex justify-center">
+              <div 
+                class="grid grid-cols-6 gap-1 bg-ink-light p-2 rounded-sm"
+                style="width: min(100%, 350px); aspect-ratio: 1/1;"
+              >
+                ${blockState.grid.map((row, rIdx) => 
+                  row.map((cell, cIdx) => {
+                    const piece = blockState.pieces.find(p => p.id === cell.value);
+                    return `
+                      <div
+                        data-block-cell="${rIdx}-${cIdx}"
+                        class="w-full h-full rounded-[2px] transition-all duration-200 ${
+                          cell.isBlocker ? 'bg-ink/80 pattern-diagonal-stripes' : ''
+                        } ${
+                          !cell.value && !cell.isBlocker ? 'bg-white hover:bg-white/90 cursor-pointer' : ''
+                        } ${
+                          cell.value && !cell.isBlocker ? 'cursor-pointer hover:brightness-110' : ''
+                        }"
+                        style="${piece ? `background-color: ${piece.color}; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);` : ''}"
+                      ></div>
+                    `;
+                  }).join('')
+                ).join('')}
+              </div>
+            </div>
+
+            <div class="flex-1">
+              <div class="grid grid-cols-3 gap-4">
+                ${blockState.pieces.map((piece) => `
+                  <button
+                    data-piece-id="${piece.id}"
+                    class="p-2 rounded-sm border transition-all h-24 flex items-center justify-center ${
+                      piece.placed ? 'opacity-20 border-transparent cursor-default' : 'hover:border-accent cursor-pointer'
+                    } ${
+                      blockState.selectedPieceId === piece.id ? 'border-accent bg-accent/5 ring-1 ring-accent' : 'border-border-subtle'
+                    }"
+                    ${piece.placed ? 'disabled' : ''}
+                  >
+                    <div style="display: grid; grid-template-columns: repeat(${piece.shape[0].length}, 10px); gap: 2px;">
+                      ${piece.shape.map(row => 
+                        row.map(val => `
+                          <div style="width: 10px; height: 10px; background-color: ${val ? piece.color : 'transparent'}; opacity: ${val ? 1 : 0};"></div>
+                        `).join('')
+                      ).join('')}
+                    </div>
+                  </button>
+                `).join('')}
+              </div>
+              <p class="text-xs text-center mt-4 text-ink-light font-sans italic">
+                Tap a piece to select. Tap again to rotate.<br/>
+                Click on grid to place. Click placed piece to remove.
+              </p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderInfoModal() {
+      if (!showInfoModal) return '';
+
+      return `
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div class="bg-paper w-full max-w-md rounded-sm shadow-elevated border border-border-subtle flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-border-subtle flex justify-between items-center bg-white">
+              <h2 class="font-serif text-2xl font-bold text-ink">How to Play</h2>
+              <button 
+                id="closeInfo"
+                class="text-ink-light hover:text-ink transition-colors text-2xl leading-none"
+              >
+                &times;
+              </button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+              <div class="space-y-8 font-sans text-ink">
+                <section>
+                  <h3 class="font-serif text-xl font-bold mb-2 text-accent">The Fifteen & Quick Blitz</h3>
+                  <p class="text-sm mb-3">
+                    Slide tiles into the empty space to arrange them in numerical order, from top-left to bottom-right.
+                  </p>
+                  <ul class="list-disc pl-5 text-sm space-y-1 mb-4 text-ink-light">
+                    <li><strong>The Fifteen:</strong> A 4x4 grid. Solvability requires foresight and efficiency.</li>
+                    <li><strong>Quick Blitz:</strong> A 3x3 grid. Beat the 60-second countdown!</li>
+                  </ul>
+                  
+                  <div class="bg-paper p-4 rounded-sm border border-border-subtle">
+                    <h4 class="text-xs font-bold uppercase tracking-widest mb-3 border-b border-border-subtle pb-2">Daily 15 Rankings</h4>
+                    <div class="space-y-3">
+                      ${DAILY_15_RANKINGS.map(rank => `
+                        <div class="flex justify-between items-baseline text-sm">
+                          <span class="font-bold text-ink">${rank.title}</span>
+                          <span class="text-ink-light font-mono text-xs">≤ ${rank.maxMoves} moves</span>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                </section>
+
+                <section class="border-t border-border-subtle pt-6">
+                  <h3 class="font-serif text-xl font-bold mb-2 text-accent">Block Logic</h3>
+                  <p class="text-sm mb-3">
+                    Fit all the colored pieces into the grid without overlapping the grey blocker squares.
+                  </p>
+                  <ul class="list-disc pl-5 text-sm space-y-1 text-ink-light">
+                    <li>Tap a piece in the tray to select it.</li>
+                    <li>Tap the selected piece again (in the tray) to rotate it.</li>
+                    <li>Tap any valid spot on the grid to place the piece.</li>
+                    <li>Tap a placed piece on the grid to remove it.</li>
+                  </ul>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderWinModal() {
+      if (!showWinModal) return '';
+
+      if (currentMode === 'BLOCK_LOGIC') {
+        return `
+          <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+            <div class="bg-paper w-full max-w-md rounded-sm shadow-elevated border border-border-subtle">
+              <div class="p-6 border-b border-border-subtle flex justify-between items-center bg-white">
+                <h2 class="font-serif text-2xl font-bold text-ink">Logic Solved</h2>
+                <button id="closeWin" class="text-ink-light hover:text-ink transition-colors text-2xl leading-none">&times;</button>
+              </div>
+              <div class="p-6">
+                <div class="text-center py-4">
+                  <p class="font-serif text-2xl mb-4 text-ink">Excellent.</p>
+                  <p class="text-ink-light mb-6">You have successfully fit all components.</p>
+                  <button
+                    id="closeWinBtn"
+                    class="bg-accent text-white px-6 py-2 rounded-sm hover:bg-accent-hover transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      const mode = currentMode === 'DAILY_15' ? 'DAILY' : 'BLITZ';
+      const ranking = getRanking(fifteenState.moves);
+      const timeElapsed = (fifteenState.endTime && fifteenState.startTime) 
+        ? fifteenState.endTime - fifteenState.startTime 
+        : 0;
+      
+      // For Quick Blitz, calculate time used
+      const blitzTimeUsed = mode === 'BLITZ' ? 60 - blitzTimeRemaining : 0;
+
+      return `
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+          <div class="bg-paper w-full max-w-md rounded-sm shadow-elevated border border-border-subtle">
+            <div class="p-6 border-b border-border-subtle flex justify-between items-center bg-white">
+              <h2 class="font-serif text-2xl font-bold text-ink">${mode === 'DAILY' ? 'Puzzle Solved' : 'Blitz Complete!'}</h2>
+              <button id="closeWin" class="text-ink-light hover:text-ink transition-colors text-2xl leading-none">&times;</button>
+            </div>
+            <div class="p-6">
+              <div class="text-center">
+                ${mode === 'DAILY' ? `
+                  <div class="mb-6">
+                    <p class="font-sans text-sm text-ink-light uppercase tracking-widest mb-2">Performance</p>
+                    <div class="font-serif text-4xl font-bold text-accent mb-1">${ranking.title}</div>
+                    <p class="font-sans text-ink-light italic">${ranking.description}</p>
+                  </div>
+                ` : `
+                  <div class="mb-6">
+                    <p class="font-sans text-sm text-ink-light uppercase tracking-widest mb-2">Challenge Complete</p>
+                    <div class="font-serif text-4xl font-bold text-success mb-1">${blitzTimeUsed}s</div>
+                    <p class="font-sans text-ink-light italic">Completed in ${blitzTimeUsed} seconds</p>
+                  </div>
+                `}
+
+                <div class="grid grid-cols-2 gap-4 border-t border-b border-border-subtle py-4 mb-6">
+                  <div>
+                    <div class="text-xs uppercase text-ink-light tracking-wider">Moves</div>
+                    <div class="text-xl font-bold text-ink">${fifteenState.moves}</div>
+                  </div>
+                  <div>
+                    <div class="text-xs uppercase text-ink-light tracking-wider">Time</div>
+                    <div class="text-xl font-bold text-ink">${mode === 'BLITZ' ? blitzTimeUsed + 's' : formatTime(timeElapsed)}</div>
+                  </div>
+                </div>
+
+                <button
+                  id="closeWinBtn"
+                  class="w-full bg-accent hover:bg-accent-hover text-white font-sans font-medium py-3 px-4 rounded-sm transition-colors"
+                >
+                  ${mode === 'BLITZ' ? 'Play Again' : 'Review Board'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFooter() {
+      return `
+        <footer class="w-full py-6 border-t border-border-subtle mt-auto">
+          <div class="max-w-4xl mx-auto px-4 flex justify-between items-center text-xs font-sans text-ink-light">
+            <div>&copy; 2025 Daily15.xyz</div>
+            <div class="flex space-x-4">
+              <button id="privacyBtn" class="hover:text-ink hover:underline">Privacy</button>
+              <button id="aboutBtn" class="hover:text-ink hover:underline">About</button>
+            </div>
+          </div>
+        </footer>
+      `;
+    }
+
+    function attachEventListeners() {
+      // Header navigation
+      const infoBtn = document.getElementById('infoBtn');
+      if (infoBtn) infoBtn.onclick = () => { showInfoModal = true; render(); };
+
+      const navDaily = document.getElementById('navDaily');
+      if (navDaily) navDaily.onclick = () => { 
+        currentMode = 'DAILY_15'; 
+        initFifteenPuzzle('DAILY'); 
+      };
+
+      const navBlitz = document.getElementById('navBlitz');
+      if (navBlitz) navBlitz.onclick = () => { 
+        currentMode = 'QUICK_BLITZ'; 
+        initFifteenPuzzle('BLITZ'); 
+      };
+
+      const navBlock = document.getElementById('navBlock');
+      if (navBlock) navBlock.onclick = () => { 
+        currentMode = 'BLOCK_LOGIC'; 
+        initBlockLogic(); 
+      };
+
+      // Fifteen Puzzle tiles
+      document.querySelectorAll('[data-tile-index]').forEach(tile => {
+        tile.onclick = () => {
+          const index = parseInt(tile.getAttribute('data-tile-index'));
+          handleFifteenTileClick(index);
+        };
+      });
+
+      // Reset buttons
+      const resetBlitz = document.getElementById('resetBlitz');
+      if (resetBlitz) resetBlitz.onclick = () => initFifteenPuzzle('BLITZ');
+
+      const resetBlock = document.getElementById('resetBlock');
+      if (resetBlock) resetBlock.onclick = () => initBlockLogic();
+
+      // Block Logic
+      document.querySelectorAll('[data-piece-id]').forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.getAttribute('data-piece-id');
+          handleBlockPieceSelect(id);
+        };
+      });
+
+      document.querySelectorAll('[data-block-cell]').forEach(cell => {
+        cell.onclick = () => {
+          const [row, col] = cell.getAttribute('data-block-cell').split('-').map(Number);
+          handleBlockGridClick(row, col);
+        };
+      });
+
+      // Modals
+      const closeInfo = document.getElementById('closeInfo');
+      if (closeInfo) closeInfo.onclick = () => { showInfoModal = false; render(); };
+
+      const closeWin = document.getElementById('closeWin');
+      if (closeWin) closeWin.onclick = () => { showWinModal = false; render(); };
+
+      const closeWinBtn = document.getElementById('closeWinBtn');
+      if (closeWinBtn) closeWinBtn.onclick = () => { 
+        showWinModal = false; 
+        // If Quick Blitz, restart the game
+        if (currentMode === 'QUICK_BLITZ') {
+          initFifteenPuzzle('BLITZ');
+        } else {
+          render();
+        }
+      };
+
+      // Footer
+      const privacyBtn = document.getElementById('privacyBtn');
+      if (privacyBtn) privacyBtn.onclick = () => alert("Privacy Policy: We store progress locally on your device.");
+
+      const aboutBtn = document.getElementById('aboutBtn');
+      if (aboutBtn) aboutBtn.onclick = () => alert("About: Designed to stimulate intellectual growth.");
+    }
+
+    // Initialize
+    initFifteenPuzzle('DAILY');
   </script>
 </body>
 </html>
