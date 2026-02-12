@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
+ <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNLVGXD9M4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -106,25 +106,6 @@
       0% { transform: scale(0.5); opacity: 0.7; }
       100% { transform: scale(1.4); opacity: 0; }
     }
-    /* Numerical Estimation */
-    .cog-expr-card {
-      padding: 2rem; background: #FFFFFF; border-radius: 0.5rem;
-      border: 1px solid #E5E5E5; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-      display: flex; align-items: center; justify-content: center; min-height: 130px;
-      transition: border-color 0.3s;
-    }
-    .cog-expr-card.highlight { border-color: #27AE60; background: rgba(39,174,96,0.04); }
-    .cog-expr-card span { font-size: clamp(1.25rem, 4vw, 2rem); font-weight: 700; color: #121212; font-family: 'Libre Baskerville', serif; }
-    .cog-num-choice-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; width: 100%; }
-    .cog-num-btn {
-      padding: 1rem; border-radius: 0.25rem; font-weight: 700; font-size: 1rem;
-      cursor: pointer; border: 1px solid #E5E5E5; transition: all 0.15s; font-family: 'Source Sans 3', sans-serif;
-    }
-    .cog-num-btn:active { transform: scale(0.97); }
-    .cog-num-btn-side { background: #F9F8F4; color: #2C3E50; }
-    .cog-num-btn-side:hover { background: #E5E5E5; }
-    .cog-num-btn-equal { background: #FFFFFF; color: #4A4A4A; }
-    .cog-num-btn-equal:hover { background: #F0F0F0; }
     /* Memory Matrix */
     .cog-matrix-grid { margin-bottom: 1.5rem; display: grid; gap: 0.375rem; }
     .cog-matrix-tile {
@@ -362,7 +343,7 @@
     };
 
     // ========== APP STATE ==========
-    let currentMode = 'DAILY_15'; // DAILY_15, QUICK_BLITZ, BLOCK_LOGIC, SYGNAL, COLOR_MATCH, NUMERICAL_EST, MEMORY_MATRIX
+    let currentMode = 'DAILY_15'; // DAILY_15, QUICK_BLITZ, BLOCK_LOGIC, SYGNAL, COLOR_MATCH, MEMORY_MATRIX
     let showInfoModal = false;
     let showWinModal = false;
 
@@ -420,10 +401,6 @@
     // Color Match State
     let cmState = { timeLeft: 45, score: 0, attempts: 0, currentItem: null, active: false };
     let cmInterval = null;
-
-    // Numerical Estimation State
-    let neState = { timeLeft: 60, score: 0, attempts: 0, problem: null, active: false };
-    let neInterval = null;
 
     // Memory Matrix State
     let mmState = {
@@ -1063,7 +1040,6 @@
     // ========== COGNITIVE GAME LOGIC ==========
     function stopCognitiveTimers() {
       if (cmInterval) { clearInterval(cmInterval); cmInterval = null; }
-      if (neInterval) { clearInterval(neInterval); neInterval = null; }
     }
 
     // --- Color Match ---
@@ -1110,49 +1086,6 @@
       if (correct) cmState.score += 100;
       // Brief visual feedback then next
       cmGenerateItem();
-      render();
-    }
-
-    // --- Numerical Estimation ---
-    function initNumericalEst() {
-      stopCognitiveTimers();
-      neState = { timeLeft: 60, score: 0, attempts: 0, problem: null, active: true };
-      cogGameOverData = null;
-      neGenerateProblem();
-      neInterval = setInterval(() => {
-        neState.timeLeft--;
-        render();
-        if (neState.timeLeft <= 0) {
-          clearInterval(neInterval); neInterval = null;
-          neState.active = false;
-          const acc = neState.attempts > 0 ? Math.round((neState.score / (neState.attempts * 100)) * 100) : 0;
-          showCogGameOver(neState.score, acc, 'numerical-estimation');
-        }
-      }, 1000);
-      render();
-    }
-
-    function neGenerateProblem() {
-      function genExpr() {
-        const ops = ['+', '−', '×'];
-        const op = ops[Math.floor(Math.random() * ops.length)];
-        let a, b, val;
-        if (op === '×') { a = Math.floor(Math.random() * 10) + 2; b = Math.floor(Math.random() * 8) + 2; val = a * b; }
-        else { a = Math.floor(Math.random() * 50) + 1; b = Math.floor(Math.random() * 50) + 1; val = op === '+' ? a + b : a - b; }
-        return { expr: `${a} ${op} ${b}`, val };
-      }
-      const left = genExpr(), right = genExpr();
-      let answer = 'equal';
-      if (left.val > right.val) answer = 'left';
-      else if (left.val < right.val) answer = 'right';
-      neState.problem = { leftExpr: left.expr, leftVal: left.val, rightExpr: right.expr, rightVal: right.val, answer };
-    }
-
-    function neHandleChoice(choice) {
-      if (!neState.active || !neState.problem) return;
-      neState.attempts++;
-      if (choice === neState.problem.answer) neState.score += 100;
-      neGenerateProblem();
       render();
     }
 
@@ -1237,7 +1170,7 @@
       generateCogInsight(score, accuracy, gameType);
     }
 
-    const COG_GAME_TITLES = { 'color-match': 'Chromatic', 'numerical-estimation': 'Calibrate', 'memory-matrix': 'Trace' };
+    const COG_GAME_TITLES = { 'color-match': 'Chromatic', 'memory-matrix': 'Trace' };
 
     async function generateCogInsight(score, accuracy, gameType) {
       try {
@@ -1361,16 +1294,6 @@
               Chromatic
             </button>
             <button
-              id="navCalibrate"
-              class="pb-2 text-xs md:text-sm font-sans font-semibold tracking-wide uppercase transition-all duration-300 ${
-                currentMode === 'NUMERICAL_EST' 
-                  ? 'text-ink border-b-2 border-ink' 
-                  : 'text-ink-light border-b-2 border-transparent hover:text-accent hover:border-accent/30'
-              }"
-            >
-              Calibrate
-            </button>
-            <button
               id="navTrace"
               class="pb-2 text-xs md:text-sm font-sans font-semibold tracking-wide uppercase transition-all duration-300 ${
                 currentMode === 'MEMORY_MATRIX' 
@@ -1393,7 +1316,6 @@
           ${currentMode === 'BLOCK_LOGIC' ? renderBlockLogic() : ''}
           ${currentMode === 'SYGNAL' ? renderSygnal() : ''}
           ${currentMode === 'COLOR_MATCH' ? renderColorMatch() : ''}
-          ${currentMode === 'NUMERICAL_EST' ? renderNumericalEst() : ''}
           ${currentMode === 'MEMORY_MATRIX' ? renderMemoryMatrix() : ''}
           ${currentMode === 'COG_GAMEOVER' ? renderCogGameOver() : ''}
         </main>
@@ -1748,41 +1670,6 @@
       `;
     }
 
-    function renderNumericalEst() {
-      const prob = neState.problem;
-      return `
-        <div class="w-full max-w-lg mx-auto flex flex-col items-center">
-          <div class="w-full flex justify-between items-center mb-6">
-            <div class="text-center">
-              <div class="text-xs font-sans uppercase tracking-widest text-ink-light mb-1">Time</div>
-              <div class="font-serif text-2xl font-bold text-ink">${neState.timeLeft}s</div>
-            </div>
-            <div class="text-center">
-              <div class="text-xs font-sans uppercase tracking-widest text-ink-light mb-1">Score</div>
-              <div class="font-serif text-2xl font-bold text-accent">${neState.score}</div>
-            </div>
-          </div>
-
-          <div class="cog-cards-row">
-            <div class="cog-expr-card" id="neLeftCard">
-              <span>${prob ? prob.leftExpr : ''}</span>
-            </div>
-            <div class="cog-expr-card" id="neRightCard">
-              <span>${prob ? prob.rightExpr : ''}</span>
-            </div>
-          </div>
-
-          <p class="text-xs font-sans uppercase tracking-widest text-ink-light text-center mb-6">Which side is larger?</p>
-
-          <div class="cog-num-choice-row">
-            <button class="cog-num-btn cog-num-btn-side" id="neLeftBtn">Left</button>
-            <button class="cog-num-btn cog-num-btn-equal" id="neEqualBtn">Equal</button>
-            <button class="cog-num-btn cog-num-btn-side" id="neRightBtn">Right</button>
-          </div>
-        </div>
-      `;
-    }
-
     function renderMemoryMatrix() {
       const size = Math.min(320, window.innerWidth - 64);
       const total = mmState.gridSize * mmState.gridSize;
@@ -1940,18 +1827,6 @@
                     <li>Match the <em>font color</em> of the choice card to the <em>word meaning</em> of the anchor.</li>
                     <li>Answer Yes or No as quickly as you can.</li>
                     <li>45-second timer — build your score!</li>
-                  </ul>
-                </section>
-
-                <section class="border-t border-border-subtle pt-6">
-                  <h3 class="font-serif text-xl font-bold mb-2 text-accent">Calibrate</h3>
-                  <p class="text-sm mb-3">
-                    Quickly compare math expressions to sharpen number sense.
-                  </p>
-                  <ul class="list-disc pl-5 text-sm space-y-1 text-ink-light">
-                    <li>Two expressions are shown — pick which side is larger.</li>
-                    <li>Choose Equal if both evaluate the same.</li>
-                    <li>60-second timer — accuracy and speed matter!</li>
                   </ul>
                 </section>
 
@@ -2192,14 +2067,6 @@
         initColorMatch();
       };
 
-      const navCalibrate = document.getElementById('navCalibrate');
-      if (navCalibrate) navCalibrate.onclick = () => {
-        if (sygnalTimerInterval) { clearInterval(sygnalTimerInterval); sygnalTimerInterval = null; }
-        if (blitzTimerInterval) { clearInterval(blitzTimerInterval); blitzTimerInterval = null; }
-        currentMode = 'NUMERICAL_EST';
-        initNumericalEst();
-      };
-
       const navTrace = document.getElementById('navTrace');
       if (navTrace) navTrace.onclick = () => {
         if (sygnalTimerInterval) { clearInterval(sygnalTimerInterval); sygnalTimerInterval = null; }
@@ -2298,13 +2165,6 @@
       const cmYesBtn = document.getElementById('cmYesBtn');
       if (cmYesBtn) cmYesBtn.onclick = () => cmHandleChoice(true);
 
-      const neLeftBtn2 = document.getElementById('neLeftBtn');
-      if (neLeftBtn2) neLeftBtn2.onclick = () => neHandleChoice('left');
-      const neEqualBtn2 = document.getElementById('neEqualBtn');
-      if (neEqualBtn2) neEqualBtn2.onclick = () => neHandleChoice('equal');
-      const neRightBtn2 = document.getElementById('neRightBtn');
-      if (neRightBtn2) neRightBtn2.onclick = () => neHandleChoice('right');
-
       document.querySelectorAll('[data-mm-tile]').forEach(tile => {
         tile.onclick = () => mmHandleTileClick(parseInt(tile.getAttribute('data-mm-tile')));
       });
@@ -2314,7 +2174,6 @@
         if (cogGameOverData) {
           const g = cogGameOverData.gameType;
           if (g === 'color-match') { currentMode = 'COLOR_MATCH'; initColorMatch(); }
-          else if (g === 'numerical-estimation') { currentMode = 'NUMERICAL_EST'; initNumericalEst(); }
           else if (g === 'memory-matrix') { currentMode = 'MEMORY_MATRIX'; initMemoryMatrix(); }
         }
       };
