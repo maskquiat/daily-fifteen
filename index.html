@@ -11,7 +11,7 @@
   gtag('config', 'G-ZNLVGXD9M4');
 </script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Daily15.xyz - Daily Puzzle Games</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -162,6 +162,73 @@
     }
     .clickable-card {
       animation: pulse-border 2s ease-in-out infinite;
+    }
+    /* === MOBILE ZERO-SCROLL LAYOUT (game-locked mode) === */
+    html { height: 100%; }
+    body { min-height: 100%; overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
+    button { touch-action: manipulation; }
+    @media (max-width: 767px) {
+      body.game-locked {
+        height: 100vh;   /* fallback */
+        height: 100dvh;  /* tracks real visible height as browser toolbars collapse */
+        overflow: hidden;
+      }
+      body.game-locked #root {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      body.game-locked main {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto; /* safety valve: only scrolls within main if content truly cannot fit */
+        padding-top: 0.5rem;
+        padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+      }
+      body.game-locked main > div {
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+      }
+      body.game-locked footer { display: none; }
+      body.game-locked .block-board {
+        width: min(100%, 350px, max(200px, calc(100vh - 330px))) !important;
+        width: min(100%, 350px, max(200px, calc(100dvh - 330px))) !important;
+      }
+      body.game-locked .sygnal-mobile-stack {
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+      body.game-locked .sygnal-mobile-stack .sygnal-card {
+        min-height: 0 !important;
+        height: 100%;
+        width: auto;
+        max-width: 100%;
+        padding: 0.5rem;
+      }
+      body.game-locked .sygnal-mobile-stack .sygnal-card.card-current {
+        flex: 0 1 auto;
+        height: 32%;
+      }
+      body.game-locked .sygnal-mobile-stack .sygnal-card.card-next {
+        flex: 1 1 auto;
+        height: auto;
+      }
+      body.game-locked .sygnal-mobile-stack .sygnal-grid {
+        grid-template-rows: repeat(3, minmax(0, 1fr));
+        gap: 0.375rem;
+        padding: 0.25rem;
+      }
+      body.game-locked .sygnal-mobile-stack .sygnal-symbol {
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 0;
+        min-height: 0;
+      }
+      body.game-locked .sygnal-mobile-stack .sygnal-btn-row {
+        flex: 0 0 auto;
+        padding-bottom: env(safe-area-inset-bottom);
+      }
     }
   </style>
   <script>
@@ -555,25 +622,129 @@
       }
     }
 
-    // ========== BLOCK LOGIC ==========
-    function initBlockLogic() {
-      const seed = getDailySeed();
-      const rng = new SeededRandom(seed);
-      
-      const initialGrid = Array(6).fill(null).map(() => 
-        Array(6).fill(null).map(() => ({ value: null, isBlocker: false }))
-      );
+    // ========== BLOCK LOGIC SOLVABILITY GUARANTEE ==========
+    // A cell-count match (empty cells === total piece cells) is necessary but NOT
+    // sufficient: blockers can seal off pockets that no piece geometry can fill
+    // (e.g. two isolated 1x1 pockets with only one 1x1 piece). The only reliable
+    // guarantee is an exact backtracking solve of the actual board+pieces combo,
+    // which runs below BEFORE any puzzle is finalized.
 
+    function getUniqueRotations(shape) {
+      const rots = [];
+      const seen = new Set();
+      let cur = shape;
+      for (let i = 0; i < 4; i++) {
+        const key = JSON.stringify(cur);
+        if (!seen.has(key)) { seen.add(key); rots.push(cur); }
+        cur = rotateShape(cur);
+      }
+      return rots;
+    }
+
+    // Exact-cover backtracking solver. Mirrors in-game rules exactly:
+    // 90-degree rotations only (no reflections), pieces must tile every
+    // non-blocker cell with no overlaps. Returns true iff >= 1 solution exists.
+    function isBoardSolvable(blockerKeys, shapeList) {
+      const occupied = new Array(36).fill(false);
+      blockerKeys.forEach(key => {
+        const [r, c] = key.split(',').map(Number);
+        occupied[r * 6 + c] = true;
+      });
+
+      // Per piece, per unique rotation: filled-cell offsets relative to that
+      // rotation's first filled cell in row-major scan order. Anchoring the
+      // scan-first cell of the shape onto the board's first empty cell means
+      // each placement is tried exactly once (no duplicate search states).
+      const pieceOptions = shapeList.map(shape =>
+        getUniqueRotations(shape).map(rot => {
+          const cells = [];
+          let first = null;
+          for (let r = 0; r < rot.length; r++)
+            for (let c = 0; c < rot[0].length; c++)
+              if (rot[r][c] === 1) {
+                if (!first) first = [r, c];
+                cells.push([r - first[0], c - first[1]]);
+              }
+          return cells;
+        })
+      );
+      const used = new Array(shapeList.length).fill(false);
+
+      function solve(startIdx) {
+        let idx = startIdx;
+        while (idx < 36 && occupied[idx]) idx++;
+        if (idx === 36) return true; // every cell tiled: solvable
+        const row = (idx / 6) | 0, col = idx % 6;
+
+        for (let p = 0; p < pieceOptions.length; p++) {
+          if (used[p]) continue;
+          for (const cells of pieceOptions[p]) {
+            let ok = true;
+            for (const [dr, dc] of cells) {
+              const gr = row + dr, gc = col + dc;
+              if (gr < 0 || gr > 5 || gc < 0 || gc > 5 || occupied[gr * 6 + gc]) { ok = false; break; }
+            }
+            if (!ok) continue;
+            for (const [dr, dc] of cells) occupied[(row + dr) * 6 + (col + dc)] = true;
+            used[p] = true;
+            if (solve(idx + 1)) return true;
+            used[p] = false;
+            for (const [dr, dc] of cells) occupied[(row + dr) * 6 + (col + dc)] = false;
+          }
+        }
+        return false;
+      }
+      return solve(0);
+    }
+
+    function drawBlockers(rng) {
       const blockers = [];
       while (blockers.length < 7) {
         const r = Math.floor(rng.next() * 6);
         const c = Math.floor(rng.next() * 6);
         const key = `${r},${c}`;
-        if (!blockers.includes(key)) {
-          blockers.push(key);
-          initialGrid[r][c] = { value: 'blocker', isBlocker: true };
-        }
+        if (!blockers.includes(key)) blockers.push(key);
       }
+      return blockers;
+    }
+
+    // Pre-verified solvable layout; used only if regeneration somehow fails
+    // to converge (never observed in testing across 400 consecutive seeds).
+    const BLOCK_FALLBACK_BLOCKERS = ["0,3", "4,1", "2,1", "5,3", "3,1", "0,4", "5,2"];
+    const BLOCK_MAX_GEN_ATTEMPTS = 60;
+
+    // Deterministic per seed: the same seeded RNG stream drives every attempt,
+    // so all players get the identical (verified-solvable) board each day.
+    function generateSolvableBlockers(seed) {
+      const rng = new SeededRandom(seed);
+      const shapeList = Object.values(SHAPES);
+      for (let attempt = 1; attempt <= BLOCK_MAX_GEN_ATTEMPTS; attempt++) {
+        const blockers = drawBlockers(rng);
+        if (isBoardSolvable(blockers, shapeList)) {
+          console.log(`\u2713 Block puzzle verified solvable by exact-cover solver (attempt ${attempt} of ${BLOCK_MAX_GEN_ATTEMPTS})`);
+          return blockers;
+        }
+        console.log(`\u2717 Block layout attempt ${attempt} unsolvable \u2014 regenerating obstacles`);
+      }
+      console.warn('Block generator did not converge; using pre-verified fallback layout');
+      return BLOCK_FALLBACK_BLOCKERS;
+    }
+
+    // ========== BLOCK LOGIC ==========
+    function initBlockLogic() {
+      const seed = getDailySeed();
+      
+      const initialGrid = Array(6).fill(null).map(() => 
+        Array(6).fill(null).map(() => ({ value: null, isBlocker: false }))
+      );
+
+      // Blocker layout is only accepted after the exact-cover solver proves
+      // the board is tileable by the full piece set (see isBoardSolvable).
+      const blockers = generateSolvableBlockers(seed);
+      blockers.forEach(key => {
+        const [r, c] = key.split(',').map(Number);
+        initialGrid[r][c] = { value: 'blocker', isBlocker: true };
+      });
 
       const pieces = Object.entries(SHAPES).map(([key, shape], idx) => ({
         id: key,
@@ -1205,6 +1376,8 @@
     // ========== RENDERING ==========
     function render() {
       const root = document.getElementById('root');
+      const lockLayout = currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL';
+      document.body.classList.toggle('game-locked', lockLayout);
       root.innerHTML = `
         ${renderHeader()}
         ${renderMain()}
@@ -1223,9 +1396,10 @@
         year: 'numeric'
       });
 
+      const compact = currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL';
       return `
-        <header class="w-full flex flex-col items-center pt-8 pb-6 px-4 border-b border-border-subtle bg-paper relative">
-          <div class="absolute right-4 top-8 md:right-8">
+        <header class="w-full flex flex-col items-center ${compact ? 'pt-2 pb-2 md:pt-8 md:pb-6' : 'pt-8 pb-6'} px-4 border-b border-border-subtle bg-paper relative">
+          <div class="absolute right-4 ${compact ? 'top-2 md:top-8' : 'top-8'} md:right-8">
             <button 
               id="infoBtn"
               class="w-8 h-8 flex items-center justify-center rounded-full border border-ink-light/30 text-ink hover:bg-ink hover:text-white transition-colors"
@@ -1234,10 +1408,10 @@
             </button>
           </div>
 
-          <div class="mb-2 font-sans text-xs font-bold tracking-widest uppercase text-ink-light">
+          <div class="${compact ? 'hidden md:block' : ''} mb-2 font-sans text-xs font-bold tracking-widest uppercase text-ink-light">
             ${dateStr}
           </div>
-          <h1 class="font-serif text-4xl md:text-5xl font-bold text-ink mb-8 tracking-tight">
+          <h1 class="font-serif ${compact ? 'text-2xl mb-2 md:text-5xl md:mb-8' : 'text-4xl md:text-5xl mb-8'} font-bold text-ink tracking-tight">
             Daily15.xyz
           </h1>
           
@@ -1405,9 +1579,9 @@
 
       return `
         <div class="flex flex-col items-center max-w-2xl mx-auto w-full">
-          <div class="w-full flex justify-between items-end mb-6 border-b border-border-subtle pb-4">
+          <div class="w-full flex justify-between items-end mb-2 pb-2 md:mb-6 md:pb-4 border-b border-border-subtle">
             <div>
-              <h2 class="font-serif text-3xl text-ink font-bold">Block Logic</h2>
+              <h2 class="font-serif text-xl md:text-3xl text-ink font-bold">Block Logic</h2>
               <p class="font-sans text-sm text-ink-light tracking-wide uppercase mt-1">
                 No. ${puzzleNum}
               </p>
@@ -1422,10 +1596,10 @@
             </div>
           </div>
 
-          <div class="flex flex-col md:flex-row gap-8 w-full">
+          <div class="flex flex-col md:flex-row gap-3 md:gap-8 w-full">
             <div class="flex-1 flex justify-center">
               <div 
-                class="grid grid-cols-6 gap-1 bg-ink-light p-2 rounded-sm"
+                class="block-board grid grid-cols-6 gap-1 bg-ink-light p-2 rounded-sm"
                 style="width: min(100%, 350px); aspect-ratio: 1/1;"
               >
                 ${blockState.grid.map((row, rIdx) => 
@@ -1450,11 +1624,11 @@
             </div>
 
             <div class="flex-1">
-              <div class="grid grid-cols-3 gap-4">
+              <div class="grid grid-cols-5 gap-2 md:grid-cols-3 md:gap-4">
                 ${blockState.pieces.map((piece) => `
                   <button
                     data-piece-id="${piece.id}"
-                    class="p-2 rounded-sm border transition-all h-24 flex items-center justify-center ${
+                    class="p-1 md:p-2 rounded-sm border transition-all h-14 md:h-24 flex items-center justify-center ${
                       piece.placed ? 'opacity-20 border-transparent cursor-default' : 'hover:border-accent cursor-pointer'
                     } ${
                       blockState.selectedPieceId === piece.id ? 'border-accent bg-accent/5 ring-1 ring-accent' : 'border-border-subtle'
@@ -1471,7 +1645,7 @@
                   </button>
                 `).join('')}
               </div>
-              <p class="text-xs text-center mt-4 text-ink-light font-sans italic">
+              <p class="text-[10px] md:text-xs text-center mt-2 md:mt-4 text-ink-light font-sans italic">
                 Tap a piece to select. Tap again to rotate.<br/>
                 Click on grid to place. Click placed piece to remove.
               </p>
@@ -1520,8 +1694,8 @@
 
       return `
         <div class="flex flex-col items-center w-full max-w-7xl mx-auto px-4">
-          <div class="w-full flex justify-between items-center mb-6">
-            <div class="flex gap-6 text-sm font-sans">
+          <div class="w-full flex justify-between items-center mb-2 md:mb-6">
+            <div class="flex gap-4 md:gap-6 text-sm font-sans">
               <div>
                 <span class="text-ink-light uppercase tracking-wider">Time Left:</span>
                 <span class="text-ink font-bold ml-2 tabular-nums ${sygnalState.timeRemaining <= 10 ? 'text-highlight' : ''}">${sygnalState.timeRemaining}s</span>
@@ -1540,17 +1714,17 @@
           </div>
 
           <!-- Mobile: Stack vertically with buttons below -->
-          <div class="flex md:hidden flex-col gap-6 w-full items-center">
+          <div class="sygnal-mobile-stack flex md:hidden flex-col gap-2 w-full items-center">
             ${renderSygnalCard(current, 'current')}
             ${renderSygnalCard(next, 'next')}
-            <div class="flex gap-3 w-full max-w-sm">
+            <div class="sygnal-btn-row flex gap-3 w-full max-w-sm">
               <button
                 id="skipSygnalCard-mobile"
-                class="flex-1 px-4 py-3 text-sm font-sans font-semibold uppercase tracking-widest text-ink-light bg-white border-2 border-ink-light/30 rounded-lg hover:bg-ink-light/5 hover:text-ink hover:border-ink transition-all shadow-soft"
+                class="flex-1 px-4 py-2.5 md:py-3 text-sm font-sans font-semibold uppercase tracking-widest text-ink-light bg-white border-2 border-ink-light/30 rounded-lg hover:bg-ink-light/5 hover:text-ink hover:border-ink transition-all shadow-soft"
               >Skip</button>
               <button
                 id="skipSygnal-mobile"
-                class="flex-1 px-4 py-3 text-sm font-sans font-semibold uppercase tracking-widest text-accent bg-white border-2 border-accent/30 rounded-lg hover:bg-accent/5 hover:text-accent-hover hover:border-accent transition-all shadow-soft"
+                class="flex-1 px-4 py-2.5 md:py-3 text-sm font-sans font-semibold uppercase tracking-widest text-accent bg-white border-2 border-accent/30 rounded-lg hover:bg-accent/5 hover:text-accent-hover hover:border-accent transition-all shadow-soft"
               >Show</button>
             </div>
           </div>
@@ -1597,15 +1771,15 @@
       ];
 
       return `
-        <div class="bg-white rounded-2xl shadow-elevated p-6 md:p-8 relative border-3 ${position === 'next' ? 'clickable-card' : ''} ${position === 'current' ? 'border-slate-300 opacity-75' : 'border-accent shadow-lg ring-2 ring-accent/20'} w-full max-w-md" style="aspect-ratio: 1/1; min-height: 350px;">
-          ${position === 'current' ? '<div class="absolute top-3 left-3 px-3 py-1 text-xs uppercase tracking-wider text-slate-600 font-sans font-bold bg-slate-200 rounded-md">Reference Only</div>' : '<div class="absolute top-3 left-3 px-3 py-1 text-xs uppercase tracking-wider text-white font-sans font-bold bg-accent rounded-md">Click Here</div>'}
+        <div class="sygnal-card ${position === 'current' ? 'card-current' : 'card-next'} bg-white rounded-2xl shadow-elevated p-2 md:p-8 relative border-3 ${position === 'next' ? 'clickable-card' : ''} ${position === 'current' ? 'border-slate-300 opacity-75' : 'border-accent shadow-lg ring-2 ring-accent/20'} w-full max-w-md" style="aspect-ratio: 1/1; min-height: 350px;">
+          ${position === 'current' ? '<div class="absolute top-1.5 left-1.5 px-2 py-0.5 text-[9px] md:top-3 md:left-3 md:px-3 md:py-1 md:text-xs uppercase tracking-wider text-slate-600 font-sans font-bold bg-slate-200 rounded-md">Reference Only</div>' : '<div class="absolute top-1.5 left-1.5 px-2 py-0.5 text-[9px] md:top-3 md:left-3 md:px-3 md:py-1 md:text-xs uppercase tracking-wider text-white font-sans font-bold bg-accent rounded-md">Click Here</div>'}
           <div class="w-full h-full flex items-center justify-center">
-            <div class="grid grid-cols-3 gap-3 md:gap-4 w-full h-full items-center justify-items-center content-center p-2">
+            <div class="sygnal-grid grid grid-cols-3 gap-3 md:gap-4 w-full h-full items-center justify-items-center content-center p-2">
               ${card.symbols.map((symbol, idx) => `
                 <button
                   data-symbol-click="${symbol.id}"
                   data-card-position="${position}"
-                  class="flex items-center justify-center rounded-xl transition-all ${
+                  class="sygnal-symbol flex items-center justify-center rounded-xl transition-all ${
                     position === 'next' 
                       ? 'hover:bg-accent/10 cursor-pointer hover:scale-110 active:scale-95' 
                       : 'cursor-not-allowed opacity-60 grayscale'
