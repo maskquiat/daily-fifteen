@@ -164,6 +164,180 @@
       animation: pulse-border 2s ease-in-out infinite;
     }
     /* === MOBILE ZERO-SCROLL LAYOUT (game-locked mode) === */
+
+    /* === LINK (word chain) — all selectors lk- prefixed === */
+    :root {
+      --lk-paper: #F4F1EA; --lk-paper-dim: #EAE6DC; --lk-ink: #1A1A1A;
+      --lk-ink-soft: #4A4642; --lk-ink-faint: #A39E93; --lk-rule: #C9C2B4;
+      --lk-correct: #2F4A3C; --lk-incorrect: #A8503F;
+    }
+    .lk-view {
+      display: flex; flex-direction: column; width: 100%;
+      max-width: 420px; margin: 0 auto; flex: 1 1 auto; min-height: 0;
+    }
+    .lk-toolbar {
+      flex: 0 0 auto; display: flex; align-items: center;
+      justify-content: space-between; padding: 2px 4px 6px;
+    }
+    .lk-attempts { display: flex; gap: 5px; }
+    .lk-attempt-mark {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--lk-ink);
+      transition: opacity .3s ease, background .3s ease;
+    }
+    .lk-attempt-mark.lk-used { background: var(--lk-incorrect); opacity: .35; }
+    .lk-help-btn {
+      width: 24px; height: 24px; border: 1px solid var(--lk-rule);
+      border-radius: 50%; background: transparent; color: var(--lk-ink-soft);
+      font-family: 'Libre Baskerville', serif; font-size: 13px; line-height: 1;
+      padding: 0; cursor: pointer;
+    }
+    .lk-theme {
+      flex: 0 0 auto; text-align: center; padding: 0 8px 6px;
+      font-family: 'Libre Baskerville', serif; font-style: italic;
+      font-size: 13px; color: var(--lk-ink-soft); letter-spacing: .2px;
+    }
+    .lk-theme b { font-style: italic; font-weight: 700; color: var(--lk-ink); }
+    .lk-chain {
+      flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column;
+      padding: 0 6px;
+    }
+    .lk-row {
+      flex: 1 1 0; min-height: 44px; display: flex; align-items: center;
+      justify-content: center; border-bottom: 1px solid var(--lk-rule);
+      position: relative;
+    }
+    .lk-row:last-child { border-bottom: none; }
+    .lk-word {
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(17px, 5vw, 25px); letter-spacing: 1.5px;
+      text-transform: uppercase; text-align: center; margin: 0;
+      color: var(--lk-ink);
+    }
+    .lk-row.lk-given .lk-word { font-weight: 700; }
+    .lk-row.lk-pending .lk-word {
+      color: var(--lk-ink-faint); opacity: .5; letter-spacing: 4px;
+      font-size: clamp(13px, 3.6vw, 17px);
+    }
+    .lk-row.lk-solved .lk-word { color: var(--lk-correct); font-weight: 700; }
+    .lk-row.lk-solved { animation: lkStamp .32s cubic-bezier(.2,.9,.3,1); }
+    @keyframes lkStamp {
+      0% { transform: scale(1.35) rotate(-2.5deg); opacity: 0; }
+      60% { transform: scale(.97) rotate(.8deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0); }
+    }
+    .lk-active-wrap { display: flex; flex-direction: column; align-items: center; width: 100%; }
+    .lk-input {
+      width: 100%; max-width: 270px; background: transparent; border: none;
+      border-bottom: 2px solid var(--lk-ink); border-radius: 0;
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(17px, 5vw, 25px); letter-spacing: 1.5px;
+      text-transform: uppercase; text-align: center; color: var(--lk-ink);
+      padding: 3px 0; outline: none; -webkit-appearance: none;
+    }
+    .lk-input::placeholder {
+      color: var(--lk-ink-faint); text-transform: none; letter-spacing: 0;
+      font-family: 'Source Sans 3', sans-serif; font-size: 13px;
+    }
+    .lk-input-meta {
+      width: 100%; max-width: 270px; display: flex; align-items: center;
+      justify-content: space-between; margin-top: 7px;
+    }
+    .lk-word-count {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+      font-weight: 600; color: var(--lk-ink-soft);
+      font-family: 'Source Sans 3', sans-serif;
+    }
+    .lk-hint-btn {
+      font-family: 'Source Sans 3', sans-serif; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; color: var(--lk-incorrect);
+      background: rgba(168,80,63,.07); border: 1px solid rgba(168,80,63,.3);
+      border-radius: 2px; padding: 3px 8px; cursor: pointer;
+    }
+    .lk-hint-btn:disabled {
+      color: var(--lk-ink-faint); border-color: var(--lk-rule);
+      background: transparent; cursor: default;
+    }
+    .lk-hint-used {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--lk-correct);
+      font-family: 'Source Sans 3', sans-serif;
+    }
+    .lk-row.lk-shake { animation: lkShake .32s ease; }
+    @keyframes lkShake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .lk-miss {
+      position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+      font-size: 12px; color: var(--lk-incorrect); opacity: 0;
+      transition: opacity .2s ease;
+    }
+    .lk-miss.lk-on { opacity: 1; }
+    .lk-guess-btn {
+      flex: 0 0 auto; width: 100%; background: var(--lk-ink); color: var(--lk-paper);
+      border: none; border-radius: 3px; padding: 13px; margin-top: 8px;
+      font-family: 'Source Sans 3', sans-serif; font-weight: 600; font-size: 15px;
+      letter-spacing: .4px; text-transform: uppercase; cursor: pointer;
+    }
+    .lk-guess-btn:disabled { background: var(--lk-ink-faint); }
+    .lk-guess-btn:active:not(:disabled) { transform: scale(.985); }
+    .lk-overlay {
+      position: fixed; inset: 0; background: rgba(26,26,26,.92);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 60; padding: 28px;
+    }
+    .lk-card {
+      position: relative; background: var(--lk-paper); color: var(--lk-ink);
+      font-family: 'Source Sans 3', sans-serif; padding: 28px 24px;
+      border-radius: 4px; text-align: center; max-width: 330px; width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    }
+    .lk-card-x {
+      position: absolute; top: 8px; right: 8px; width: 30px; height: 30px;
+      border: none; background: transparent; color: var(--lk-ink-soft);
+      font-size: 18px; line-height: 1; cursor: pointer; padding: 0;
+    }
+    .lk-card h2 {
+      font-family: 'Libre Baskerville', serif; font-weight: 700;
+      font-size: 21px; margin: 0 0 8px;
+    }
+    .lk-card p {
+      font-size: 14px; color: var(--lk-ink-soft); line-height: 1.55;
+      margin: 0 0 16px; white-space: pre-line;
+    }
+    .lk-chain-reveal {
+      font-family: 'Libre Baskerville', serif; font-size: 14px;
+      letter-spacing: 1px; text-transform: uppercase; color: var(--lk-ink);
+      line-height: 1.9; margin: 0 0 16px;
+    }
+    .lk-card-btns { display: flex; gap: 8px; }
+    .lk-btn {
+      flex: 1; border: none; border-radius: 3px; padding: 12px 10px;
+      font-family: 'Source Sans 3', sans-serif; font-weight: 600;
+      font-size: 14px; letter-spacing: .3px; cursor: pointer;
+    }
+    .lk-btn-primary { background: var(--lk-ink); color: var(--lk-paper); }
+    .lk-btn-quiet { background: var(--lk-paper-dim); color: var(--lk-ink); border: 1px solid var(--lk-rule); }
+    .lk-stats-row { display: flex; justify-content: center; gap: 22px; margin: 0 0 16px; }
+    .lk-stat { text-align: center; }
+    .lk-stat b {
+      display: block; font-family: 'Libre Baskerville', serif;
+      font-size: 22px; font-weight: 700;
+    }
+    .lk-stat span {
+      font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+      color: var(--lk-ink-soft);
+    }
+    .lk-countdown { font-size: 12px; color: var(--lk-ink-soft); letter-spacing: .3px; margin-top: 12px; }
+    .lk-howto-list {
+      text-align: left; font-size: 14px; color: var(--lk-ink-soft);
+      line-height: 1.6; margin: 0 0 18px; padding-left: 18px;
+    }
+    .lk-howto-list li { margin-bottom: 7px; }
+    @media (max-width: 767px) {
+      body.game-locked .lk-view { height: 100%; }
+    }
     html { height: 100%; }
     body { min-height: 100%; overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
     button { touch-action: manipulation; }
@@ -1380,7 +1554,7 @@
     // ========== RENDERING ==========
     function render() {
       const root = document.getElementById('root');
-      const lockLayout = currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ';
+      const lockLayout = currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ' || currentMode === 'LINK';
       document.body.classList.toggle('game-locked', lockLayout);
       root.innerHTML = `
         ${renderHeader()}
@@ -1400,7 +1574,7 @@
         year: 'numeric'
       });
 
-      const compact = currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ';
+      const compact = currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ' || currentMode === 'LINK';
       return `
         <header class="w-full flex flex-col items-center ${compact ? 'pt-2 pb-2 md:pt-8 md:pb-6' : 'pt-8 pb-6'} px-4 border-b border-border-subtle bg-paper relative">
           <div class="absolute right-4 ${compact ? 'top-2 md:top-8' : 'top-8'} md:right-8">
@@ -1460,6 +1634,16 @@
             >
               Sygnal
             </button>
+            <button
+              id="navLink"
+              class="pb-2 text-xs md:text-sm font-sans font-semibold tracking-wide uppercase transition-all duration-300 ${
+                currentMode === 'LINK' 
+                  ? 'text-ink border-b-2 border-ink' 
+                  : 'text-ink-light border-b-2 border-transparent hover:text-accent hover:border-accent/30'
+              }"
+            >
+              Link
+            </button>
             <span class="text-border-subtle mx-1 hidden md:inline">|</span>
             <button
               id="navChromatic"
@@ -1495,6 +1679,7 @@
           ${currentMode === 'SYGNAL' ? renderSygnal() : ''}
           ${currentMode === 'COLOR_MATCH' ? renderColorMatch() : ''}
           ${currentMode === 'MEMORY_MATRIX' ? renderMemoryMatrix() : ''}
+          ${currentMode === 'LINK' ? renderLink() : ''}
           ${currentMode === 'COG_GAMEOVER' ? renderCogGameOver() : ''}
         </main>
       `;
@@ -2188,6 +2373,432 @@
       `;
     }
 
+
+    // ==================== LINK (word chain) ====================
+    // Data + schedule: every valid 6-word chain is enumerated once and served
+    // by day index since LK_EPOCH — no repeats for ~53 years. Themed chains
+    // air first, in LK_THEMES key order. Any change to LK_EDGES reshuffles
+    // the entire schedule and orphans the theme map: regenerate both together.
+    const LK_EDGES = {"AIR":["PORT","PLANE","LINE","WAY","CRAFT","TIGHT","FIELD","SPACE"],"APPLE":["SAUCE","PIE","JACK"],"BACK":["BONE","PACK","GROUND","FIRE","STAGE","TRACK","YARD","DOOR","BOARD","LOG"],"BALL":["PARK","ROOM","GAME","PLAYER","POINT"],"BAND":["WAGON","STAND","WIDTH"],"BANK":["ROLL","BOOK"],"BAR":["TENDER","STOOL","CODE","BELL"],"BASE":["BALL","LINE","BOARD","CAMP"],"BED":["ROOM","TIME","ROCK","SIDE","SPREAD"],"BILL":["BOARD","FOLD"],"BLOCK":["BUSTER","HEAD"],"BOARD":["WALK","ROOM","GAME","HOUSE"],"BONE":["HEAD","YARD"],"BOOK":["CASE","MARK","SHELF","WORM","STORE","KEEPER","END"],"BOW":["TIE","LINE"],"BOX":["CAR","OFFICE","TOP"],"BREAK":["FAST","DOWN","THROUGH","WATER","UP","NECK"],"BUTTER":["FLY","CUP","MILK","SCOTCH","NUT"],"CAKE":["WALK"],"CAMP":["FIRE","GROUND","SITE"],"CANDLE":["STICK","LIGHT"],"CAR":["POOL","PORT"],"CARD":["BOARD","STOCK"],"CASE":["WORK","LOAD"],"CAST":["AWAY"],"CHALK":["BOARD"],"CLASS":["ROOM","MATE","WORK"],"CLIFF":["SIDE","HANGER"],"CLUB":["HOUSE"],"COAT":["RACK","TAIL"],"CODE":["WORD"],"COLOR":["BLIND"],"COPPER":["HEAD","PLATE"],"CRACKER":["JACK"],"CUP":["CAKE","BOARD"],"DAY":["LIGHT","DREAM","BREAK","TIME"],"DESK":["TOP"],"DOOR":["WAY","STEP","BELL","STOP","MAN","KNOB"],"DOWN":["FALL","TOWN","STAIRS","POUR","SIDE","HILL","STREAM","TIME"],"DREAM":["LAND"],"DRIFT":["WOOD"],"END":["GAME","POINT"],"FALL":["OUT","BACK"],"FAST":["BALL","FOOD"],"FIELD":["WORK","TRIP","HOUSE"],"FIRE":["FLY","WORK","PLACE","FIGHTER","ARM","WOOD","CRACKER","HOUSE","PROOF"],"FISH":["BOWL","HOOK","POND","TANK","NET"],"FLOWER":["POT","BED"],"FLY":["WHEEL","TRAP","OVER","PAPER"],"FOOT":["BALL","PATH","STEP","NOTE","PRINT","HILL","HOLD","LOOSE","STOOL"],"FRAME":["WORK","RATE"],"FRONT":["DOOR","PAGE","LINE","RUNNER"],"GAME":["PLAY","KEEPER","STOP"],"GATE":["WAY","KEEPER","POST"],"GOLD":["FISH","MINE","SMITH"],"GRASS":["HOPPER","LAND","ROOTS"],"GROUND":["WORK","HOG","BREAKING","WATER"],"GUARD":["RAIL"],"HAMMER":["HEAD"],"HANDLE":["BAR"],"HAT":["BAND","TRICK"],"HEAD":["ACHE","LIGHT","LINE","PHONE","QUARTERS","STONE","WAY","STRONG"],"HILL":["SIDE","TOP"],"HOG":["WASH"],"HOLD":["UP","OUT","BACK"],"HOLDER":["SHIP"],"HOLE":["SALE"],"HOOK":["WORM"],"HORSE":["BACK","SHOE","POWER","PLAY","RADISH"],"HOUSE":["HOLD","BOAT","WORK","WIFE","KEEPER","TOP","PLANT","MAID","GUEST"],"IRON":["WORK"],"JACK":["POT","KNIFE","HAMMER"],"LAND":["MARK","SCAPE","LORD","SLIDE","FILL","OWNER"],"LETTER":["HEAD","BOX"],"LIFE":["TIME","GUARD","BOAT","STYLE","LONG"],"LIGHT":["HOUSE","WEIGHT","BULB","SHIP","HEARTED"],"LINE":["UP","BACKER","MAN","WORK","BREAK"],"LOG":["JAM"],"MAN":["HOLE","KIND","POWER","HOOD"],"MARK":["UP"],"MILK":["SHAKE","MAN","WEED"],"MILL":["STONE"],"MINE":["FIELD","SHAFT"],"MOON":["LIGHT","SHINE","WALK","BEAM","LIT"],"MOUNTAIN":["SIDE","TOP"],"NEWS":["PAPER","STAND","CAST","ROOM","LETTER","WORTHY"],"NIGHT":["MARE","FALL","TIME","GOWN","CLUB","LIFE","STAND"],"NUT":["SHELL","CRACKER","MEG"],"OUT":["SIDE","LINE","LOOK","FIELD","LET","COME","BREAK","PUT","GROWTH","DOOR","GOING","SET","POST"],"OVER":["COAT","SEAS","TIME","LOAD","SIGHT","COME","HEAD"],"PAN":["CAKE","HANDLE"],"PAPER":["BACK","WORK","WEIGHT","BOY","CUT"],"PARK":["WAY","LAND"],"PEN":["KNIFE","PAL"],"PIECE":["WORK","MEAL"],"PIPE":["LINE"],"PLACE":["HOLDER","MAT","BOOK"],"PLATE":["FORM"],"PLAY":["GROUND","HOUSE","MATE","BACK","PEN","BILL","TIME"],"POOL":["SIDE","ROOM"],"POST":["MAN","CARD","SCRIPT"],"POT":["HOLE","LUCK"],"POWER":["HOUSE","PLAY"],"PROOF":["READ"],"RAIL":["ROAD","WAY"],"RAIN":["BOW","COAT","FALL","DROP","STORM","WATER","FOREST"],"RIVER":["SIDE","BANK","BED","BOAT"],"ROAD":["SIDE","BLOCK","WAY","WORK","RUNNER"],"ROCK":["SLIDE","STAR","BAND"],"ROLL":["BACK","CALL"],"ROOM":["MATE"],"RUNNER":["UP"],"SAUCE":["PAN"],"SCHOOL":["HOUSE","YARD","MATE","BOY","GIRL","WORK","BOOK"],"SEA":["SHORE","SIDE","SHELL","WEED","PORT","FOOD","SICK","HORSE"],"SET":["BACK","UP"],"SHAKE":["DOWN"],"SHARE":["HOLDER","WARE","CROPPER"],"SHELL":["FISH"],"SHIP":["MATE","WRECK","YARD"],"SHOE":["LACE","MAKER","HORN","BOX"],"SHORE":["LINE"],"SHOW":["CASE","DOWN","OFF","ROOM","TIME"],"SIDE":["WALK","KICK","BAR","LINE","STEP","TRACK","SHOW","BOARD"],"SILVER":["WARE","SMITH"],"SLIDE":["SHOW"],"SNOW":["BALL","FLAKE","MAN","STORM","PLOW","SHOE","DRIFT","CAP"],"SPACE":["SHIP","CRAFT","MAN","SHUTTLE"],"SPOON":["FEED"],"SPRING":["TIME","BOARD"],"STAGE":["COACH","HAND"],"STAND":["POINT","STILL","OUT"],"STAR":["FISH","LIGHT","DUST","GAZER","BURST"],"STEEL":["WORK"],"STOCK":["PILE","HOLDER","ROOM","YARD"],"STONE":["WALL","WARE"],"STORE":["FRONT","HOUSE","ROOM"],"STORM":["FRONT"],"STREAM":["LINE"],"SUIT":["CASE"],"SUMMER":["TIME","HOUSE"],"SUN":["FLOWER","SHINE","RISE","SET","BURN","GLASSES","LIGHT","DIAL","ROOF","BATHE"],"TABLE":["SPOON","CLOTH","TOP","WARE"],"THROUGH":["OUT"],"TIE":["BREAKER"],"TIGHT":["ROPE"],"TIME":["ZONE","LINE","OUT","FRAME","TABLE","KEEPER","PIECE","STAMP","SHARE"],"TOP":["HAT","SOIL","COAT","SIDE","NOTCH"],"TOWN":["SHIP","HOUSE"],"TRACK":["SUIT","SIDE"],"TRAP":["DOOR"],"UP":["SIDE","TOWN","GRADE","TIGHT","STAIRS","ROOT","HILL"],"WAGON":["WHEEL"],"WALK":["WAY","OUT","MAN","OVER"],"WARE":["HOUSE"],"WASH":["OUT","TUB","ROOM","CLOTH"],"WATER":["FALL","MARK","MELON","PROOF","SHED","COLOR","FRONT","GATE","WAY"],"WAY":["SIDE","WARD","FARER"],"WHEEL":["BARROW","CHAIR","HOUSE"],"WIND":["MILL","SHIELD","STORM","PIPE","FALL"],"WINTER":["TIME"],"WOOD":["LAND","WORK","SHED","PILE"],"WORD":["PLAY","SMITH","BOOK"],"WORK":["OUT","PLACE","SHOP","FORCE","BOOK","BENCH","ROOM","LOAD","STATION"],"WORM":["HOLE"],"YARD":["STICK"],"ZONE":["OUT","DEFENSE"]};
+    const LK_THEMES = {"FIRE>HOUSE>HOLD>BACK>LOG>JAM":"Slow Burn","BAR>CODE>WORD>PLAY>PEN>PAL":"Secret Correspondence","LETTER>HEAD>WAY>SIDE>LINE>WORK":"Making Headway","PLACE>BOOK>END>GAME>PLAY>MATE":"Checkmate, Buddy","DOWN>TIME>SHARE>HOLDER>SHIP>MATE":"Equity Cruise","HOG>WASH>OUT>POST>CARD>STOCK":"Wish You Weren't Here","PARK>LAND>MARK>UP>SIDE>TRACK":"Tourist Detour","RIVER>BED>ROCK>BAND>STAND>OUT":"Rock and Roll","PARK>LAND>MARK>UP>TOWN>HOUSE":"Prime Real Estate","HEAD>LINE>MAN>POWER>PLAY>GROUND":"Breaking News: Recess","SHOE>BOX>TOP>HAT>BAND>WIDTH":"Dressed for Data","THROUGH>OUT>SET>BACK>GROUND>BREAKING":"Groundbreaking Ceremony","WAY>SIDE>BAR>CODE>WORD>PLAY":"Approach the Bench","SHOE>BOX>TOP>HAT>BAND>WAGON":"Jump On Board","BALL>PARK>WAY>SIDE>LINE>BACKER":"Game Day Traffic","BASE>CAMP>FIRE>FLY>PAPER>BOY":"Lights Out at Camp","POWER>HOUSE>WORK>PLACE>BOOK>CASE":"Overachiever's Desk","GATE>WAY>SIDE>BAR>CODE>WORD":"Password Protected","GROUND>HOG>WASH>OUT>LINE>BACKER":"February Fumble","FLY>TRAP>DOOR>MAN>HOLE>SALE":"Watch Your Step","SIDE>LINE>UP>HILL>TOP>HAT":"An Uphill Battle","HILL>TOP>HAT>BAND>WAGON>WHEEL":"Parade Route","BOOK>CASE>WORK>PLACE>HOLDER>SHIP":"Temp Position","CARD>STOCK>HOLDER>SHIP>YARD>STICK":"Paper Trail to the Docks","TRAP>DOOR>MAN>POWER>HOUSE>MAID":"Upstairs, Downstairs","CASE>WORK>PLACE>HOLDER>SHIP>YARD":"Shipping Department","SHARE>WARE>HOUSE>HOLD>UP>STAIRS":"The Warehouse Job","FIRE>FLY>PAPER>WORK>PLACE>BOOK":"Sticky Situation","BREAK>WATER>WAY>SIDE>BAR>BELL":"Harbor Happy Hour","WOOD>LAND>MARK>UP>HILL>SIDE":"Scenic Overlook","WOOD>WORK>PLACE>BOOK>END>POINT":"Shop Class","CAR>POOL>SIDE>LINE>UP>ROOT":"Everybody In","LINE>MAN>POWER>HOUSE>TOP>HAT":"High Voltage, High Fashion","DAY>DREAM>LAND>SLIDE>SHOW>ROOM":"Head in the Clouds","BUTTER>NUT>SHELL>FISH>HOOK>WORM":"In a Nutshell","POOL>SIDE>BAR>CODE>WORD>PLAY":"Cabana Banter","STONE>WARE>HOUSE>HOLD>UP>TOWN":"Pottery Heist","SIDE>BAR>CODE>WORD>BOOK>WORM":"Cipher Club","FALL>BACK>BOARD>GAME>PLAY>MATE":"Rainy Day Plans","THROUGH>OUT>FIELD>HOUSE>HOLD>BACK":"Benched","RIVER>SIDE>WALK>OVER>COAT>TAIL":"Riding Coattails","HOUSE>TOP>SIDE>BOARD>GAME>STOP":"Family Game Night","BOARD>WALK>OUT>DOOR>WAY>FARER":"Pier Pressure","MILL>STONE>WARE>HOUSE>WORK>LOAD":"Heavy Lifting","BUTTER>FLY>WHEEL>HOUSE>TOP>SIDE":"Right in Your Wheelhouse","ROAD>RUNNER>UP>TOWN>SHIP>MATE":"Almost Famous","DRIFT>WOOD>LAND>MARK>UP>TIGHT":"Sticker Shock at the Shore","CLIFF>SIDE>LINE>UP>TOWN>HOUSE":"Edge of Town","MILK>MAN>POWER>HOUSE>WORK>BENCH":"Special Delivery","BILL>BOARD>GAME>PLAY>TIME>LINE":"Prime Time Slot","ROCK>SLIDE>SHOW>CASE>WORK>LOAD":"Geology Presentation","GOLD>FISH>HOOK>WORM>HOLE>SALE":"Bait and Switch","TRACK>SIDE>SHOW>DOWN>TOWN>SHIP":"High Noon Downtown","PAPER>BACK>TRACK>SIDE>BAR>CODE":"Plot Twist","RAIN>FALL>BACK>BONE>HEAD>QUARTERS":"Storm Command","CRACKER>JACK>HAMMER>HEAD>STONE>WARE":"Demolition Prize","CASE>WORK>BOOK>END>GAME>STOP":"Closed Case","SHARE>WARE>HOUSE>HOLD>UP>TOWN":"Stockroom Standoff","SUN>LIGHT>HOUSE>WORK>BOOK>CASE":"Bright Ideas","JACK>HAMMER>HEAD>WAY>SIDE>TRACK":"Construction Detour","TRAP>DOOR>WAY>SIDE>WALK>OUT":"Stage Exit","GUARD>RAIL>ROAD>WAY>SIDE>WALK":"Safe Passage","MILK>MAN>POWER>PLAY>GROUND>BREAKING":"Groundbreaking Delivery","FAST>BALL>GAME>PLAY>TIME>ZONE":"Extra Innings Abroad","BOW>LINE>MAN>POWER>HOUSE>KEEPER":"Shipshape Staff","HANDLE>BAR>CODE>WORD>BOOK>MARK":"Save Your Place","HAMMER>HEAD>WAY>SIDE>BAR>TENDER":"Shark Walks Into a Bar","DREAM>LAND>MARK>UP>TOWN>HOUSE":"Dream Listing","FAST>BALL>GAME>PLAY>GROUND>BREAKING":"Opening Day Ceremony","BAND>STAND>OUT>LINE>BREAK>FAST":"Morning Encore","SILVER>WARE>HOUSE>WORK>ROOM>MATE":"Chore Wars","WAGON>WHEEL>HOUSE>WORK>ROOM>MATE":"Home on the Range","TOP>HAT>BAND>WAGON>WHEEL>CHAIR":"Front Row at the Parade","STREAM>LINE>UP>SIDE>TRACK>SUIT":"Aerodynamic Athleisure","FIRE>FLY>WHEEL>HOUSE>HOLD>BACK":"Slow Your Glow","JACK>HAMMER>HEAD>STONE>WARE>HOUSE":"Rest in Pieces","BAND>WAGON>WHEEL>HOUSE>WORK>ROOM":"Roadie's Day Off","SUIT>CASE>WORK>PLACE>BOOK>WORM":"Business Trip Reading","SHOW>CASE>WORK>PLACE>BOOK>SHELF":"Display Copy","WOOD>LAND>SLIDE>SHOW>ROOM>MATE":"Nature Documentary Night","JACK>HAMMER>HEAD>WAY>SIDE>KICK":"Demolition Duo","TOWN>HOUSE>HOLD>BACK>GROUND>BREAKING":"New Development","CRACKER>JACK>HAMMER>HEAD>WAY>FARER":"Journeyman","BONE>HEAD>LINE>BREAK>THROUGH>OUT":"Eureka, Eventually","END>GAME>PLAY>GROUND>HOG>WASH":"Checkmate? Nonsense.","OVER>TIME>ZONE>OUT>SIDE>WALK":"Jet Lag Stroll","CLASS>WORK>PLACE>HOLDER>SHIP>YARD":"Vocational School","FIRE>PLACE>HOLDER>SHIP>YARD>STICK":"Hearth and Harbor","STONE>WARE>HOUSE>WORK>ROOM>MATE":"Glazed and Confused","POOL>SIDE>WALK>OVER>TIME>PIECE":"Vacation Hours","PIPE>LINE>MAN>POWER>HOUSE>MAID":"Full Staff","SAUCE>PAN>HANDLE>BAR>CODE>WORD":"Recipe for Secrecy","FAST>BALL>PARK>WAY>SIDE>BOARD":"Seventh-Inning Spread","MAN>POWER>PLAY>BACK>BONE>YARD":"Bench Strength","FOOT>HOLD>UP>TOWN>HOUSE>WIFE":"Climbing the Social Ladder","BLOCK>HEAD>WAY>SIDE>SHOW>CASE":"Carnival of Errors","WINTER>TIME>ZONE>OUT>SIDE>BAR":"Cold Open","SCHOOL>BOOK>STORE>HOUSE>TOP>HAT":"Back to School Formal","FLY>OVER>TIME>TABLE>TOP>SIDE":"Layover Logistics","SNOW>DRIFT>WOOD>LAND>SLIDE>SHOW":"Nature's Slideshow","TOWN>HOUSE>TOP>HAT>BAND>WAGON":"Keeping Up Appearances","STEEL>WORK>BOOK>STORE>FRONT>RUNNER":"Industrial Bestseller","GROUND>WATER>WAY>SIDE>TRACK>SUIT":"Hydration Station","NEWS>PAPER>BACK>GROUND>WATER>SHED":"Watershed Moment","BANK>BOOK>CASE>WORK>PLACE>HOLDER":"Balanced Books","PARK>WAY>SIDE>LINE>BREAK>UP":"It's Not You, It's Traffic","BOW>LINE>UP>SIDE>BOARD>GAME":"Knots and Crosses","BUTTER>MILK>MAN>POWER>PLAY>PEN":"Farm Team","NEWS>STAND>OUT>SIDE>BAR>CODE":"Scan All About It","CODE>WORD>PLAY>TIME>SHARE>CROPPER":"Puns and Acres","BREAK>FAST>BALL>PARK>LAND>SLIDE":"Breakfast at the Ballpark","HAMMER>HEAD>LINE>WORK>BOOK>END":"Nailing the Story","HANDLE>BAR>CODE>WORD>BOOK>SHELF":"Bike Shop Library","ROCK>BAND>STAND>OUT>BREAK>FAST":"Encore, Then Eggs","MARK>UP>TOWN>SHIP>YARD>STICK":"Measuring the Market","HILL>SIDE>WALK>OVER>COAT>TAIL":"Autumn Stroll","GOLD>MINE>FIELD>HOUSE>HOLD>BACK":"Risky Riches","FALL>OUT>SIDE>SHOW>DOWN>TOWN":"Circus Standoff"};
+    const LK_REVERSE = {};
+    for (const k in LK_EDGES) for (const v of LK_EDGES[k]) (LK_REVERSE[v] = LK_REVERSE[v] || []).push(k);
+    const LK_CHAIN_LENGTH = 6;
+    const LK_MAX_ATTEMPTS = 6;
+    const LK_EPOCH = '2026-07-13';
+    const LK_LS_STATE = 'lk_state_v1';
+    const LK_LS_STATS = 'lk_stats_v1';
+
+    let lkSchedule = null;
+    let lkG = null; // per-session game state
+    let lkCdTimer = null;
+
+    function lkMulberry32(seed) {
+      return function () {
+        seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function lkCross(a, b) {
+      const s = new Set(LK_EDGES[a] || []);
+      return (LK_REVERSE[b] || []).filter(w => s.has(w));
+    }
+    function lkValidate(c) {
+      for (let i = 1; i < c.length - 1; i++) {
+        const k = lkCross(c[i - 1], c[i + 1]);
+        if (k.length !== 1 || k[0] !== c[i]) return false;
+      }
+      return true;
+    }
+    function lkBuildSchedule() {
+      const all = [];
+      (function () {
+        function dfs(p) {
+          if (p.length === LK_CHAIN_LENGTH) { if (lkValidate(p)) all.push(p); return; }
+          const opts = LK_EDGES[p[p.length - 1]] || [];
+          for (let i = 0; i < opts.length; i++) if (p.indexOf(opts[i]) === -1) dfs(p.concat([opts[i]]));
+        }
+        const starts = Object.keys(LK_EDGES).sort();
+        for (let i = 0; i < starts.length; i++) dfs([starts[i]]);
+      })();
+      const byKey = {};
+      for (let i = 0; i < all.length; i++) byKey[all[i].join('>')] = all[i];
+      const prefix = []; const inP = {};
+      const tk = Object.keys(LK_THEMES);
+      for (let i = 0; i < tk.length; i++) { const c = byKey[tk[i]]; if (c) { prefix.push(c); inP[tk[i]] = true; } }
+      const rest = all.filter(c => !inP[c.join('>')]);
+      const rng = lkMulberry32(0x4C494E4B);
+      for (let i = rest.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        const t = rest[i]; rest[i] = rest[j]; rest[j] = t;
+      }
+      const sched = prefix.concat(rest);
+      function ov(a, b) { let n = 0; for (let i = 0; i < b.length; i++) if (a.indexOf(b[i]) !== -1) n++; return n; }
+      const W = 10;
+      for (let i = prefix.length; i < sched.length; i++) {
+        let bad = false;
+        for (let w = Math.max(0, i - W); w < i && !bad; w++) if (ov(sched[w], sched[i]) >= 4) bad = true;
+        if (!bad) continue;
+        for (let j = i + 1; j < sched.length; j++) {
+          let ok = true;
+          for (let w = Math.max(0, i - W); w < i && ok; w++) if (ov(sched[w], sched[j]) >= 4) ok = false;
+          if (ok) { const t = sched[i]; sched[i] = sched[j]; sched[j] = t; break; }
+        }
+      }
+      return sched;
+    }
+    function lkTodayStr() {
+      const d = new Date();
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+    function lkChainForDate(ds) {
+      if (!lkSchedule) lkSchedule = lkBuildSchedule();
+      const ms = new Date(ds + 'T00:00:00') - new Date(LK_EPOCH + 'T00:00:00');
+      const idx = Math.round(ms / 86400000);
+      const n = lkSchedule.length;
+      return lkSchedule[((idx % n) + n) % n];
+    }
+    function lkPuzzleNumber(ds) {
+      const ms = new Date(ds + 'T00:00:00') - new Date(LK_EPOCH + 'T00:00:00');
+      return Math.max(1, Math.round(ms / 86400000) + 1);
+    }
+    function lkLoadStats() {
+      try {
+        return JSON.parse(localStorage.getItem(LK_LS_STATS)) ||
+          { played: 0, wins: 0, streak: 0, maxStreak: 0, lastWinDate: null, lastPlayedDate: null };
+      } catch (e) {
+        return { played: 0, wins: 0, streak: 0, maxStreak: 0, lastWinDate: null, lastPlayedDate: null };
+      }
+    }
+    function lkSaveState() {
+      if (lkG.practice) return;
+      try {
+        localStorage.setItem(LK_LS_STATE, JSON.stringify({
+          date: lkG.date, blankIdx: lkG.blankIdx, attemptsUsed: lkG.attemptsUsed,
+          guessLog: lkG.guessLog, hintedBlanks: lkG.hintedBlanks,
+          finished: lkG.finished, won: lkG.won
+        }));
+      } catch (e) {}
+    }
+    function lkRecordResult(didWin) {
+      const st = lkLoadStats();
+      if (lkG.practice) return st;
+      if (st.lastPlayedDate === lkG.date) return st;
+      st.played++;
+      st.lastPlayedDate = lkG.date;
+      if (didWin) {
+        const y = new Date(lkG.date + 'T00:00:00'); y.setDate(y.getDate() - 1);
+        const yStr = y.getFullYear() + '-' + String(y.getMonth() + 1).padStart(2, '0') + '-' + String(y.getDate()).padStart(2, '0');
+        st.streak = (st.lastWinDate === yStr) ? st.streak + 1 : 1;
+        st.maxStreak = Math.max(st.maxStreak, st.streak);
+        st.lastWinDate = lkG.date;
+        st.wins++;
+      } else {
+        st.streak = 0;
+      }
+      try { localStorage.setItem(LK_LS_STATS, JSON.stringify(st)); } catch (e) {}
+      return st;
+    }
+
+    function initLink() {
+      const params = new URLSearchParams(location.search);
+      const dateOverride = /^\d{4}-\d{2}-\d{2}$/.test(params.get('date') || '') ? params.get('date') : null;
+      const practice = params.get('practice') === '1' || dateOverride !== null;
+      if (params.get('reset') === '1') { try { localStorage.removeItem(LK_LS_STATE); } catch (e) {} }
+
+      const date = dateOverride || lkTodayStr();
+      const chain = lkChainForDate(date);
+      lkG = {
+        date: date, practice: practice, dateOverride: dateOverride,
+        chain: chain, answers: chain.slice(1, -1),
+        theme: LK_THEMES[chain.join('>')] || null,
+        blankIdx: 0, attemptsUsed: 0, guessLog: [], hintedBlanks: [],
+        finished: false, won: false,
+        showHow: false, showEnd: false, endStats: null, typed: ''
+      };
+      if (!practice) {
+        try {
+          const raw = localStorage.getItem(LK_LS_STATE);
+          if (raw) {
+            const s = JSON.parse(raw);
+            if (s && s.date === date) {
+              lkG.blankIdx = s.blankIdx; lkG.attemptsUsed = s.attemptsUsed;
+              lkG.guessLog = s.guessLog || []; lkG.hintedBlanks = s.hintedBlanks || [];
+              lkG.finished = s.finished; lkG.won = s.won;
+            }
+          }
+        } catch (e) {}
+      }
+      let seenHow = false;
+      try { seenHow = localStorage.getItem('lk_seen_howto') === '1'; } catch (e) {}
+      if (!seenHow && !lkG.finished) lkG.showHow = true;
+      if (lkG.finished) { lkG.showEnd = true; lkG.endStats = lkLoadStats(); }
+      render();
+    }
+
+    function renderLink() {
+      if (!lkG) return '';
+      const g = lkG;
+      let rows = '';
+      for (let i = 0; i < g.chain.length; i++) {
+        const word = g.chain[i];
+        const isGiven = i === 0 || i === g.chain.length - 1;
+        const bIdx = i - 1;
+        if (isGiven) {
+          rows += `<div class="lk-row lk-given" data-lk-i="${i}"><div class="lk-word">${word}</div></div>`;
+        } else if (g.finished && !g.won && bIdx >= g.blankIdx) {
+          rows += `<div class="lk-row" data-lk-i="${i}"><div class="lk-word" style="color:var(--lk-incorrect);opacity:.75">${word}</div></div>`;
+        } else if (g.finished || bIdx < g.blankIdx) {
+          rows += `<div class="lk-row lk-solved" data-lk-i="${i}"><div class="lk-word">${word}</div></div>`;
+        } else if (bIdx === g.blankIdx) {
+          const answer = g.answers[bIdx];
+          const hinted = g.hintedBlanks.indexOf(bIdx) !== -1;
+          const ph = hinted ? answer[0] + Array(answer.length).join('\u2022') : answer.length + ' letters';
+          const metaRight = hinted
+            ? '<span class="lk-hint-used">Letter revealed</span>'
+            : `<button class="lk-hint-btn" id="lkHintBtn" type="button" ${g.attemptsUsed >= LK_MAX_ATTEMPTS - 1 ? 'disabled' : ''}>Hint (\u22121 guess)</button>`;
+          rows += `<div class="lk-row lk-active" data-lk-i="${i}">
+            <div class="lk-active-wrap">
+              <input class="lk-input" id="lkInput" autocomplete="off" autocapitalize="characters"
+                     spellcheck="false" enterkeyhint="go" maxlength="${answer.length}" placeholder="${ph}">
+              <div class="lk-input-meta">
+                <span class="lk-word-count">Word ${bIdx + 1} of ${g.answers.length}</span>
+                ${metaRight}
+              </div>
+            </div>
+            <div class="lk-miss" id="lkMiss">\u2715</div>
+          </div>`;
+        } else {
+          rows += `<div class="lk-row lk-pending" data-lk-i="${i}"><div class="lk-word">\u2022\u2022\u2022\u2022\u2022</div></div>`;
+        }
+      }
+      let dots = '';
+      for (let i = 0; i < LK_MAX_ATTEMPTS; i++) {
+        dots += `<div class="lk-attempt-mark${i < g.attemptsUsed ? ' lk-used' : ''}"></div>`;
+      }
+      const badge = g.practice
+        ? `<span style="font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:600;color:var(--lk-ink-faint);font-family:'Source Sans 3',sans-serif;">${g.dateOverride ? g.date : 'practice'}</span>`
+        : '<span></span>';
+      const themeLine = g.theme
+        ? `<div class="lk-theme">Today\u2019s theme: <b>\u201C${g.theme}\u201D</b></div>` : '';
+
+      let overlays = '';
+      if (g.showHow) {
+        overlays += `
+        <div class="lk-overlay" id="lkHowOverlay">
+          <div class="lk-card">
+            <button class="lk-card-x" id="lkHowX" aria-label="Close">\u2715</button>
+            <h2>How to play</h2>
+            <ul class="lk-howto-list">
+              <li>Six words form a chain. The first and last are given.</li>
+              <li>Each pair of neighbors makes a common compound word or two-word phrase.</li>
+              <li>Solve top to bottom \u2014 guess the word that links to the one above (and, eventually, everything below).</li>
+              <li>You have <b>6 guesses total</b> for all four blanks.</li>
+              <li>Stuck? A <b>Hint</b> reveals the word\u2019s first letter \u2014 but costs one guess.</li>
+              <li>A new chain arrives at midnight.</li>
+            </ul>
+            <div class="lk-card-btns">
+              <button class="lk-btn lk-btn-primary" id="lkHowClose">Play</button>
+            </div>
+          </div>
+        </div>`;
+      }
+      if (g.showEnd) {
+        const st = g.endStats || lkLoadStats();
+        overlays += `
+        <div class="lk-overlay" id="lkEndOverlay">
+          <div class="lk-card">
+            <button class="lk-card-x" id="lkEndX" aria-label="Close">\u2715</button>
+            <h2>${g.won ? 'Solved!' : 'Out of guesses'}</h2>
+            <p>${g.won ? 'You completed the chain in ' + g.attemptsUsed + ' of ' + LK_MAX_ATTEMPTS + ' guesses.' : 'The full chain was:'}</p>
+            ${g.won ? '' : '<div class="lk-chain-reveal">' + g.chain.join(' \u2192 ') + '</div>'}
+            <div class="lk-stats-row">
+              <div class="lk-stat"><b>${st.played}</b><span>Played</span></div>
+              <div class="lk-stat"><b>${st.played ? Math.round(100 * st.wins / st.played) + '%' : '0%'}</b><span>Win %</span></div>
+              <div class="lk-stat"><b>${st.streak}</b><span>Streak</span></div>
+              <div class="lk-stat"><b>${st.maxStreak}</b><span>Best</span></div>
+            </div>
+            <div class="lk-card-btns">
+              <button class="lk-btn lk-btn-quiet" id="lkCloseBtn">Close</button>
+              <button class="lk-btn lk-btn-primary" id="lkShareBtn">Share</button>
+            </div>
+            <div class="lk-countdown" id="lkCountdown"></div>
+          </div>
+        </div>`;
+      }
+
+      return `
+        <div class="lk-view">
+          <div class="lk-toolbar">
+            ${badge}
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div class="lk-attempts" id="lkAttempts">${dots}</div>
+              <button class="lk-help-btn" id="lkHelpBtn" aria-label="How to play">?</button>
+            </div>
+          </div>
+          ${themeLine}
+          <div class="lk-chain" id="lkChain">${rows}</div>
+          <button class="lk-guess-btn" id="lkGuessBtn" ${g.finished ? 'disabled' : ''}>Guess</button>
+          ${overlays}
+        </div>`;
+    }
+
+    function lkSubmitGuess() {
+      const g = lkG;
+      if (!g || g.finished) return;
+      const input = document.getElementById('lkInput');
+      if (!input) return;
+      const guess = input.value.trim().toUpperCase();
+      if (!guess) return;
+
+      g.attemptsUsed++;
+      const correct = guess === g.answers[g.blankIdx];
+      g.guessLog.push(correct ? 'ok' : 'miss');
+
+      if (correct) {
+        g.blankIdx++;
+        if (g.blankIdx >= g.answers.length) {
+          g.finished = true; g.won = true;
+        }
+        g.typed = '';
+        lkSaveState();
+        if (g.finished) {
+          g.endStats = lkRecordResult(true);
+          render();
+          setTimeout(() => { g.showEnd = true; render(); }, 700);
+        } else {
+          render();
+          const inp = document.getElementById('lkInput');
+          if (inp) inp.focus();
+        }
+      } else {
+        input.value = '';
+        // imperative feedback without full re-render (preserves focus)
+        const row = document.querySelector('.lk-row.lk-active');
+        if (row) {
+          row.classList.add('lk-shake');
+          setTimeout(() => row.classList.remove('lk-shake'), 330);
+        }
+        const miss = document.getElementById('lkMiss');
+        if (miss) {
+          miss.classList.add('lk-on');
+          setTimeout(() => miss.classList.remove('lk-on'), 900);
+        }
+        const dotEls = document.querySelectorAll('#lkAttempts .lk-attempt-mark');
+        if (dotEls[g.attemptsUsed - 1]) dotEls[g.attemptsUsed - 1].classList.add('lk-used');
+        const hb = document.getElementById('lkHintBtn');
+        if (hb) hb.disabled = g.attemptsUsed >= LK_MAX_ATTEMPTS - 1;
+        lkSaveState();
+        if (g.attemptsUsed >= LK_MAX_ATTEMPTS) {
+          g.finished = true; g.won = false;
+          g.endStats = lkRecordResult(false);
+          lkSaveState();
+          render();
+          setTimeout(() => { g.showEnd = true; render(); }, 500);
+        }
+      }
+    }
+
+    function lkUseHint() {
+      const g = lkG;
+      if (!g || g.finished) return;
+      if (g.hintedBlanks.indexOf(g.blankIdx) !== -1) return;
+      if (g.attemptsUsed >= LK_MAX_ATTEMPTS - 1) return;
+      g.attemptsUsed++;
+      g.hintedBlanks.push(g.blankIdx);
+      g.guessLog.push('hint');
+      const input = document.getElementById('lkInput');
+      g.typed = input ? input.value : '';
+      lkSaveState();
+      render();
+      const inp = document.getElementById('lkInput');
+      if (inp) { inp.value = g.typed; inp.focus(); g.typed = ''; }
+    }
+
+    function lkShareText() {
+      const g = lkG;
+      const grid = g.guessLog.map(x => x === 'ok' ? '\uD83D\uDFE9' : x === 'hint' ? '\uD83D\uDFE8' : '\u2B1B').join('');
+      const score = g.won ? g.attemptsUsed + '/' + LK_MAX_ATTEMPTS : 'X/' + LK_MAX_ATTEMPTS;
+      return 'Link #' + lkPuzzleNumber(g.date) + ' \u2014 ' + score + '\n' + grid + '\ndaily15.xyz';
+    }
+
+    function lkTickCountdown() {
+      const el = document.getElementById('lkCountdown');
+      if (!el) { clearInterval(lkCdTimer); lkCdTimer = null; return; }
+      const now = new Date();
+      const mid = new Date(now); mid.setHours(24, 0, 0, 0);
+      const ms = mid - now;
+      const h = String(Math.floor(ms / 3600000)).padStart(2, '0');
+      const m = String(Math.floor(ms % 3600000 / 60000)).padStart(2, '0');
+      const s = String(Math.floor(ms % 60000 / 1000)).padStart(2, '0');
+      el.textContent = 'Next chain in ' + h + ':' + m + ':' + s;
+    }
+
+    function attachLinkListeners() {
+      if (currentMode !== 'LINK' || !lkG) return;
+      const g = lkG;
+
+      const guessBtn = document.getElementById('lkGuessBtn');
+      if (guessBtn) guessBtn.onclick = lkSubmitGuess;
+
+      const input = document.getElementById('lkInput');
+      if (input) {
+        input.onkeydown = (e) => { if (e.key === 'Enter') lkSubmitGuess(); };
+        input.oninput = () => { input.value = input.value.replace(/[^a-zA-Z]/g, ''); };
+      }
+
+      const hintBtn = document.getElementById('lkHintBtn');
+      if (hintBtn) hintBtn.onclick = lkUseHint;
+
+      const helpBtn = document.getElementById('lkHelpBtn');
+      if (helpBtn) helpBtn.onclick = () => { g.showHow = true; render(); };
+
+      const closeHow = () => {
+        g.showHow = false;
+        try { localStorage.setItem('lk_seen_howto', '1'); } catch (e) {}
+        render();
+        const inp = document.getElementById('lkInput');
+        if (inp) inp.focus();
+      };
+      const howX = document.getElementById('lkHowX');
+      if (howX) howX.onclick = closeHow;
+      const howClose = document.getElementById('lkHowClose');
+      if (howClose) howClose.onclick = closeHow;
+      const howOv = document.getElementById('lkHowOverlay');
+      if (howOv) howOv.onclick = (e) => { if (e.target === howOv) closeHow(); };
+
+      const closeEnd = () => {
+        g.showEnd = false;
+        if (lkCdTimer) { clearInterval(lkCdTimer); lkCdTimer = null; }
+        render();
+      };
+      const endX = document.getElementById('lkEndX');
+      if (endX) endX.onclick = closeEnd;
+      const closeBtn = document.getElementById('lkCloseBtn');
+      if (closeBtn) closeBtn.onclick = closeEnd;
+      const endOv = document.getElementById('lkEndOverlay');
+      if (endOv) {
+        endOv.onclick = (e) => { if (e.target === endOv) closeEnd(); };
+        lkTickCountdown();
+        if (!lkCdTimer) lkCdTimer = setInterval(lkTickCountdown, 1000);
+      }
+
+      const shareBtn = document.getElementById('lkShareBtn');
+      if (shareBtn) shareBtn.onclick = () => {
+        const txt = lkShareText();
+        if (navigator.share) {
+          navigator.share({ text: txt }).catch(() => {});
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(txt).then(() => {
+            shareBtn.textContent = 'Copied!';
+            setTimeout(() => { shareBtn.textContent = 'Share'; }, 1400);
+          });
+        }
+      };
+    }
+
     function attachEventListeners() {
       const infoBtn = document.getElementById('infoBtn');
       if (infoBtn) infoBtn.onclick = () => { showInfoModal = true; render(); };
@@ -2253,6 +2864,18 @@
         initMemoryMatrix();
       };
 
+      const navLink = document.getElementById('navLink');
+      if (navLink) navLink.onclick = () => {
+        stopCognitiveTimers();
+        if (sygnalTimerInterval) { clearInterval(sygnalTimerInterval); sygnalTimerInterval = null; }
+        if (blitzTimerInterval) { clearInterval(blitzTimerInterval); blitzTimerInterval = null; }
+        currentMode = 'LINK';
+        initLink();
+      };
+
+
+      // --- Link bindings ---
+      attachLinkListeners();
       document.querySelectorAll('[data-tile-index]').forEach(tile => {
         tile.onclick = () => {
           const index = parseInt(tile.getAttribute('data-tile-index'));
