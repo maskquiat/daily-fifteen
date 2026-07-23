@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
+ <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNLVGXD9M4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -225,22 +225,28 @@
       60% { transform: scale(.97) rotate(.8deg); opacity: 1; }
       100% { transform: scale(1) rotate(0); }
     }
-    .lk-active-wrap { display: flex; flex-direction: column; align-items: center; width: 100%; }
+    .lk-active-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: flex-end; width: 100%; height: 100%; position: relative;
+    }
+    .lk-row.lk-active { overflow: visible; }
     .lk-input {
       width: 100%; max-width: 270px; background: transparent; border: none;
       border-bottom: 2px solid var(--lk-ink); border-radius: 0;
       font-family: 'Libre Baskerville', serif;
       font-size: clamp(17px, 5vw, 25px); letter-spacing: 1.5px;
       text-transform: uppercase; text-align: center; color: var(--lk-ink);
-      padding: 3px 0; outline: none; -webkit-appearance: none;
+      padding: 3px 0; margin: 0; line-height: 1.1;
+      outline: none; -webkit-appearance: none;
     }
     .lk-input::placeholder {
       color: var(--lk-ink-faint); text-transform: none; letter-spacing: 0;
       font-family: 'Source Sans 3', sans-serif; font-size: 13px;
     }
     .lk-input-meta {
+      position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
       width: 100%; max-width: 270px; display: flex; align-items: center;
-      justify-content: space-between; margin-top: 7px;
+      justify-content: space-between; margin-top: 7px; white-space: nowrap;
     }
     .lk-word-count {
       font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
@@ -337,6 +343,18 @@
     .lk-howto-list li { margin-bottom: 7px; }
     @media (max-width: 767px) {
       body.game-locked .lk-view { height: 100%; }
+    }
+    /* Desktop / iPad: the row-flex-to-fill-viewport behavior below is only meant
+       for the locked mobile layout. Elsewhere, cap the puzzle to a comfortable,
+       fixed-height card instead of letting rows stretch across a tall window
+       (which is what was pushing the input line out of alignment with the
+       row dividers and making text look oversized). */
+    @media (min-width: 768px) {
+      .lk-view { max-width: 440px; }
+      .lk-chain {
+        flex: 0 1 auto; max-height: 384px; padding: 0 10px;
+      }
+      .lk-row { flex: 0 0 64px; min-height: 64px; }
     }
     html { height: 100%; }
     body { min-height: 100%; overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
@@ -2612,7 +2630,7 @@
           <div class="lk-card">
             <button class="lk-card-x" id="lkEndX" aria-label="Close">\u2715</button>
             <h2>${g.won ? 'Solved!' : 'Out of guesses'}</h2>
-            <p>${g.won ? 'You completed the chain in ' + g.attemptsUsed + ' of ' + LK_MAX_ATTEMPTS + ' guesses.' : 'The full chain was:'}</p>
+            <p>${g.won ? (g.attemptsUsed === 0 ? 'You completed the chain with no misses!' : 'You completed the chain using ' + g.attemptsUsed + ' of ' + LK_MAX_ATTEMPTS + ' allowed misses.') : 'The full chain was:'}</p>
             ${g.won ? '' : '<div class="lk-chain-reveal">' + g.chain.join(' \u2192 ') + '</div>'}
             <div class="lk-stats-row">
               <div class="lk-stat"><b>${st.played}</b><span>Played</span></div>
@@ -2653,9 +2671,9 @@
       const guess = input.value.trim().toUpperCase();
       if (!guess) return;
 
-      g.attemptsUsed++;
       const correct = guess === g.answers[g.blankIdx];
       g.guessLog.push(correct ? 'ok' : 'miss');
+      if (!correct) g.attemptsUsed++;
 
       if (correct) {
         g.blankIdx++;
@@ -2719,9 +2737,10 @@
 
     function lkShareText() {
       const g = lkG;
-      const grid = g.guessLog.map(x => x === 'ok' ? '\uD83D\uDFE9' : x === 'hint' ? '\uD83D\uDFE8' : '\u2B1B').join('');
-      const score = g.won ? g.attemptsUsed + '/' + LK_MAX_ATTEMPTS : 'X/' + LK_MAX_ATTEMPTS;
-      return 'Link #' + lkPuzzleNumber(g.date) + ' \u2014 ' + score + '\n' + grid + '\ndaily15.xyz';
+      const d = new Date(g.date + 'T00:00:00');
+      const dateStr = String(d.getMonth() + 1).padStart(2, '0') + '/' + String(d.getDate()).padStart(2, '0') + '/' + d.getFullYear();
+      const status = g.won ? '\uD83D\uDD17\u2705' : '\uD83D\uDD17\u274C';
+      return 'Link #' + lkPuzzleNumber(g.date) + ' \u2014 ' + dateStr + ' ' + status + '\ndaily15.xyz';
     }
 
     function lkTickCountdown() {
