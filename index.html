@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <!-- Google tag (gtag.js) -->
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNLVGXD9M4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -229,7 +229,8 @@
       display: flex; flex-direction: column; align-items: center;
       justify-content: flex-end; width: 100%; height: 100%; position: relative;
     }
-    .lk-row.lk-active { overflow: visible; }
+    .lk-row.lk-active { overflow: visible; z-index: 2; }
+    .lk-input-meta { pointer-events: auto; }
     .lk-input {
       width: 100%; max-width: 270px; background: transparent; border: none;
       border-bottom: 2px solid var(--lk-ink); border-radius: 0;
@@ -242,6 +243,11 @@
     .lk-input::placeholder {
       color: var(--lk-ink-faint); text-transform: none; letter-spacing: 0;
       font-family: 'Source Sans 3', sans-serif; font-size: 13px;
+    }
+    .lk-input.lk-hinted::placeholder {
+      color: var(--lk-ink); opacity: .6; text-transform: uppercase;
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(17px, 5vw, 25px); letter-spacing: 1.5px;
     }
     .lk-input-meta {
       position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
@@ -2579,7 +2585,7 @@
             : `<button class="lk-hint-btn" id="lkHintBtn" type="button" ${g.attemptsUsed >= LK_MAX_ATTEMPTS - 1 ? 'disabled' : ''}>Hint (\u22121 guess)</button>`;
           rows += `<div class="lk-row lk-active" data-lk-i="${i}">
             <div class="lk-active-wrap">
-              <input class="lk-input" id="lkInput" autocomplete="off" autocapitalize="characters"
+              <input class="lk-input${hinted ? ' lk-hinted' : ''}" id="lkInput" autocomplete="off" autocapitalize="characters"
                      spellcheck="false" enterkeyhint="go" maxlength="${answer.length}" placeholder="${ph}">
               <div class="lk-input-meta">
                 <span class="lk-word-count">Word ${bIdx + 1} of ${g.answers.length}</span>
