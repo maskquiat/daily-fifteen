@@ -13,6 +13,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Daily15.xyz - Daily Puzzle Games</title>
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#2C3E50">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -432,6 +437,120 @@
         padding-bottom: env(safe-area-inset-bottom);
       }
     }
+    /* === HOME / GAME HUB — sized to fit the window with no page scroll === */
+    body.home-locked{height:100vh;height:100dvh;overflow:hidden}
+    body.home-locked #root{height:100%;display:flex;flex-direction:column}
+    body.home-locked main{flex:1 1 auto;min-height:0;display:flex}
+    .hm-head{flex:0 0 auto;width:100%;box-sizing:border-box;border-bottom:1px solid #121212;display:flex;flex-direction:column;align-items:center;padding:12px 64px 10px;position:relative;background:#F9F8F4}
+    .hm-date{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#4A4A4A;font-family:'Source Sans 3',sans-serif}
+    .hm-brand{display:flex;align-items:center;gap:9px;margin:5px 0 3px}
+    .hm-brand svg{width:30px;height:30px;flex:0 0 auto}
+    .hm-title{font-family:'Libre Baskerville',serif;font-weight:700;font-size:26px;line-height:1.1;letter-spacing:-.02em;margin:0;color:#121212;white-space:nowrap}
+    .hm-tag{margin:0;font-family:'Libre Baskerville',serif;font-style:italic;font-size:13px;color:#4A4A4A;text-align:center}
+    .hm-wrap{flex:1 1 auto;min-height:0;width:100%;max-width:1240px;margin:0 auto;box-sizing:border-box;padding:10px 12px 6px;display:flex;flex-direction:column;justify-content:center}
+    .hm-grid{flex:1 1 auto;min-height:0;display:grid;gap:8px;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto repeat(3,minmax(0,1fr)) auto}
+    .hm-tile{position:relative;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;gap:6px;background:#FFFFFF;border:1px solid #E5E5E5;border-radius:16px;padding:12px;color:#121212;text-decoration:none;box-sizing:border-box;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;font-family:'Source Sans 3',sans-serif}
+    a.hm-tile:hover{transform:translateY(-3px);box-shadow:0 14px 28px -12px rgba(18,18,18,.22);border-color:#C9C2B4}
+    a.hm-tile:active{transform:scale(.98)}
+    a.hm-tile:focus-visible{outline:3px solid #2C3E50;outline-offset:3px}
+    .hm-icon{margin-bottom:2px;--i:clamp(32px,5.4vh,48px);width:var(--i);height:var(--i);border-radius:calc(var(--i) * .27);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+    .hm-icon svg{width:62%;height:62%}
+    .hm-cat{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1.2}
+    .hm-name{font-family:'Libre Baskerville',serif;font-weight:700;font-size:17px;line-height:1.2;margin:1px 0 0}
+    .hm-desc{display:none;margin:0;font-size:14px;line-height:1.4;color:#4A4A4A}
+    .hm-meta{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;color:#4A4A4A}
+    .hm-timing{display:inline-flex;align-items:center;gap:6px}
+    .hm-cta{display:none;font-weight:600;color:#121212}
+    .hm-badge{position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:#E8F0EA;color:#2F5D45;font-size:12px;font-weight:700}
+    .hm-feature{grid-column:1/-1;background:#2C3E50;border-color:#2C3E50;color:#FFFFFF;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;padding:12px}
+    a.hm-feature:hover{border-color:#2C3E50}
+    .hm-ftext{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+    .hm-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.14);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+    .hm-ftitle{font-family:'Libre Baskerville',serif;font-weight:700;font-size:24px;line-height:1.05;margin:0}
+    .hm-fdesc{margin:0;font-size:14px;line-height:1.35;color:rgba(255,255,255,.88)}
+    .hm-fplay{display:none;align-items:center;gap:8px;padding:10px 20px;border-radius:999px;background:#FFFFFF;color:#2C3E50;font-weight:700;font-size:15px;margin-top:6px;white-space:nowrap}
+    .hm-fplay-sm{flex:0 0 auto;width:44px;height:44px;border-radius:22px;background:#FFFFFF;display:flex;align-items:center;justify-content:center}
+    .hm-board{--t:16px;flex:0 0 auto;display:grid;grid-template-columns:repeat(4,var(--t));gap:3px;padding:5px;background:rgba(255,255,255,.12);border-radius:9px}
+    .hm-board span{width:var(--t);height:var(--t);border-radius:calc(var(--t) * .2);background:#FFFFFF;color:#2C3E50;font-family:'Libre Baskerville',serif;font-weight:700;font-size:calc(var(--t) * .45);display:flex;align-items:center;justify-content:center}
+    .hm-board span.hm-gap{background:transparent;border:1.5px dashed rgba(255,255,255,.35);box-sizing:border-box}
+    .hm-soon{display:none;border:2px dashed #C9C2B4;background:transparent;color:#4A4A4A}
+    .hm-soon .hm-icon{border:2px dashed #A39E93;box-sizing:border-box}
+    .hm-next{grid-column:1/-1;background:#2C3E50;border-color:#2C3E50;color:#F9F8F4;flex-direction:row;align-items:center;justify-content:space-between;padding:9px 14px;border-radius:14px}
+    .hm-nexthead{display:flex;align-items:center;gap:8px}
+    .hm-next .hm-cat{display:block;color:#D5DCE3}
+    .hm-clock{font-family:'Libre Baskerville',serif;font-weight:700;font-size:19px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+    .hm-nextmark{width:20px;height:20px;flex:0 0 auto;box-shadow:0 0 0 1.5px rgba(255,255,255,.35);border-radius:5px}
+    .hm-nextnote{display:none;margin:0;font-size:14px;line-height:1.4;color:#D5DCE3}
+    .hm-foot{flex:0 0 auto;width:100%;max-width:1240px;margin:0 auto;box-sizing:border-box;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:2px 16px max(6px,env(safe-area-inset-bottom));font-size:12px;color:#4A4A4A;font-family:'Source Sans 3',sans-serif}
+    .hm-foot button{background:none;border:0;padding:4px 2px;color:#4A4A4A;font:inherit;cursor:pointer}
+    .hm-foot button:hover{color:#121212;text-decoration:underline}
+    @media (max-width:639px) and (max-height:700px){
+      .hm-tile{padding:10px;gap:4px}
+      .hm-icon{--i:30px}
+      .hm-board{--t:14px}
+      .hm-tile:not(.hm-next) .hm-cat{display:none}
+      .hm-fdesc{display:none}
+      .hm-tag{font-size:12px}
+    }
+    @media (min-width:640px){
+      .hm-head{padding:16px 96px 12px}
+      .hm-date{font-size:12px;letter-spacing:.2em}
+      .hm-brand{gap:12px;margin:6px 0 4px}
+      .hm-brand svg{width:40px;height:40px}
+      .hm-title{font-size:38px}
+      .hm-tag{font-size:16px}
+      .hm-wrap{padding:16px 24px 8px}
+      .hm-grid{gap:14px;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:auto repeat(2,minmax(0,1fr));max-height:760px}
+      .hm-tile{padding:16px;gap:8px;border-radius:18px}
+      .hm-icon{--i:clamp(40px,6.4vh,58px)}
+      .hm-cat{font-size:12px}
+      .hm-name{font-size:21px;margin:3px 0 4px}
+      .hm-desc{display:block}
+      .hm-cta{display:inline}
+      .hm-badge{top:14px;right:14px;font-size:13px;padding:4px 10px}
+      .hm-feature{padding:18px 22px;gap:24px}
+      .hm-ftitle{font-size:32px}
+      .hm-fdesc{font-size:16px}
+      .hm-fplay{display:inline-flex}
+      .hm-fplay-sm{display:none}
+      .hm-board{--t:26px;gap:4px;padding:7px;border-radius:11px}
+      .hm-soon{display:flex}
+      .hm-next{grid-column:auto;flex-direction:column;align-items:stretch;justify-content:space-between;padding:16px;border-radius:18px}
+      .hm-nexthead{justify-content:space-between}
+      .hm-nextmark{width:24px;height:24px}
+      .hm-clock{font-size:30px}
+      .hm-nextnote{display:block}
+    }
+    @media (min-width:1024px){
+      .hm-grid{grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));max-height:640px}
+      .hm-feature{grid-column:span 2}
+      .hm-feature{padding:18px;gap:18px}
+      .hm-board{--t:clamp(22px,calc((100vh - 372px) / 9.2),32px)}
+      .hm-ftitle{font-size:30px}
+    }
+    @media (min-width:1280px){
+      .hm-feature{padding:20px 24px;gap:24px}
+      .hm-board{--t:clamp(24px,calc((100vh - 372px) / 9.2),46px)}
+      .hm-ftitle{font-size:clamp(30px,4.6vh,42px)}
+    }
+    @media (min-width:640px) and (max-height:820px){
+      .hm-head{padding-top:12px;padding-bottom:10px}
+      .hm-title{font-size:32px}
+      .hm-brand svg{width:34px;height:34px}
+      .hm-tag{font-size:15px}
+      .hm-nextnote{display:none}
+    }
+    @media (min-width:640px) and (max-height:700px){
+      .hm-desc{display:none}
+      .hm-date{display:none}
+    }
+    /* very short windows (landscape phones): let the page scroll instead of crushing tiles */
+    @media (max-height:539px){
+      body.home-locked{height:auto;overflow:auto}
+      body.home-locked #root{height:auto}
+      .hm-grid{grid-template-rows:none;grid-auto-rows:auto}
+      .hm-tile{min-height:110px}
+    }
   </style>
   <script>
     tailwind.config = {
@@ -612,7 +731,7 @@
     };
 
     // ========== APP STATE ==========
-    let currentMode = 'DAILY_15'; // DAILY_15, QUICK_BLITZ, BLOCK_LOGIC, SYGNAL, COLOR_MATCH, MEMORY_MATRIX
+    let currentMode = 'HOME'; // HOME, DAILY_15, QUICK_BLITZ, BLOCK_LOGIC, SYGNAL, COLOR_MATCH, MEMORY_MATRIX
     let showInfoModal = false;
     let showWinModal = false;
 
@@ -1575,11 +1694,198 @@
       }
     }
 
+
+    // ========== HOME (GAME HUB) + ROUTING ==========
+    // Each game has a #hash route so tiles are real links and the browser Back button returns to the hub.
+    // timed: shown on the tile as "Timed" / "Untimed". Add a new game here and it gets a tile automatically.
+    const HUB_GAMES = [
+      { route: 'blitz',     mode: 'QUICK_BLITZ',   name: 'Blitz',     cat: 'Speed',      color: '#B03A2E', timed: true,
+        desc: 'A 3×3 slider against a 60-second clock.',
+        icon: '<svg viewBox="0 0 48 48" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"><circle cx="24" cy="27" r="15"/><path d="M20 6h8M24 6v6M24 27V18M37 14l3-3"/></svg>' },
+      { route: 'block',     mode: 'BLOCK_LOGIC',   name: 'Block',     cat: 'Logic',      color: '#2F5D45', timed: false,
+        desc: 'Fit every piece into the 6×6 grid.',
+        icon: '<svg viewBox="0 0 48 48" fill="#FFFFFF"><rect x="5" y="5" width="9" height="9" rx="1.5"/><rect x="15" y="5" width="9" height="9" rx="1.5"/><rect x="25" y="5" width="9" height="9" rx="1.5"/><rect x="15" y="15" width="9" height="9" rx="1.5"/><g opacity="0.65"><rect x="34" y="16" width="9" height="9" rx="1.5"/><rect x="34" y="26" width="9" height="9" rx="1.5"/><rect x="34" y="36" width="9" height="9" rx="1.5"/><rect x="24" y="36" width="9" height="9" rx="1.5"/></g><g opacity="0.38"><rect x="5" y="26" width="9" height="9" rx="1.5"/><rect x="5" y="36" width="9" height="9" rx="1.5"/><rect x="15" y="36" width="9" height="9" rx="1.5"/></g></svg>' },
+      { route: 'sygnal',    mode: 'SYGNAL',        name: 'Sygnal',    cat: 'Perception', color: '#6B3E66', timed: true,
+        desc: 'Two cards, one shared symbol. Spot it fast.',
+        icon: '<svg viewBox="0 0 48 48" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"><circle cx="24" cy="24" r="20"/><circle cx="17" cy="17" r="4" fill="#FFFFFF"/><path d="M31 12l5 8h-10z" fill="#FFFFFF"/><rect x="13" y="27" width="8" height="8" fill="#FFFFFF"/><path d="M31 26v10M26 31h10" stroke-linecap="round"/></svg>' },
+      { route: 'link',      mode: 'LINK',          name: 'Link',      cat: 'Words',      color: '#3A3530', timed: false,
+        desc: 'Build the compound-word chain in six tries.',
+        icon: '<svg viewBox="0 0 48 48" fill="none" stroke="#FFFFFF" stroke-width="3.5"><g transform="rotate(-35 24 24)"><rect x="4" y="17" width="23" height="14" rx="7"/><rect x="21" y="17" width="23" height="14" rx="7"/></g></svg>' },
+      { route: 'chromatic', mode: 'COLOR_MATCH',   name: 'Chromatic', cat: 'Perception', color: '#8A5A12', timed: false,
+        desc: 'Match the ink color to the word’s meaning.',
+        icon: '<svg viewBox="0 0 48 48" fill="#FFFFFF" fill-opacity="0.45" stroke="#FFFFFF" stroke-width="2.5"><circle cx="17" cy="18" r="11"/><circle cx="31" cy="18" r="11"/><circle cx="24" cy="30" r="11"/></svg>' },
+      { route: 'trace',     mode: 'MEMORY_MATRIX', name: 'Trace',     cat: 'Memory',     color: '#1F5F6B', timed: false,
+        desc: 'Memorize the lit tiles, then tap them back.',
+        icon: '<svg viewBox="0 0 48 48" fill="#FFFFFF"><circle cx="10" cy="10" r="3"/><circle cx="24" cy="10" r="3"/><circle cx="38" cy="10" r="3"/><circle cx="10" cy="24" r="3"/><circle cx="24" cy="24" r="3"/><circle cx="38" cy="24" r="3"/><circle cx="10" cy="38" r="3"/><circle cx="24" cy="38" r="3"/><circle cx="38" cy="38" r="3"/><path d="M10 10H24V24L38 38" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="38" r="5.5"/></svg>' },
+    ];
+    const ROUTE_TO_MODE = { fifteen: 'DAILY_15' };
+    HUB_GAMES.forEach(g => { ROUTE_TO_MODE[g.route] = g.mode; });
+
+    let homeCdTimer = null;
+    let currentRoute = null;
+
+    function logoMark(cls) {
+      return '<svg class="' + (cls || '') + '" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#2C3E50"/><rect x="5" y="5" width="10" height="10" rx="2.2" fill="#FFFFFF"/><rect x="5" y="17" width="10" height="10" rx="2.2" fill="#FFFFFF"/><rect x="17" y="17" width="10" height="10" rx="2.2" fill="#FFFFFF"/><path d="M17 15V4.5A10.5 10.5 0 0 1 27.5 15Z" fill="#E0533F"/></svg>';
+    }
+
+    // Honest, local-only status: only games that already save today's result on this device get a badge.
+    function hubTodayStatus(route) {
+      try {
+        if (route === 'fifteen') {
+          const s = JSON.parse(localStorage.getItem('daily15_' + getDailySeed()) || 'null');
+          return s && s.isComplete ? 'Solved today' : null;
+        }
+        if (route === 'link') {
+          const s = JSON.parse(localStorage.getItem(LK_LS_STATE) || 'null');
+          if (s && s.date === lkTodayStr() && s.finished) return s.won ? 'Solved today' : 'Played today';
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    function hubCountdownText() {
+      const now = new Date();
+      const mid = new Date(now); mid.setHours(24, 0, 0, 0);
+      const s = Math.max(0, Math.floor((mid - now) / 1000));
+      const p = n => String(n).padStart(2, '0');
+      return p(Math.floor(s / 3600)) + ':' + p(Math.floor((s % 3600) / 60)) + ':' + p(s % 60);
+    }
+
+    function syncHomeCountdown() {
+      if (currentMode === 'HOME') {
+        if (!homeCdTimer) homeCdTimer = setInterval(() => {
+          const el = document.getElementById('hmCountdown');
+          if (el) el.textContent = hubCountdownText();
+        }, 1000);
+      } else if (homeCdTimer) {
+        clearInterval(homeCdTimer); homeCdTimer = null;
+      }
+    }
+
+    function renderHomeHeader() {
+      const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      return `
+        <header class="hm-head">
+          <div class="absolute right-4 top-4 md:right-8 md:top-8">
+            <button id="infoBtn" aria-label="How to play" class="w-8 h-8 flex items-center justify-center rounded-full border border-ink-light/30 text-ink hover:bg-ink hover:text-white transition-colors">
+              <span class="font-serif italic font-bold text-sm">i</span>
+            </button>
+          </div>
+          <div class="hm-date">${dateStr}</div>
+          <div class="hm-brand">${logoMark()}<h1 class="hm-title">Daily15.xyz</h1></div>
+          <p class="hm-tag">Take a quick break. New puzzles every day.</p>
+        </header>
+      `;
+    }
+
+    function renderHome() {
+      const check = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>';
+      const timedIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M10 2h4"/></svg>';
+      const untimedIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 8c-2.8 0-4.5 1.8-4.5 4s1.7 4 4.5 4c3.8 0 6.2-8 10-8 2.8 0 4.5 1.8 4.5 4s-1.7 4-4.5 4c-3.8 0-6.2-8-10-8z"/></svg>';
+
+      const board = [5, 1, 3, 4, 9, 2, 7, 8, 13, 6, 11, 12, 14, 10, 0, 15]
+        .map(n => n ? '<span>' + n + '</span>' : '<span class="hm-gap"></span>').join('');
+      const fStatus = hubTodayStatus('fifteen');
+
+      const feature = `
+        <a href="#fifteen" class="hm-tile hm-feature" aria-label="Play Fifteen${fStatus ? ' (' + fStatus.toLowerCase() + ')' : ''}">
+          <div class="hm-board" aria-hidden="true">${board}</div>
+          <div class="hm-ftext">
+            <span class="hm-chip">${fStatus ? check + fStatus : 'The Flagship'}</span>
+            <h2 class="hm-ftitle">Fifteen</h2>
+            <p class="hm-fdesc">Slide the tiles back into order, 1 through 15.</p>
+            <span class="hm-fplay">${fStatus ? 'See result' : 'Play now'}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </div>
+          <span class="hm-fplay-sm" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="#2C3E50"><path d="M8 5l12 7-12 7z"/></svg></span>
+        </a>`;
+
+      const tiles = HUB_GAMES.map(g => {
+        const status = hubTodayStatus(g.route);
+        return `
+        <a href="#${g.route}" class="hm-tile" aria-label="${g.name}, ${g.timed ? 'timed' : 'untimed'}${status ? ', ' + status.toLowerCase() : ''}">
+          ${status ? '<span class="hm-badge">' + check + status.replace(' today', '') + '</span>' : ''}
+          <div class="hm-icon" style="background:${g.color}">${g.icon}</div>
+          <div>
+            <div class="hm-cat" style="color:${g.color}">${g.cat}</div>
+            <h3 class="hm-name">${g.name}</h3>
+            <p class="hm-desc">${g.desc}</p>
+          </div>
+          <div class="hm-meta">
+            <span class="hm-timing">${g.timed ? timedIcon + 'Timed' : untimedIcon + 'Untimed'}</span>
+            <span class="hm-cta">${status ? 'See result →' : 'Play →'}</span>
+          </div>
+        </a>`;
+      }).join('');
+
+      return `
+        <div class="hm-wrap">
+          <section class="hm-grid" aria-label="Today's puzzles">
+            ${feature}
+            ${tiles}
+            <div class="hm-tile hm-soon">
+              <div class="hm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
+              <div>
+                <div class="hm-cat">Coming soon</div>
+                <h3 class="hm-name" style="color:#121212">New puzzle</h3>
+                <p class="hm-desc">A new puzzle joins the edition.</p>
+              </div>
+            </div>
+            <div class="hm-tile hm-next">
+              <div class="hm-nexthead"><span class="hm-cat">New puzzles in</span>${logoMark('hm-nextmark')}</div>
+              <div id="hmCountdown" class="hm-clock">${hubCountdownText()}</div>
+              <p class="hm-nextnote">Fresh puzzles at midnight, your local time.</p>
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    function stopAllGameTimers() {
+      if (sygnalTimerInterval) { clearInterval(sygnalTimerInterval); sygnalTimerInterval = null; }
+      if (blitzTimerInterval) { clearInterval(blitzTimerInterval); blitzTimerInterval = null; }
+      stopCognitiveTimers();
+    }
+
+    function openMode(mode) {
+      stopAllGameTimers();
+      showWinModal = false;
+      cogGameOverData = null;
+      currentMode = mode;
+      if (mode === 'DAILY_15') initFifteenPuzzle('DAILY');
+      else if (mode === 'QUICK_BLITZ') initFifteenPuzzle('BLITZ');
+      else if (mode === 'BLOCK_LOGIC') initBlockLogic();
+      else if (mode === 'SYGNAL') initSygnal();
+      else if (mode === 'COLOR_MATCH') initColorMatch();
+      else if (mode === 'MEMORY_MATRIX') initMemoryMatrix();
+      else if (mode === 'LINK') initLink();
+      else { currentMode = 'HOME'; render(); }
+      window.scrollTo(0, 0);
+    }
+
+    // Reads location.hash and shows that game (or the hub). force=true re-opens the same route.
+    function applyRoute(force) {
+      const route = (location.hash || '').replace(/^#/, '').toLowerCase();
+      const known = ROUTE_TO_MODE[route] ? route : '';
+      if (!force && known === currentRoute) return;
+      currentRoute = known;
+      openMode(known ? ROUTE_TO_MODE[known] : 'HOME');
+    }
+
+    function navigate(route) {
+      const target = '#' + route;
+      if (route && location.hash !== target) { location.hash = route; return; }   // hashchange -> applyRoute
+      if (!route && location.hash) { history.pushState(null, '', location.pathname + location.search); }
+      applyRoute(true);
+    }
+
     // ========== RENDERING ==========
     function render() {
       const root = document.getElementById('root');
       const lockLayout = currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ' || currentMode === 'LINK';
       document.body.classList.toggle('game-locked', lockLayout);
+      document.body.classList.toggle('home-locked', currentMode === 'HOME');
       root.innerHTML = `
         ${renderHeader()}
         ${renderMain()}
@@ -1588,9 +1894,11 @@
         ${renderFooter()}
       `;
       attachEventListeners();
+      syncHomeCountdown();
     }
 
     function renderHeader() {
+      if (currentMode === 'HOME') return renderHomeHeader();
       const dateStr = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         month: 'long',
@@ -1610,11 +1918,18 @@
             </button>
           </div>
 
+          <div class="absolute left-4 ${compact ? 'top-2 md:top-8' : 'top-8'} md:left-8">
+            <button id="allGamesBtn" aria-label="All games" class="h-8 px-2.5 flex items-center gap-1.5 rounded-full border border-ink-light/30 text-ink hover:bg-ink hover:text-white transition-colors">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+              <span class="hidden sm:inline font-sans text-xs font-semibold uppercase tracking-wide">All games</span>
+            </button>
+          </div>
+
           <div class="${compact ? 'hidden md:block' : ''} mb-2 font-sans text-xs font-bold tracking-widest uppercase text-ink-light">
             ${dateStr}
           </div>
           <h1 class="font-serif ${compact ? 'text-2xl mb-2 md:text-5xl md:mb-8' : 'text-4xl md:text-5xl mb-8'} font-bold text-ink tracking-tight">
-            Daily15.xyz
+            <button id="homeBtn" type="button" aria-label="Daily15.xyz — all games" class="inline-flex items-center gap-2 md:gap-3 font-serif font-bold tracking-tight hover:opacity-80 transition-opacity">${logoMark(compact ? 'w-6 h-6 md:w-11 md:h-11' : 'w-8 h-8 md:w-11 md:h-11')}<span>Daily15.xyz</span></button>
           </h1>
           
           <nav class="flex flex-wrap justify-center gap-x-3 gap-y-1 md:gap-x-6">
@@ -1695,6 +2010,7 @@
     }
 
     function renderMain() {
+      if (currentMode === 'HOME') return `<main class="w-full flex-grow">${renderHome()}</main>`;
       return `
         <main class="w-full max-w-4xl px-4 py-8 md:py-12 flex-grow flex flex-col items-center mx-auto">
           ${currentMode === 'DAILY_15' ? renderFifteenPuzzle('DAILY') : ''}
@@ -2384,6 +2700,11 @@
     }
 
     function renderFooter() {
+      if (currentMode === 'HOME') return `
+        <footer class="hm-foot">
+          <span>&copy; 2025 Daily15.xyz</span>
+          <span><button id="privacyBtn">Privacy</button> · <button id="aboutBtn">About</button></span>
+        </footer>`;
       return `
         <footer class="w-full py-6 border-t border-border-subtle mt-auto">
           <div class="max-w-4xl mx-auto px-4 flex justify-between items-center text-xs font-sans text-ink-light">
@@ -2828,75 +3149,15 @@
       const infoBtn = document.getElementById('infoBtn');
       if (infoBtn) infoBtn.onclick = () => { showInfoModal = true; render(); };
 
-      const navDaily = document.getElementById('navDaily');
-      if (navDaily) navDaily.onclick = () => { 
-        // Clean up Sygnal timer when switching modes
-        if (sygnalTimerInterval) {
-          clearInterval(sygnalTimerInterval);
-          sygnalTimerInterval = null;
-        }
-        stopCognitiveTimers();
-        currentMode = 'DAILY_15'; 
-        initFifteenPuzzle('DAILY'); 
-      };
-
-      const navBlitz = document.getElementById('navBlitz');
-      if (navBlitz) navBlitz.onclick = () => { 
-        // Clean up Sygnal timer when switching modes
-        if (sygnalTimerInterval) {
-          clearInterval(sygnalTimerInterval);
-          sygnalTimerInterval = null;
-        }
-        stopCognitiveTimers();
-        currentMode = 'QUICK_BLITZ'; 
-        initFifteenPuzzle('BLITZ'); 
-      };
-
-      const navBlock = document.getElementById('navBlock');
-      if (navBlock) navBlock.onclick = () => { 
-        // Clean up Sygnal timer when switching modes
-        if (sygnalTimerInterval) {
-          clearInterval(sygnalTimerInterval);
-          sygnalTimerInterval = null;
-        }
-        stopCognitiveTimers();
-        currentMode = 'BLOCK_LOGIC'; 
-        initBlockLogic(); 
-      };
-
-      const navSygnal = document.getElementById('navSygnal');
-      if (navSygnal) navSygnal.onclick = () => {
-        stopCognitiveTimers();
-        if (blitzTimerInterval) { clearInterval(blitzTimerInterval); blitzTimerInterval = null; }
-        currentMode = 'SYGNAL';
-        initSygnal();
-      };
-
-      // Cognitive game nav buttons
-      const navChromatic = document.getElementById('navChromatic');
-      if (navChromatic) navChromatic.onclick = () => {
-        if (sygnalTimerInterval) { clearInterval(sygnalTimerInterval); sygnalTimerInterval = null; }
-        if (blitzTimerInterval) { clearInterval(blitzTimerInterval); blitzTimerInterval = null; }
-        currentMode = 'COLOR_MATCH';
-        initColorMatch();
-      };
-
-      const navTrace = document.getElementById('navTrace');
-      if (navTrace) navTrace.onclick = () => {
-        if (sygnalTimerInterval) { clearInterval(sygnalTimerInterval); sygnalTimerInterval = null; }
-        if (blitzTimerInterval) { clearInterval(blitzTimerInterval); blitzTimerInterval = null; }
-        currentMode = 'MEMORY_MATRIX';
-        initMemoryMatrix();
-      };
-
-      const navLink = document.getElementById('navLink');
-      if (navLink) navLink.onclick = () => {
-        stopCognitiveTimers();
-        if (sygnalTimerInterval) { clearInterval(sygnalTimerInterval); sygnalTimerInterval = null; }
-        if (blitzTimerInterval) { clearInterval(blitzTimerInterval); blitzTimerInterval = null; }
-        currentMode = 'LINK';
-        initLink();
-      };
+      const NAV_ROUTES = { navDaily: 'fifteen', navBlitz: 'blitz', navBlock: 'block', navSygnal: 'sygnal', navChromatic: 'chromatic', navTrace: 'trace', navLink: 'link' };
+      Object.keys(NAV_ROUTES).forEach(id => {
+        const b = document.getElementById(id);
+        if (b) b.onclick = () => navigate(NAV_ROUTES[id]);
+      });
+      const homeBtn = document.getElementById('homeBtn');
+      if (homeBtn) homeBtn.onclick = () => navigate('');
+      const allGamesBtn = document.getElementById('allGamesBtn');
+      if (allGamesBtn) allGamesBtn.onclick = () => navigate('');
 
 
       // --- Link bindings ---
@@ -3006,8 +3267,7 @@
       const cogBackToFifteen = document.getElementById('cogBackToFifteen');
       if (cogBackToFifteen) cogBackToFifteen.onclick = () => {
         cogGameOverData = null;
-        currentMode = 'DAILY_15';
-        initFifteenPuzzle('DAILY');
+        navigate('fifteen');
       };
 
       const privacyBtn = document.getElementById('privacyBtn');
@@ -3017,8 +3277,10 @@
       if (aboutBtn) aboutBtn.onclick = () => alert("About: Designed to stimulate intellectual growth.");
     }
 
-    // Initialize
-    initFifteenPuzzle('DAILY');
+    // Initialize: open the game named in the URL hash, or the hub
+    window.addEventListener('hashchange', () => applyRoute());
+    window.addEventListener('popstate', () => applyRoute());
+    applyRoute(true);
   </script>
 </body>
 </html>
