@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZNLVGXD9M4"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NQ3SSGYQ8H"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-ZNLVGXD9M4');
+  gtag('config', 'G-NQ3SSGYQ8H');
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -453,12 +453,15 @@
     a.hm-tile:hover{transform:translateY(-3px);box-shadow:0 14px 28px -12px rgba(18,18,18,.22);border-color:#C9C2B4}
     a.hm-tile:active{transform:scale(.98)}
     a.hm-tile:focus-visible{outline:3px solid #2C3E50;outline-offset:3px}
-    .hm-icon{margin-bottom:2px;--i:clamp(32px,5.4vh,48px);width:var(--i);height:var(--i);border-radius:calc(var(--i) * .27);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-    .hm-icon svg{width:62%;height:62%}
+    .hm-iconwrap{flex:1 1 auto;min-height:40px;width:100%;display:flex;align-items:center;justify-content:center;container-type:size}
+    .hm-icon{--i:56px;width:var(--i);height:var(--i);border-radius:calc(var(--i) * .225);display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 1px 2px rgba(18,18,18,.12),0 6px 14px -6px rgba(18,18,18,.35)}
+    @supports (width:1cqh){ .hm-icon{--i:max(40px,min(100cqh,100cqw,128px))} }
+    .hm-icon svg{width:58%;height:58%}
+    .hm-text{text-align:center;width:100%}
     .hm-cat{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;line-height:1.2}
-    .hm-name{font-family:'Libre Baskerville',serif;font-weight:700;font-size:17px;line-height:1.2;margin:1px 0 0}
+    .hm-name{font-family:'Libre Baskerville',serif;font-weight:700;font-size:17px;line-height:1.2;margin:0}
     .hm-desc{display:none;margin:0;font-size:14px;line-height:1.4;color:#4A4A4A}
-    .hm-meta{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;color:#4A4A4A}
+    .hm-meta{display:flex;justify-content:center;align-items:center;gap:8px;font-size:13px;color:#4A4A4A}
     .hm-timing{display:inline-flex;align-items:center;gap:6px}
     .hm-cta{display:none;font-weight:600;color:#121212}
     .hm-badge{position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:#E8F0EA;color:#2F5D45;font-size:12px;font-weight:700}
@@ -474,7 +477,7 @@
     .hm-board span{width:var(--t);height:var(--t);border-radius:calc(var(--t) * .2);background:#FFFFFF;color:#2C3E50;font-family:'Libre Baskerville',serif;font-weight:700;font-size:calc(var(--t) * .45);display:flex;align-items:center;justify-content:center}
     .hm-board span.hm-gap{background:transparent;border:1.5px dashed rgba(255,255,255,.35);box-sizing:border-box}
     .hm-soon{display:none;border:2px dashed #C9C2B4;background:transparent;color:#4A4A4A}
-    .hm-soon .hm-icon{border:2px dashed #A39E93;box-sizing:border-box}
+    .hm-soon .hm-icon{border:2px dashed #A39E93;box-sizing:border-box;box-shadow:none}
     .hm-next{grid-column:1/-1;background:#2C3E50;border-color:#2C3E50;color:#F9F8F4;flex-direction:row;align-items:center;justify-content:space-between;padding:9px 14px;border-radius:14px}
     .hm-nexthead{display:flex;align-items:center;gap:8px}
     .hm-next .hm-cat{display:block;color:#D5DCE3}
@@ -486,7 +489,8 @@
     .hm-foot button:hover{color:#121212;text-decoration:underline}
     @media (max-width:639px) and (max-height:700px){
       .hm-tile{padding:10px;gap:4px}
-      .hm-icon{--i:30px}
+      .hm-iconwrap{min-height:30px}
+      .hm-icon{--i:max(30px,min(100cqh,100cqw,128px))}
       .hm-board{--t:14px}
       .hm-tile:not(.hm-next) .hm-cat{display:none}
       .hm-fdesc{display:none}
@@ -502,9 +506,9 @@
       .hm-wrap{padding:16px 24px 8px}
       .hm-grid{gap:14px;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:auto repeat(2,minmax(0,1fr));max-height:760px}
       .hm-tile{padding:16px;gap:8px;border-radius:18px}
-      .hm-icon{--i:clamp(40px,6.4vh,58px)}
+      .hm-meta{justify-content:space-between}
       .hm-cat{font-size:12px}
-      .hm-name{font-size:21px;margin:3px 0 4px}
+      .hm-name{font-size:21px;margin:2px 0 3px}
       .hm-desc{display:block}
       .hm-cta{display:inline}
       .hm-badge{top:14px;right:14px;font-size:13px;padding:4px 10px}
@@ -1806,8 +1810,8 @@
         return `
         <a href="#${g.route}" class="hm-tile" aria-label="${g.name}, ${g.timed ? 'timed' : 'untimed'}${status ? ', ' + status.toLowerCase() : ''}">
           ${status ? '<span class="hm-badge">' + check + status.replace(' today', '') + '</span>' : ''}
-          <div class="hm-icon" style="background:${g.color}">${g.icon}</div>
-          <div>
+          <div class="hm-iconwrap"><div class="hm-icon" style="background:${g.color}">${g.icon}</div></div>
+          <div class="hm-text">
             <div class="hm-cat" style="color:${g.color}">${g.cat}</div>
             <h3 class="hm-name">${g.name}</h3>
             <p class="hm-desc">${g.desc}</p>
@@ -1825,8 +1829,8 @@
             ${feature}
             ${tiles}
             <div class="hm-tile hm-soon">
-              <div class="hm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
-              <div>
+              <div class="hm-iconwrap"><div class="hm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="hm-text">
                 <div class="hm-cat">Coming soon</div>
                 <h3 class="hm-name" style="color:#121212">New puzzle</h3>
                 <p class="hm-desc">A new puzzle joins the edition.</p>
