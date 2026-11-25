@@ -725,7 +725,10 @@ function viewFinal(){
     <div class="pad">
       <div class="podium">${slot(1, 'second', 120)}${slot(0, 'first', 170)}${slot(2, 'third', 84)}</div><div class="podium-base"></div>
       <div id="frest" class="fade-in"><div class="card">${ps.map(p => `<div class="lb-row"><span style="font-weight:800;width:22px">${p.rank}</span>${p.rank <= 3 ? trophy(p.rank, 26) : '<span style="width:26px;flex:none"></span>'}<span class="pdot" style="background:${pcolor(p.color)}"></span><span style="font-weight:700">${esc(p.name)}</span><span class="pts">${p.s}</span></div>`).join('')}</div>
-      ${isHost ? `<div class="stack"><button class="btn primary" data-act="again">Play again, same family</button><button class="btn" data-act="newgame">New game</button></div>` : '<p class="center muted">Thanks for playing.</p>'}</div>
+      ${isHost ? `<div class="stack"><button class="btn primary" data-act="again">Play again, same players</button><button class="btn" data-act="home">Back to start</button>
+        <p class="center muted" style="margin:0;font-size:15px">Back to start ends this game for everyone. From there you can host a new game, join one, or play against the computer.</p></div>`
+      : `<div class="stack"><p class="center" style="margin:0;font-weight:600">Thanks for playing. If the host starts another game, you’ll be taken there automatically.</p><button class="btn primary" data-act="home">Back to start</button>
+        <p class="center muted" style="margin:0;font-size:15px">Join a new game, host your own, or play against the computer.</p></div>`}
     </div>`;
 }
 function confetti(n){
@@ -880,7 +883,8 @@ document.addEventListener('click', async e => {
     case 'skipguess': if (H.g.active && H.g.active.stage === 'tiebreak'){ resolveTie(0); pushState(); } break;
     case 'closevote': if (H.g.active && H.g.active.stage === 'vote'){ tally(); pushState(); } break;
     case 'again': { const g = H.g; g.phase = 'lobby'; g.round = 0; g.cats = null; g.bonusCat = null; g.reveal = null; g.history = []; g.lbUnlocked = false; Object.keys(g.scores).forEach(p => g.scores[p] = 0); pushState(); break; }
-    case 'newgame': store.del('ak_hostgame'); location.href = location.pathname; break;
+    case 'newgame':
+    case 'home': if (isHost) store.del('ak_hostgame'); if (net) net.close(); location.href = location.pathname; break;
   }
 });
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.target.id === 'jn' || e.target.id === 'jc')){ e.preventDefault(); const b = document.querySelector('[data-act=join]'); b && b.click(); } });
