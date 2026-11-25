@@ -198,7 +198,7 @@ function qrSVG(text, px){
   for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) d += `M${c + pad} ${r + pad}h1v1h-1z`;
   return `<svg viewBox="0 0 ${w} ${w}" width="${px}" height="${px}" role="img" aria-label="QR code to join game ${code}" shape-rendering="crispEdges" style="display:block;background:#fff;border-radius:10px"><path d="${d}" fill="#111"/></svg>`;
 }
-const BOT_NAMES = ['Robo Raccoon','Pixel Panda','Byte Badger','Circuit Crow','Gizmo Gator'];
+const BOT_NAMES = ['Simone Salamander','Koala Kai','Brooke Badger','Groundhog Grace','Jackal Joe'];
 const bankCache = {};
 function bankFor(cat){ const k = String(cat).trim().toLowerCase(), key = BANK[k] ? k : CAT_ALIAS[k]; if (!key) return [];
   return bankCache[key] || (bankCache[key] = BANK[key].split(',').map(w => w.trim()).filter(Boolean)); }
@@ -664,7 +664,7 @@ function viewHostLobby(){
       <div class="muted" style="font-size:15px">Point a phone or iPad camera here, or go to daily15.xyz/council. Then tap Join a game and enter ${esc(code)}.</div></div></div>
     <div class="card"><div class="row" style="justify-content:space-between"><div class="label">Players</div><div id="pcount" class="label"></div></div><div id="plist" class="row" style="flex-wrap:wrap;margin-top:10px"></div>
       <button class="btn small" data-act="addbot" style="margin-top:12px">Add a computer player</button>
-      <div class="muted" style="font-size:14px;margin-top:8px">Computer players answer, vote, and sometimes challenge. Good for practice or a smaller crowd.</div></div>
+      <div class="muted" style="font-size:14px;margin-top:8px">Computer players answer and vote on challenges. Good for practice or a smaller crowd.</div></div>
     <div class="card stack">
       <label class="label" for="hn">Your name</label><input id="hn" class="field" maxlength="18" autocomplete="off" value="${esc(me.name)}">
       <label class="row" style="font-weight:700;gap:12px"><input type="checkbox" id="hp" ${c.hostPlays ? 'checked' : ''} style="width:26px;height:26px;accent-color:var(--a1)"> I’m playing too</label>
