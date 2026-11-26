@@ -445,6 +445,12 @@ function hostHandle(m){
       break;
     case 'challenge': {
       if (g.phase !== 'reveal' || !g.players[m.from]) return;
+      if (m.kind === 'match'){
+        const ids = (m.ids || []).slice(0, 2), es = ids.map(findEntry);
+        if (ids.length !== 2 || es.some(e => !e || e.ruling || e.status === 'blank' || e.status === 'wrong' || inCouncil(g, e.id)) || ids[0].split('|')[0] !== ids[1].split('|')[0] || !es.some(e => e.base > 0)) return;
+        g.queue.push({ kind:'match', cat:ids[0].split('|')[0], ids, by:m.from });
+        if (!g.active) nextChallenge(); pushState(); break;
+      }
       const e = findEntry(m.id); if (!e || !canChallenge(e, m.from)) return;
       g.queue.push({ id:m.id, by:m.from }); if (!g.active && Date.now() >= (g.queueReadyAt || 0)) nextChallenge(); pushState(); break; }
     case 'vote': {
@@ -509,8 +515,6 @@ function buildReveal(){
       else { const w = e.core.split(' ').filter(Boolean); if (w.length >= 2 && w.every(x => x[0] === L)){ status = 'double'; base = 2; } else { status = 'unique'; base = 1; } }
       return { id:e.id, pid:e.pid, text:e.text, status, base, pts:base, ruling:null };
     });
-    findMatchGroups(list).forEach(gr => { const ids = gr.map(e => e.id);
-      if (ids.some(id => rv[cat].find(x => x.id === id).base > 0)) matchQueue.push({ kind:'match', cat, ids }); });
   });
   g.reveal = rv; g.queue = matchQueue; g.active = null;
 }
@@ -526,7 +530,7 @@ function nextChallenge(){
     if (q.kind === 'match'){
       const es = q.ids.map(findEntry).filter(e => e && !e.ruling); if (es.length < 2 || !es.some(e => e.base > 0)) continue;
       H.votes = {}; H.secret = null;
-      g.active = { kind:'match', id:'match|' + es.map(e => e.id).join(','), ids:es.map(e => e.id), cat:q.cat, items:es.map(e => ({ pid:e.pid, text:e.text })), stage:'vote', endsAt:Date.now() + g.cfg.voteTime * 1000, nVoted:0, nVoters:activePids().length, yes:0, no:0, result:null };
+      g.active = { kind:'match', by:q.by, id:'match|' + es.map(e => e.id).join(','), ids:es.map(e => e.id), cat:q.cat, items:es.map(e => ({ pid:e.pid, text:e.text })), stage:'vote', endsAt:Date.now() + g.cfg.voteTime * 1000, nVoted:0, nVoters:activePids().length, yes:0, no:0, result:null };
       const keys = es.map(e => matchKey(e.text)), close = keys.every(k => keys.every(j => k === j || lev(k, j) <= Math.floor(Math.max(k.length, j.length) * .25)));
       botPids().forEach(pid => queueAct(Date.now() + 1500 + Math.random() * 4500, { t:'vote', from:pid, id:g.active.id, accept: close ? Math.random() < .85 : Math.random() < .5 }));
       return;
@@ -613,7 +617,7 @@ function hostTick(){
     botPids().forEach(pid => { H.answers[pid] = botAnswers(roundCats(g), g.letter);
       queueAct(t + g.cfg.time * 1000 * (.35 + Math.random() * .5), { t:'ans', from:pid, round:g.round, a:H.answers[pid], locked:true }); }); }
   else if (g.phase === 'answering' && t >= g.endsAt){ g.phase = 'locking'; g.endsAt = t + LOCK_GRACE; ch = true; }
-  else if (g.phase === 'locking' && t >= g.endsAt){ buildReveal(); g.phase = 'reveal'; g.queueReadyAt = t + 4500; ch = true; }
+  else if (g.phase === 'locking' && t >= g.endsAt){ buildReveal(); g.phase = 'reveal'; g.queueReadyAt = 0; ch = true; }
   if (g.phase === 'reveal' && !g.active && g.queue.length && t >= (g.queueReadyAt || 0)){ nextChallenge(); ch = true; }
   const a = g.active;
   if (a){
@@ -777,7 +781,7 @@ function viewAnswer(){
 function viewReveal(){
   return `${topbar()}<div class="band art" style="height:110px"><div class="tile" style="width:90px;height:90px;font-size:68px;bottom:-26px">${esc(G.letter)}</div></div>
    <div class="pad" style="padding-top:44px"><div class="row" style="justify-content:space-between;margin-bottom:12px"><div class="shout slam" style="font-size:44px">Reveal</div></div>
-   <p class="muted" style="margin:0 0 16px;font-size:15px">Doubt an answer? Tap Challenge twice and the council votes. Answers that look alike go to the council automatically.</p>
+   <p class="muted" style="margin:0 0 16px;font-size:15px">Doubt an answer, or think two answers are the same? Tap Challenge and the council votes.</p>
    <div id="lbInline"></div><div id="rv"></div></div>
    ${isHost ? `<div class="hostbar"><div class="inner row"><button class="btn" data-act="endgame" style="flex:0 0 auto;width:auto;padding:12px 16px">End game</button><button class="btn primary" data-act="endround" id="endbtn">${G.round >= G.totalRounds ? 'Finish game' : 'End round ' + G.round}</button></div></div>` : ''}`;
 }
@@ -849,10 +853,20 @@ function entryHTML(e, i){
   const note = e.ruling === 'matched' ? 'Same answer' : e.status === 'dupe' ? 'Matched, no points' : e.status === 'wrong' ? `Doesn’t start with ${esc(G.letter)}` : e.status === 'double' ? 'Double points' : '';
   const stamp = e.ruling ? `<div class="stamp ${e.ruling === 'accepted' || e.ruling === 'kept' ? 'good' : 'bad'}">${({ accepted:'Council: accepted', rejected:'Council: rejected', kept:'Won the tiebreak', lost:'Lost the tiebreak', matched:'Council: same answer' })[e.ruling]}</div>` : e.diff ? `<div class="stamp good">Council: different answers</div>` : '';
   const canC = amPlaying() && !mine && e.base > 0 && !e.ruling && !queued && !flag;
-  const cbtn = canC ? `<button class="challenge-btn ${armed === e.id ? 'arm' : ''}" data-ch="${esc(e.id)}">${armed === e.id ? 'Tap to confirm' : 'Challenge'}</button>` : queued ? `<span class="chip" style="font-size:12px">${mq ? 'Possible match' : 'In line'}</span>` : '';
+  const cbtn = canC ? `<button class="challenge-btn ${armed === e.id ? 'arm' : ''}" data-ch="${esc(e.id)}">${armed === e.id ? 'Cancel' : 'Challenge'}</button>` : queued ? `<span class="chip" style="font-size:12px">${mq ? 'Possible match' : 'In line'}</span>` : '';
   return `<div class="entry ${zero && e.status !== 'blank' ? 'dim' : ''} ${flag ? 'flag' : ''} ${curKey !== update.lastReveal ? 'pop' : ''}" style="animation-delay:${i * 40}ms">
     <div class="grow"><div class="who"><span class="pdot" style="background:${pcolor(p.color)}"></span>${esc(p.name)}${mine ? ' (you)' : ''}${note ? ` · <span class="muted">${note}</span>` : ''}</div>
-    <div class="ans">${e.text ? esc(e.text) : '<span class="muted" style="font-weight:600">blank</span>'}</div>${stamp}</div>${cbtn}${badge}</div>`;
+    <div class="ans">${e.text ? esc(e.text) : '<span class="muted" style="font-weight:600">blank</span>'}</div>${stamp}</div>${cbtn}${badge}</div>${armed === e.id && canC ? challengeMenu(e) : ''}`;
+}
+function challengeMenu(e){
+  const cat = e.id.split('|')[0], key = e.text ? matchKey(e.text) : '';
+  const others = (G.reveal[cat] || []).filter(o => o.id !== e.id && o.status !== 'blank' && o.status !== 'wrong' && !o.ruling && !inCouncil(G, o.id) && matchKey(o.text) !== key);
+  const chips = others.map(o => { const p = G.players[o.pid] || { name:'?', color:0 };
+    return `<button class="optc" data-same="${esc(e.id)}" data-other="${esc(o.id)}" style="text-align:left"><span style="font-size:12px;font-weight:700;display:block;opacity:.75">${esc(p.name)}</span>${esc(o.text)}</button>`; }).join('');
+  return `<div class="entry" style="flex-direction:column;align-items:stretch;gap:10px;background:var(--paper)">
+    <div class="label">Challenge “${esc(e.text)}”</div>
+    <button class="btn small" data-chreal="${esc(e.id)}" style="width:100%">Not a real ${esc(cat.toLowerCase())}</button>
+    ${others.length ? `<div style="font-weight:700;font-size:15px">Same as…</div><div class="row" style="flex-wrap:wrap;gap:8px">${chips}</div>` : ''}</div>`;
 }
 function update(){
   if (!G) return;
@@ -926,7 +940,7 @@ function bindScreen(k){
   }
 }
 document.addEventListener('click', async e => {
-  const t = e.target.closest('[data-act],[data-step],[data-letter],[data-rmcat],[data-theme],[data-ch],[data-vote],[data-num],[data-opt],[data-rmbot]'); if (!t) return;
+  const t = e.target.closest('[data-act],[data-step],[data-letter],[data-rmcat],[data-theme],[data-ch],[data-chreal],[data-same],[data-vote],[data-num],[data-opt],[data-rmbot]'); if (!t) return;
   if (t.dataset.rmbot){ const g = H.g; delete g.players[t.dataset.rmbot]; delete g.scores[t.dataset.rmbot]; pushState(); return; }
   if (t.dataset.opt){ const c = H.g.cfg.cats, o = t.dataset.opt, i = c.findIndex(x => x.trim().toLowerCase() === o.toLowerCase());
     if (i >= 0){ if (c.length <= 1) return toast('Keep at least one category'); c.splice(i, 1); } else { if (c.length >= 10) return toast('Ten categories max'); c.push(o); }
@@ -938,10 +952,9 @@ document.addEventListener('click', async e => {
   if (t.dataset.rmcat != null){ const c = H.g.cfg.cats; if (c.length <= 1) return toast('Keep at least one category'); c.splice(+t.dataset.rmcat, 1); pushState(); return; }
   if (t.dataset.theme){ const th = THEMES.find(x => x.id === t.dataset.theme), img = await loadImage(th.src);
     H.g.theme = { id:th.id, tv:H.g.theme.tv + 1, focus:th.focus, ar:th.ar, palette:extractPalette(img) }; pushState(); return; }
-  if (t.dataset.ch){ const id = t.dataset.ch;
-    if (armed === id){ armed = null; sendToHost({ t:'challenge', id }); toast('Challenge sent to the council'); }
-    else { armed = id; setTimeout(() => { if (armed === id){ armed = null; update(); } }, 3500); }
-    update(); return; }
+  if (t.dataset.ch){ const id = t.dataset.ch; armed = armed === id ? null : id; update(); return; }
+  if (t.dataset.chreal){ sendToHost({ t:'challenge', id:t.dataset.chreal }); armed = null; toast('Challenge sent to the council'); update(); return; }
+  if (t.dataset.same){ sendToHost({ t:'challenge', kind:'match', ids:[t.dataset.same, t.dataset.other] }); armed = null; toast('Sent to the council: same answer?'); update(); return; }
   if (t.dataset.vote){ const a = G.active; if (!a) return; const vk = G.round + ':' + a.id; myVotes[vk] = t.dataset.vote === 'yes'; sendToHost({ t:'vote', id:a.id, accept:myVotes[vk] }); curOverlay = ''; renderOverlay(); return; }
   if (t.dataset.num){ sendToHost({ t:'guess', n:+t.dataset.num }); return; }
   switch (act){
@@ -998,7 +1011,7 @@ function renderOverlay(){
     if (a.kind === 'match'){
       const list = `<div class="stack" style="gap:8px">${a.items.map(it => { const p = G.players[it.pid] || { name:'?', color:0 };
         return `<div style="background:var(--paper);color:var(--ink);border-radius:12px;padding:8px 12px"><div style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px"><span class="pdot" style="background:${pcolor(p.color)}"></span>${esc(p.name)}</div><div style="font-size:24px;font-weight:800;line-height:1.15">${esc(it.text)}</div></div>`; }).join('')}</div>`;
-      const mhead = `<div class="label" style="opacity:.8">Possible match · ${esc(a.cat)}</div>` + list;
+      const mhead = `<div class="label" style="opacity:.8">${esc((G.players[a.by] || { name:'Someone' }).name)} thinks these ${esc(a.cat.toLowerCase())} answers are the same</div>` + list;
       if (a.stage === 'vote') body = mhead + `<div style="font-size:20px;font-weight:700">Are these the same answer? If yes, nobody gets points for them.</div>
         ${canVote ? (voted ? `<div class="sticker pop" style="color:var(--ink);align-self:flex-start">Vote cast. It stays secret.</div>` :
           `<div class="vote-row"><button class="btn bad" data-vote="yes">Same</button><button class="btn good" data-vote="no">Different</button></div>`) : `<div class="muted">The council is voting.</div>`}
