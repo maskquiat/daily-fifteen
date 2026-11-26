@@ -571,7 +571,7 @@ function hostTick(){
   }
   if (ch || t - H.lastPush > 3000) pushState();
 }
-async function becomeHost(resume){
+async function becomeHost(resume, solo){
   isHost = true;
   if (resume){
     const s = store.get('ak_hostgame', null); code = s.code; me = s.me;
@@ -581,11 +581,11 @@ async function becomeHost(resume){
     code = Array.from({length:4}, () => CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]).join('');
     me = { pid:uid(), name:store.get('ak_name', '') || 'Host' };
     H = { g:newGameState(code), answers:{}, secret:null, votes:{}, seen:{}, lastPush:0, acts:[] };
-    H.g.hostPid = me.pid; addPlayer(me.pid, me.name);
+    H.g.hostPid = me.pid; addPlayer(me.pid, me.name); if (solo) H.g.solo = true;
     const img = await loadImage(THEMES[0].src); H.g.theme.palette = extractPalette(img);
   }
   history.replaceState(null, '', location.pathname + '?host=' + code);
-  try { await connect(code, onMessage); } catch(e){ toast('Connection trouble. Retrying…'); setTimeout(() => connect(code, onMessage).catch(() => {}), 3000); }
+  if (!H.g.solo) try { await connect(code, onMessage); } catch(e){ toast('Connection trouble. Retrying…'); setTimeout(() => connect(code, onMessage).catch(() => {}), 3000); }
   setInterval(hostTick, 250);
   pushState(); wake();
 }
@@ -632,8 +632,8 @@ function render(){
 function lbLabel(){ return (G && G.phase === 'reveal' ? lbOpen : lbPeek) ? 'Hide scores' : 'Scores'; }
 function topbar(extra){
   const lb = G && G.lbUnlocked ? `<button class="btn small" data-act="lb">${lbLabel()}</button>` : '';
-  const inv = isHost ? `<button class="btn small" data-act="invite">Invite</button>` : '';
-  return `<div class="topbar"><div><div class="label">Round ${G.round} of ${G.totalRounds}</div><div style="font-weight:800">Code ${esc(code)}</div></div><div class="row">${extra || ''}${inv}${lb}</div></div>`;
+  const inv = isHost && !G.solo ? `<button class="btn small" data-act="invite">Invite</button>` : '';
+  return `<div class="topbar"><div><div class="label">Round ${G.round} of ${G.totalRounds}</div><div style="font-weight:800">${G.solo ? 'Solo game' : 'Code ' + esc(code)}</div></div><div class="row">${extra || ''}${inv}${lb}</div></div>`;
 }
 function viewHome(){
   const saved = store.get('ak_hostgame', null), resumable = saved && Date.now() - saved.at < 12 * 3600e3 && saved.g.phase !== 'final';
@@ -655,6 +655,12 @@ function viewHome(){
 function stepper(id, val, unit){ return `<div class="stepper"><button data-step="${id}" data-d="-1" aria-label="Less">−</button><div class="val" id="val-${id}">${val}${unit || ''}</div><button data-step="${id}" data-d="1" aria-label="More">+</button></div>`; }
 function viewHostLobby(){
   const c = G.cfg;
+  if (G.solo) return `<div class="topbar"><div class="label">Solo game</div></div>
+  <div class="pad">
+    <div class="card center stripes" style="padding:6px"><div style="background:var(--paper);border-radius:12px;padding:16px 14px">
+      <div class="shout slam" style="font-size:40px">You vs. the computer</div>
+      <div class="muted" style="font-size:15px;margin-top:8px">A private game just for you. Add or remove computer players below, then start.</div></div></div>
+    ${hostLobbyRest()}`;
   return `<div class="topbar"><div class="label">You’re hosting</div><button class="btn small ghost" data-act="howjoin">How to join</button></div>
   <div class="pad">
     <div class="card center stripes" style="padding:6px"><div style="background:var(--paper);border-radius:12px;padding:14px">
@@ -662,12 +668,16 @@ function viewHostLobby(){
       <div style="display:flex;justify-content:center;margin:14px 0 8px"><div style="border:var(--bw) solid var(--ink);border-radius:14px;padding:6px;background:#fff">${qrSVG(joinURL(), 190)}</div></div>
       <div style="font-weight:800">Scan to open the game</div>
       <div class="muted" style="font-size:15px">Point a phone or iPad camera here, or go to daily15.xyz/council. Then tap Join a game and enter ${esc(code)}.</div></div></div>
-    <div class="card"><div class="row" style="justify-content:space-between"><div class="label">Players</div><div id="pcount" class="label"></div></div><div id="plist" class="row" style="flex-wrap:wrap;margin-top:10px"></div>
+    ${hostLobbyRest()}`;
+}
+function hostLobbyRest(){
+  const c = G.cfg;
+  return `    <div class="card"><div class="row" style="justify-content:space-between"><div class="label">Players</div><div id="pcount" class="label"></div></div><div id="plist" class="row" style="flex-wrap:wrap;margin-top:10px"></div>
       <button class="btn small" data-act="addbot" style="margin-top:12px">Add a computer player</button>
       <div class="muted" style="font-size:14px;margin-top:8px">Computer players answer and vote on challenges. Good for practice or a smaller crowd.</div></div>
     <div class="card stack">
       <label class="label" for="hn">Your name</label><input id="hn" class="field" maxlength="18" autocomplete="off" value="${esc(me.name)}">
-      <label class="row" style="font-weight:700;gap:12px"><input type="checkbox" id="hp" ${c.hostPlays ? 'checked' : ''} style="width:26px;height:26px;accent-color:var(--a1)"> I’m playing too</label>
+      ${G.solo ? '' : `<label class="row" style="font-weight:700;gap:12px"><input type="checkbox" id="hp" ${c.hostPlays ? 'checked' : ''} style="width:26px;height:26px;accent-color:var(--a1)"> I’m playing too</label>`}
     </div>
     <div class="card stack">
       <div class="row" style="justify-content:space-between"><div class="label">Rounds</div>${stepper('rounds', c.rounds)}</div>
@@ -749,7 +759,7 @@ function viewFinal(){
       <div class="podium">${slot(1, 'second', 120)}${slot(0, 'first', 170)}${slot(2, 'third', 84)}</div><div class="podium-base"></div>
       <div id="frest" class="fade-in"><div class="card">${ps.map(p => `<div class="lb-row"><span style="font-weight:800;width:22px">${p.rank}</span>${p.rank <= 3 ? trophy(p.rank, 26) : '<span style="width:26px;flex:none"></span>'}<span class="pdot" style="background:${pcolor(p.color)}"></span><span style="font-weight:700">${esc(p.name)}</span><span class="pts">${p.s}</span></div>`).join('')}</div>
       ${isHost ? `<div class="stack"><button class="btn primary" data-act="again">Play again, same players</button><button class="btn" data-act="home">Back to start</button>
-        <p class="center muted" style="margin:0;font-size:15px">Back to start ends this game for everyone. From there you can host a new game, join one, or play against the computer.</p></div>`
+        <p class="center muted" style="margin:0;font-size:15px">${G.solo ? 'From the start screen you can play solo again, host a game, or join one.' : 'Back to start ends this game for everyone. From there you can host a new game, join one, or play against the computer.'}</p></div>`
       : `<div class="stack"><p class="center" style="margin:0;font-weight:600">Thanks for playing. If the host starts another game, you’ll be taken there automatically.</p><button class="btn primary" data-act="home">Back to start</button>
         <p class="center muted" style="margin:0;font-size:15px">Join a new game, host your own, or play against the computer.</p></div>`}
     </div>`;
@@ -846,7 +856,7 @@ function bindScreen(k){
   }
   if (k === 'hostlobby'){
     $('#hn').addEventListener('input', e => { const nm = e.target.value.trim() || 'Host'; me.name = nm; store.set('ak_name', nm); if (H.g.players[me.pid]) H.g.players[me.pid].name = nm; clearTimeout(bindScreen.t); bindScreen.t = setTimeout(pushState, 400); });
-    $('#hp').addEventListener('change', e => { const g = H.g; g.cfg.hostPlays = e.target.checked;
+    if ($('#hp')) $('#hp').addEventListener('change', e => { const g = H.g; g.cfg.hostPlays = e.target.checked;
       if (e.target.checked){ addPlayer(me.pid, me.name); g.hostPid = me.pid; } else { delete g.players[me.pid]; g.hostPid = null; } pushState(); });
     $('#mys').addEventListener('change', e => { H.g.cfg.mystery = e.target.checked; pushState(); });
     $('#cats').addEventListener('input', e => { const i = e.target.dataset.cati; if (i != null){ H.g.cfg.cats[i] = e.target.value; clearTimeout(bindScreen.c); bindScreen.c = setTimeout(pushState, 400); } });
@@ -888,7 +898,7 @@ document.addEventListener('click', async e => {
     case 'join': { const c = ($('#jc').value || '').toUpperCase().trim(), n = ($('#jn').value || '').trim();
       if (c.length !== 4) return setErr('Enter the 4-letter game code.'); if (!n) return setErr('Enter your name.'); joinGame(c, n); break; }
     case 'host': becomeHost(false); break;
-    case 'solo': await becomeHost(false); { const g = H.g; addPlayer('bot-' + uid(), BOT_NAMES[0], true); addPlayer('bot-' + uid(), BOT_NAMES[1], true); pushState(); } break;
+    case 'solo': await becomeHost(false, true); { const g = H.g; addPlayer('bot-' + uid(), BOT_NAMES[0], true); addPlayer('bot-' + uid(), BOT_NAMES[1], true); pushState(); } break;
     case 'resume': becomeHost(true); break;
     case 'invite': inviteOpen = !inviteOpen; renderInvite(); break;
     case 'howjoin': toast(`Open this page and enter ${code}`); break;
