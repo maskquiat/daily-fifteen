@@ -105,7 +105,7 @@ button,input,select{font:inherit;color:inherit}
 .btn.good{background:var(--good);color:var(--on-good)}
 .btn.bad{background:var(--bad);color:var(--on-bad)}
 .btn.chosen{outline:5px solid var(--a2);outline-offset:3px}
-.nums{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .nums button{aspect-ratio:1;border:3px solid var(--paper);border-radius:16px;background:var(--a5);color:var(--on-a5);font-size:30px;font-weight:800;cursor:pointer}
 .lb{position:fixed;right:12px;top:62px;z-index:40;width:min(320px,calc(100vw - 24px));background:var(--paper);border:var(--bw) solid var(--ink);border-radius:var(--r);box-shadow:var(--shadow);padding:12px 14px;max-height:70vh;overflow:auto}
 .lb-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:2px dashed var(--ink)}
@@ -210,6 +210,7 @@ function botAnswers(cats, L){ const a = {}; L = L.toLowerCase();
 const roundCats = g => (g.cats && g.cats.length ? g.cats : g.cfg.cats);
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const TIE_MAX = 3;
 const LOCK_GRACE = 2500, RESULT_HOLD = 4000, COUNTDOWN = 3000;
 
 const $ = s => document.querySelector(s);
@@ -451,7 +452,7 @@ function hostHandle(m){
       H.votes[m.from] = !!m.accept; pushState(); break; }
     case 'guess': {
       const a = g.active; if (!a || a.stage !== 'tiebreak' || m.from !== a.pid) return;
-      const n = parseInt(m.n, 10); if (!(n >= 1 && n <= 10)) return;
+      const n = parseInt(m.n, 10); if (!(n >= 1 && n <= TIE_MAX)) return;
       resolveTie(n); pushState(); break; }
   }
 }
@@ -512,8 +513,8 @@ function tally(){
   const e = findEntry(a.id);
   if (a.yes > a.no){ a.stage = 'result'; a.result = 'accepted'; e.ruling = 'accepted'; a.endsAt = Date.now() + RESULT_HOLD; }
   else if (a.no > a.yes){ a.stage = 'result'; a.result = 'rejected'; e.ruling = 'rejected'; e.pts = 0; a.endsAt = Date.now() + RESULT_HOLD; }
-  else { a.stage = 'tiebreak'; H.secret = 1 + Math.floor(Math.random() * 10); a.endsAt = 0;
-    if (g.players[a.pid] && g.players[a.pid].bot) queueAct(Date.now() + 2800, { t:'guess', from:a.pid, n:1 + Math.floor(Math.random() * 10) }); }
+  else { a.stage = 'tiebreak'; H.secret = 1 + Math.floor(Math.random() * TIE_MAX); a.endsAt = 0;
+    if (g.players[a.pid] && g.players[a.pid].bot) queueAct(Date.now() + 2800, { t:'guess', from:a.pid, n:1 + Math.floor(Math.random() * TIE_MAX) }); }
 }
 function resolveTie(n){
   const g = H.g, a = g.active, e = findEntry(a.id);
@@ -951,8 +952,8 @@ function renderOverlay(){
     } else if (a.stage === 'tiebreak'){
       const mine = me && a.pid === me.pid;
       body = head + `<div class="shout" style="font-size:36px;color:var(--a2)">Tied. Guess the number.</div>
-        <div style="font-size:18px">A secret number from 1 to 10 was drawn. ${mine ? 'One guess. Get it right and you keep the points.' : esc(owner.name) + ' gets one guess to keep the points.'}</div>
-        ${mine ? `<div class="nums">${Array.from({length:10}, (_, i) => `<button data-num="${i + 1}">${i + 1}</button>`).join('')}</div>` : `<div class="sticker pop" style="color:var(--ink);align-self:flex-start">${esc(owner.name)} is guessing…</div>`}
+        <div style="font-size:18px">A secret number from 1 to ${TIE_MAX} was drawn. ${mine ? 'One guess. Get it right and you keep the points.' : esc(owner.name) + ' gets one guess to keep the points.'}</div>
+        ${mine ? `<div class="nums">${Array.from({length:TIE_MAX}, (_, i) => `<button data-num="${i + 1}">${i + 1}</button>`).join('')}</div>` : `<div class="sticker pop" style="color:var(--ink);align-self:flex-start">${esc(owner.name)} is guessing…</div>`}
         ${isHost && !mine ? `<button class="btn small ghost" data-act="skipguess" style="color:var(--on-ink);border-color:var(--on-ink);align-self:center">Skip (counts as a miss)</button>` : ''}`;
     } else {
       const good = a.result === 'accepted' || a.result === 'kept';
