@@ -158,6 +158,7 @@ button,input,select{font:inherit;color:inherit}
 <div id="overlay"></div>
 <div id="lbRoot"></div>
 <div id="inviteRoot"></div>
+<div id="endRoot"></div>
 <script>
 /* ===== Setup: paste your Supabase project URL and anon (publishable) key here.
    Leave blank to run in test mode (works across tabs of one browser only). ===== */
@@ -444,8 +445,14 @@ function hostHandle(m){
       break;
     case 'challenge': {
       if (g.phase !== 'reveal' || !g.players[m.from]) return;
+      if (m.kind === 'match'){
+        const ids = (m.ids || []).slice(0, 2), es = ids.map(findEntry);
+        if (ids.length !== 2 || es.some(e => !e || e.ruling || e.status === 'blank' || e.status === 'wrong' || inCouncil(g, e.id)) || ids[0].split('|')[0] !== ids[1].split('|')[0] || !es.some(e => e.base > 0)) return;
+        g.queue.push({ kind:'match', cat:ids[0].split('|')[0], ids, by:m.from });
+        if (!g.active) nextChallenge(); pushState(); break;
+      }
       const e = findEntry(m.id); if (!e || !canChallenge(e, m.from)) return;
-      g.queue.push({ id:m.id, by:m.from }); if (!g.active) nextChallenge(); pushState(); break; }
+      g.queue.push({ id:m.id, by:m.from }); if (!g.active && Date.now() >= (g.queueReadyAt || 0)) nextChallenge(); pushState(); break; }
     case 'vote': {
       const a = g.active; if (!a || a.stage !== 'vote' || a.id !== m.id || !g.players[m.from]) return;
       if (H.votes[m.from] == null) a.nVoted++;
@@ -465,18 +472,39 @@ function botChallenge(){
   if (cands.length && Math.random() < .55) queueAct(Date.now() + 4000 + Math.random() * 4000, { t:'challenge', from:pick(bots), id:pick(cands).id });
 }
 function findEntry(id){ const g = H ? H.g : G; if (!g.reveal) return null; const [cat] = id.split('|'); return (g.reveal[cat] || []).find(e => e.id === id); }
+const inCouncil = (g, id) => g.queue.some(q => q.id === id || (q.ids && q.ids.includes(id))) || !!(g.active && (g.active.id === id || (g.active.ids && g.active.ids.includes(id))));
 function canChallenge(e, by){
   const g = H ? H.g : G;
-  return e.base > 0 && !e.ruling && e.pid !== by && !g.queue.some(q => q.id === e.id) && !(g.active && g.active.id === e.id);
+  return e.base > 0 && !e.ruling && e.pid !== by && !inCouncil(g, e.id);
 }
 function norm(s){ return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+const stripParens = s => String(s || '').replace(/\([^)]*\)|\[[^\]]*\]/g, ' ');
+const singular = w => w.length > 3 && w.endsWith('s') && !w.endsWith('ss') ? w.slice(0, -1) : w;
+function matchWords(raw){ return norm(stripParens(raw)).replace(/^(the|a|an) /, '').split(' ').filter(Boolean).map(singular); }
+const matchKey = raw => matchWords(raw).join('');
+function lev(a, b){ const m = a.length, n = b.length; let prev = Array.from({length:n + 1}, (_, j) => j);
+  for (let i = 1; i <= m; i++){ const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
+  return prev[n]; }
+function looksAlike(ra, rb){
+  const a = matchKey(ra), b = matchKey(rb); if (!a || !b || a === b) return false;
+  const mx = Math.max(a.length, b.length);
+  if (mx >= 6 && lev(a, b) <= Math.floor(mx * .25)) return true;
+  const wa = matchWords(ra), wb = matchWords(rb), [sh, lg] = wa.length <= wb.length ? [wa, wb] : [wb, wa];
+  return sh.join('').length >= 3 && sh.every(w => lg.includes(w));
+}
+function findMatchGroups(list){
+  const items = list.filter(e => e.ok), parent = items.map((_, i) => i), find = i => parent[i] === i ? i : (parent[i] = find(parent[i]));
+  for (let i = 0; i < items.length; i++) for (let j = i + 1; j < items.length; j++) if (looksAlike(items[i].text, items[j].text)) parent[find(i)] = find(j);
+  const groups = {}; items.forEach((e, i) => (groups[find(i)] = groups[find(i)] || []).push(e));
+  return Object.values(groups).filter(gr => gr.length > 1 && new Set(gr.map(e => e.key)).size > 1);
+}
 function buildReveal(){
-  const g = H.g, L = g.letter.toLowerCase(), pids = Object.keys(g.players), rv = {};
+  const g = H.g, L = g.letter.toLowerCase(), pids = Object.keys(g.players), rv = {}, matchQueue = [];
   roundCats(g).forEach(cat => {
     const list = pids.map(pid => {
       const raw = ((H.answers[pid] || {})[cat] || '').trim().slice(0, 60);
-      const n = norm(raw), core = n.replace(/^the /, '');
-      return { id:cat + '|' + pid, pid, text:raw, key:core, ok:!!core && core[0] === L };
+      const core = norm(stripParens(raw)).replace(/^the /, '');
+      return { id:cat + '|' + pid, pid, text:raw, key:matchKey(raw), core, ok:!!core && core[0] === L };
     });
     const counts = {}; list.forEach(e => { if (e.ok) counts[e.key] = (counts[e.key] || 0) + 1; });
     rv[cat] = list.map(e => {
@@ -484,11 +512,11 @@ function buildReveal(){
       if (!e.text) status = 'blank';
       else if (!e.ok) status = 'wrong';
       else if (counts[e.key] > 1) status = 'dupe';
-      else { const w = e.key.split(' ').filter(Boolean); if (w.length >= 2 && w.every(x => x[0] === L)){ status = 'double'; base = 2; } else { status = 'unique'; base = 1; } }
+      else { const w = e.core.split(' ').filter(Boolean); if (w.length >= 2 && w.every(x => x[0] === L)){ status = 'double'; base = 2; } else { status = 'unique'; base = 1; } }
       return { id:e.id, pid:e.pid, text:e.text, status, base, pts:base, ruling:null };
     });
   });
-  g.reveal = rv; g.queue = []; g.active = null;
+  g.reveal = rv; g.queue = matchQueue; g.active = null;
 }
 function roundPts(g){
   const out = {}; Object.keys(g.players).forEach(p => out[p] = 0);
@@ -498,7 +526,16 @@ function roundPts(g){
 function nextChallenge(){
   const g = H.g; g.active = null;
   while (g.queue.length){
-    const q = g.queue.shift(), e = findEntry(q.id); if (!e || e.ruling) continue;
+    const q = g.queue.shift();
+    if (q.kind === 'match'){
+      const es = q.ids.map(findEntry).filter(e => e && !e.ruling); if (es.length < 2 || !es.some(e => e.base > 0)) continue;
+      H.votes = {}; H.secret = null;
+      g.active = { kind:'match', by:q.by, id:'match|' + es.map(e => e.id).join(','), ids:es.map(e => e.id), cat:q.cat, items:es.map(e => ({ pid:e.pid, text:e.text })), stage:'vote', endsAt:Date.now() + g.cfg.voteTime * 1000, nVoted:0, nVoters:activePids().length, yes:0, no:0, result:null };
+      const keys = es.map(e => matchKey(e.text)), close = keys.every(k => keys.every(j => k === j || lev(k, j) <= Math.floor(Math.max(k.length, j.length) * .25)));
+      botPids().forEach(pid => queueAct(Date.now() + 1500 + Math.random() * 4500, { t:'vote', from:pid, id:g.active.id, accept: close ? Math.random() < .85 : Math.random() < .5 }));
+      return;
+    }
+    const e = findEntry(q.id); if (!e || e.ruling) continue;
     H.votes = {}; H.secret = null;
     g.active = { id:e.id, pid:e.pid, cat:e.id.split('|')[0], text:e.text, by:q.by, stage:'vote', endsAt:Date.now() + g.cfg.voteTime * 1000, nVoted:0, nVoters:activePids().length, yes:0, no:0, result:null, guess:null, secret:null };
     const cat = g.active.cat;
@@ -510,6 +547,12 @@ function nextChallenge(){
 function tally(){
   const g = H.g, a = g.active, vals = Object.values(H.votes);
   a.yes = vals.filter(v => v).length; a.no = vals.filter(v => !v).length;
+  if (a.kind === 'match'){
+    a.stage = 'result'; a.endsAt = Date.now() + RESULT_HOLD;
+    if (a.yes > a.no){ a.result = 'same'; a.ids.forEach(id => { const e = findEntry(id); if (e){ e.ruling = 'matched'; e.pts = 0; } }); }
+    else { a.result = 'different'; a.ids.forEach(id => { const e = findEntry(id); if (e) e.diff = true; }); }
+    return;
+  }
   const e = findEntry(a.id);
   if (a.yes > a.no){ a.stage = 'result'; a.result = 'accepted'; e.ruling = 'accepted'; a.endsAt = Date.now() + RESULT_HOLD; }
   else if (a.no > a.yes){ a.stage = 'result'; a.result = 'rejected'; e.ruling = 'rejected'; e.pts = 0; a.endsAt = Date.now() + RESULT_HOLD; }
@@ -556,6 +599,17 @@ function hostEndRound(){
   if (g.round >= g.totalRounds){ g.phase = 'final'; g.reveal = null; g.finalAt = Date.now() + 300; } else startRound();
   pushState();
 }
+function hostResetToSetup(){
+  const g = H.g; g.phase = 'lobby'; g.round = 0; g.cats = null; g.bonusCat = null; g.reveal = null; g.queue = []; g.active = null; g.locked = {};
+  g.history = []; g.lbUnlocked = false; g.endsAt = 0; H.acts = []; H.answers = {}; H.votes = {}; H.secret = null;
+  Object.keys(g.scores).forEach(p => g.scores[p] = 0); pushState();
+}
+function hostFinishNow(){
+  const g = H.g;
+  if (g.phase === 'reveal' && g.reveal){ const pts = roundPts(g); Object.entries(pts).forEach(([p, v]) => g.scores[p] = (g.scores[p] || 0) + v); g.history.push({ round:g.round, letter:g.letter, pts }); }
+  g.phase = 'final'; g.reveal = null; g.queue = []; g.active = null; g.lbUnlocked = true; g.finalAt = Date.now() + 300; H.acts = [];
+  pushState();
+}
 function hostTick(){
   if (!H) return; const g = H.g, t = Date.now(); let ch = false;
   if (H.acts && H.acts.length){ const due = H.acts.filter(x => x.at <= t); if (due.length){ H.acts = H.acts.filter(x => x.at > t); due.forEach(x => hostHandle(x.m)); } }
@@ -563,7 +617,8 @@ function hostTick(){
     botPids().forEach(pid => { H.answers[pid] = botAnswers(roundCats(g), g.letter);
       queueAct(t + g.cfg.time * 1000 * (.35 + Math.random() * .5), { t:'ans', from:pid, round:g.round, a:H.answers[pid], locked:true }); }); }
   else if (g.phase === 'answering' && t >= g.endsAt){ g.phase = 'locking'; g.endsAt = t + LOCK_GRACE; ch = true; }
-  else if (g.phase === 'locking' && t >= g.endsAt){ buildReveal(); g.phase = 'reveal'; ch = true; }
+  else if (g.phase === 'locking' && t >= g.endsAt){ buildReveal(); g.phase = 'reveal'; g.queueReadyAt = 0; ch = true; }
+  if (g.phase === 'reveal' && !g.active && g.queue.length && t >= (g.queueReadyAt || 0)){ nextChallenge(); ch = true; }
   const a = g.active;
   if (a){
     if (a.stage === 'vote'){ a.nVoters = Math.max(a.nVoted, activePids().length);
@@ -628,7 +683,7 @@ function render(){
       ({ home:viewHome, hostlobby:viewHostLobby, lobby:viewLobby, count:viewCount, answer:viewAnswer, reveal:viewReveal, final:viewFinal })[k]();
     bindScreen(k); window.scrollTo(0, 0);
   }
-  update(); renderOverlay(); renderLB(); renderInvite();
+  update(); renderOverlay(); renderLB(); renderInvite(); renderEndPanel();
 }
 function lbLabel(){ return (G && G.phase === 'reveal' ? lbOpen : lbPeek) ? 'Hide scores' : 'Scores'; }
 function topbar(extra){
@@ -721,14 +776,14 @@ function viewAnswer(){
         `<div class="card center"><p class="shout" style="font-size:40px">Players are writing</p><p class="muted">Answers stay hidden until time’s up.</p></div>`}
       <div class="center muted" id="lockcount" style="margin-top:14px;font-weight:700"></div>
     </div>
-    ${isHost ? `<div class="hostbar"><div class="inner"><button class="btn" data-act="endearly">End answering now</button></div></div>` : ''}`;
+    ${isHost ? `<div class="hostbar"><div class="inner row"><button class="btn" data-act="endgame" style="flex:0 0 auto;width:auto;padding:12px 16px">End game</button><button class="btn" data-act="endearly">End answering now</button></div></div>` : ''}`;
 }
 function viewReveal(){
   return `${topbar()}<div class="band art" style="height:110px"><div class="tile" style="width:90px;height:90px;font-size:68px;bottom:-26px">${esc(G.letter)}</div></div>
    <div class="pad" style="padding-top:44px"><div class="row" style="justify-content:space-between;margin-bottom:12px"><div class="shout slam" style="font-size:44px">Reveal</div></div>
-   <p class="muted" style="margin:0 0 16px;font-size:15px">Doubt an answer? Tap Challenge twice and the council votes.</p>
+   <p class="muted" style="margin:0 0 16px;font-size:15px">Doubt an answer, or think two answers are the same? Tap Challenge and the council votes.</p>
    <div id="lbInline"></div><div id="rv"></div></div>
-   ${isHost ? `<div class="hostbar"><div class="inner"><button class="btn primary" data-act="endround" id="endbtn">${G.round >= G.totalRounds ? 'Finish game' : 'End round ' + G.round}</button></div></div>` : ''}`;
+   ${isHost ? `<div class="hostbar"><div class="inner row"><button class="btn" data-act="endgame" style="flex:0 0 auto;width:auto;padding:12px 16px">End game</button><button class="btn primary" data-act="endround" id="endbtn">${G.round >= G.totalRounds ? 'Finish game' : 'End round ' + G.round}</button></div></div>` : ''}`;
 }
 const METAL = { 1:'#F2C230', 2:'#C9CED6', 3:'#C8793A' }, METAL_NAME = { 1:'Gold', 2:'Silver', 3:'Bronze' };
 const FINAL_T = { p3:1800, p2:3800, p1:6200, rest:8400 };
@@ -789,19 +844,29 @@ function finalTick(){
 function entryHTML(e, i){
   const p = G.players[e.pid] || { name:'?', color:0 };
   const zero = e.pts === 0, mine = me && e.pid === me.pid;
-  const flag = G.active && G.active.id === e.id, queued = G.queue.some(q => q.id === e.id);
+  const flag = G.active && (G.active.id === e.id || (G.active.ids && G.active.ids.includes(e.id))), queued = !flag && inCouncil(G, e.id), mq = queued && G.queue.some(q => q.ids && q.ids.includes(e.id));
   let badge = '';
   if (e.status === 'blank') badge = `<span class="badge b-zero">—</span>`;
   else if (e.status === 'wrong') badge = `<span class="badge b-zero" title="Doesn't start with ${esc(G.letter)}">0</span>`;
   else if (e.status === 'dupe') badge = `<span class="badge b-zero">0</span>`;
-  else badge = `<span class="badge ${zero ? 'b-zero' : e.status === 'double' ? 'b-double' : 'b-unique'}">+${e.pts}</span>`;
-  const note = e.status === 'dupe' ? 'Matched, no points' : e.status === 'wrong' ? `Doesn’t start with ${esc(G.letter)}` : e.status === 'double' ? 'Double points' : '';
-  const stamp = e.ruling ? `<div class="stamp ${e.ruling === 'accepted' || e.ruling === 'kept' ? 'good' : 'bad'}">${({ accepted:'Council: accepted', rejected:'Council: rejected', kept:'Won the tiebreak', lost:'Lost the tiebreak' })[e.ruling]}</div>` : '';
+  else badge = `<span class="badge ${zero ? 'b-zero' : e.status === 'double' ? 'b-double' : 'b-unique'}">${zero ? '0' : '+' + e.pts}</span>`;
+  const note = e.ruling === 'matched' ? 'Same answer' : e.status === 'dupe' ? 'Matched, no points' : e.status === 'wrong' ? `Doesn’t start with ${esc(G.letter)}` : e.status === 'double' ? 'Double points' : '';
+  const stamp = e.ruling ? `<div class="stamp ${e.ruling === 'accepted' || e.ruling === 'kept' ? 'good' : 'bad'}">${({ accepted:'Council: accepted', rejected:'Council: rejected', kept:'Won the tiebreak', lost:'Lost the tiebreak', matched:'Council: same answer' })[e.ruling]}</div>` : e.diff ? `<div class="stamp good">Council: different answers</div>` : '';
   const canC = amPlaying() && !mine && e.base > 0 && !e.ruling && !queued && !flag;
-  const cbtn = canC ? `<button class="challenge-btn ${armed === e.id ? 'arm' : ''}" data-ch="${esc(e.id)}">${armed === e.id ? 'Tap to confirm' : 'Challenge'}</button>` : queued ? `<span class="chip" style="font-size:12px">In line</span>` : '';
+  const cbtn = canC ? `<button class="challenge-btn ${armed === e.id ? 'arm' : ''}" data-ch="${esc(e.id)}">${armed === e.id ? 'Cancel' : 'Challenge'}</button>` : queued ? `<span class="chip" style="font-size:12px">${mq ? 'Possible match' : 'In line'}</span>` : '';
   return `<div class="entry ${zero && e.status !== 'blank' ? 'dim' : ''} ${flag ? 'flag' : ''} ${curKey !== update.lastReveal ? 'pop' : ''}" style="animation-delay:${i * 40}ms">
     <div class="grow"><div class="who"><span class="pdot" style="background:${pcolor(p.color)}"></span>${esc(p.name)}${mine ? ' (you)' : ''}${note ? ` · <span class="muted">${note}</span>` : ''}</div>
-    <div class="ans">${e.text ? esc(e.text) : '<span class="muted" style="font-weight:600">blank</span>'}</div>${stamp}</div>${cbtn}${badge}</div>`;
+    <div class="ans">${e.text ? esc(e.text) : '<span class="muted" style="font-weight:600">blank</span>'}</div>${stamp}</div>${cbtn}${badge}</div>${armed === e.id && canC ? challengeMenu(e) : ''}`;
+}
+function challengeMenu(e){
+  const cat = e.id.split('|')[0], key = e.text ? matchKey(e.text) : '';
+  const others = (G.reveal[cat] || []).filter(o => o.id !== e.id && o.status !== 'blank' && o.status !== 'wrong' && !o.ruling && !inCouncil(G, o.id) && matchKey(o.text) !== key);
+  const chips = others.map(o => { const p = G.players[o.pid] || { name:'?', color:0 };
+    return `<button class="optc" data-same="${esc(e.id)}" data-other="${esc(o.id)}" style="text-align:left"><span style="font-size:12px;font-weight:700;display:block;opacity:.75">${esc(p.name)}</span>${esc(o.text)}</button>`; }).join('');
+  return `<div class="entry" style="flex-direction:column;align-items:stretch;gap:10px;background:var(--paper)">
+    <div class="label">Challenge “${esc(e.text)}”</div>
+    <button class="btn small" data-chreal="${esc(e.id)}" style="width:100%">Not a real ${esc(cat.toLowerCase())}</button>
+    ${others.length ? `<div style="font-weight:700;font-size:15px">Same as…</div><div class="row" style="flex-wrap:wrap;gap:8px">${chips}</div>` : ''}</div>`;
 }
 function update(){
   if (!G) return;
@@ -875,7 +940,7 @@ function bindScreen(k){
   }
 }
 document.addEventListener('click', async e => {
-  const t = e.target.closest('[data-act],[data-step],[data-letter],[data-rmcat],[data-theme],[data-ch],[data-vote],[data-num],[data-opt],[data-rmbot]'); if (!t) return;
+  const t = e.target.closest('[data-act],[data-step],[data-letter],[data-rmcat],[data-theme],[data-ch],[data-chreal],[data-same],[data-vote],[data-num],[data-opt],[data-rmbot]'); if (!t) return;
   if (t.dataset.rmbot){ const g = H.g; delete g.players[t.dataset.rmbot]; delete g.scores[t.dataset.rmbot]; pushState(); return; }
   if (t.dataset.opt){ const c = H.g.cfg.cats, o = t.dataset.opt, i = c.findIndex(x => x.trim().toLowerCase() === o.toLowerCase());
     if (i >= 0){ if (c.length <= 1) return toast('Keep at least one category'); c.splice(i, 1); } else { if (c.length >= 10) return toast('Ten categories max'); c.push(o); }
@@ -887,10 +952,9 @@ document.addEventListener('click', async e => {
   if (t.dataset.rmcat != null){ const c = H.g.cfg.cats; if (c.length <= 1) return toast('Keep at least one category'); c.splice(+t.dataset.rmcat, 1); pushState(); return; }
   if (t.dataset.theme){ const th = THEMES.find(x => x.id === t.dataset.theme), img = await loadImage(th.src);
     H.g.theme = { id:th.id, tv:H.g.theme.tv + 1, focus:th.focus, ar:th.ar, palette:extractPalette(img) }; pushState(); return; }
-  if (t.dataset.ch){ const id = t.dataset.ch;
-    if (armed === id){ armed = null; sendToHost({ t:'challenge', id }); toast('Challenge sent to the council'); }
-    else { armed = id; setTimeout(() => { if (armed === id){ armed = null; update(); } }, 3500); }
-    update(); return; }
+  if (t.dataset.ch){ const id = t.dataset.ch; armed = armed === id ? null : id; update(); return; }
+  if (t.dataset.chreal){ sendToHost({ t:'challenge', id:t.dataset.chreal }); armed = null; toast('Challenge sent to the council'); update(); return; }
+  if (t.dataset.same){ sendToHost({ t:'challenge', kind:'match', ids:[t.dataset.same, t.dataset.other] }); armed = null; toast('Sent to the council: same answer?'); update(); return; }
   if (t.dataset.vote){ const a = G.active; if (!a) return; const vk = G.round + ':' + a.id; myVotes[vk] = t.dataset.vote === 'yes'; sendToHost({ t:'vote', id:a.id, accept:myVotes[vk] }); curOverlay = ''; renderOverlay(); return; }
   if (t.dataset.num){ sendToHost({ t:'guess', n:+t.dataset.num }); return; }
   switch (act){
@@ -902,6 +966,9 @@ document.addEventListener('click', async e => {
     case 'solo': await becomeHost(false, true); { const g = H.g; addPlayer('bot-' + uid(), BOT_NAMES[0], true); addPlayer('bot-' + uid(), BOT_NAMES[1], true); pushState(); } break;
     case 'resume': becomeHost(true); break;
     case 'invite': inviteOpen = !inviteOpen; renderInvite(); break;
+    case 'endgame': endOpen = !endOpen; $('#endRoot').innerHTML = ''; renderEndPanel(); break;
+    case 'endsetup': endOpen = false; $('#endRoot').innerHTML = ''; hostResetToSetup(); break;
+    case 'endfinish': endOpen = false; $('#endRoot').innerHTML = ''; hostFinishNow(); break;
     case 'howjoin': toast(`Open this page and enter ${code}`); break;
     case 'addcat': { const c = H.g.cfg.cats; if (c.length >= 10) return toast('Ten categories max'); c.push('New category'); pushState(); setTimeout(() => { const f = document.querySelector(`[data-cati="${c.length - 1}"]`); if (f){ f.focus(); f.select(); } }, 50); break; }
     case 'upload': $('#upl').click(); break;
@@ -917,7 +984,7 @@ document.addEventListener('click', async e => {
       document.querySelectorAll('.topbar [data-act=lb]').forEach(b => b.textContent = lbLabel()); renderLB(); break;
     case 'skipguess': if (H.g.active && H.g.active.stage === 'tiebreak'){ resolveTie(0); pushState(); } break;
     case 'closevote': if (H.g.active && H.g.active.stage === 'vote'){ tally(); pushState(); } break;
-    case 'again': { const g = H.g; g.phase = 'lobby'; g.round = 0; g.cats = null; g.bonusCat = null; g.reveal = null; g.history = []; g.lbUnlocked = false; Object.keys(g.scores).forEach(p => g.scores[p] = 0); pushState(); break; }
+    case 'again': hostResetToSetup(); break;
     case 'newgame':
     case 'home': if (isHost) store.del('ak_hostgame'); if (net) net.close(); location.href = location.pathname; break;
   }
@@ -941,8 +1008,23 @@ function renderOverlay(){
   if (key !== curOverlay){
     curOverlay = key; document.body.style.overflow = 'hidden';
     let body = '';
+    if (a.kind === 'match'){
+      const list = `<div class="stack" style="gap:8px">${a.items.map(it => { const p = G.players[it.pid] || { name:'?', color:0 };
+        return `<div style="background:var(--paper);color:var(--ink);border-radius:12px;padding:8px 12px"><div style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px"><span class="pdot" style="background:${pcolor(p.color)}"></span>${esc(p.name)}</div><div style="font-size:24px;font-weight:800;line-height:1.15">${esc(it.text)}</div></div>`; }).join('')}</div>`;
+      const mhead = `<div class="label" style="opacity:.8">${esc((G.players[a.by] || { name:'Someone' }).name)} thinks these ${esc(a.cat.toLowerCase())} answers are the same</div>` + list;
+      if (a.stage === 'vote') body = mhead + `<div style="font-size:20px;font-weight:700">Are these the same answer? If yes, nobody gets points for them.</div>
+        ${canVote ? (voted ? `<div class="sticker pop" style="color:var(--ink);align-self:flex-start">Vote cast. It stays secret.</div>` :
+          `<div class="vote-row"><button class="btn bad" data-vote="yes">Same</button><button class="btn good" data-vote="no">Different</button></div>`) : `<div class="muted">The council is voting.</div>`}
+        <div id="constel" style="color:var(--on-ink)"></div><div class="center" style="font-weight:800;font-size:22px" data-timer="vote"></div>
+        ${isHost ? `<button class="btn small ghost" data-act="closevote" style="color:var(--on-ink);border-color:var(--on-ink);align-self:center">Close the vote now</button>` : ''}`;
+      else { const same = a.result === 'same';
+        body = mhead + `<div class="center"><span class="sticker shake shout" style="display:inline-block;background:${same ? 'var(--bad)' : 'var(--good)'};color:${same ? 'var(--on-bad)' : 'var(--on-good)'};font-size:44px">${same ? 'Same answer' : 'Different'}</span></div>
+          <div class="center" style="font-size:19px;font-weight:700">${same ? 'No points for these.' : 'Everyone keeps their points.'} The council voted ${a.yes} to ${a.no}.</div>`; }
+      root.innerHTML = `<div class="overlay"><div class="art"><div class="council-tag">The council</div></div><div class="body">${body}</div></div>`;
+    }
     const head = `<div class="label" style="opacity:.8">${esc(by.name)} challenged ${esc(owner.name)}’s ${esc(a.cat.toLowerCase())}</div><p class="shout slam">${esc(a.text)}</p>`;
-    if (a.stage === 'vote'){
+    if (a.kind === 'match'){}
+    else if (a.stage === 'vote'){
       body = head + `<div style="font-size:20px;font-weight:700">Is this a real ${esc(a.cat.toLowerCase())} that starts with ${esc(G.letter)}?</div>
         ${canVote ? (voted ? `<div class="sticker pop" style="color:var(--ink);align-self:flex-start">Vote cast. It stays secret.</div>` :
           `<div class="vote-row"><button class="btn good" data-vote="yes">Accept</button><button class="btn bad" data-vote="no">Reject</button></div>`) :
@@ -961,7 +1043,7 @@ function renderOverlay(){
       const detail = a.result === 'kept' || a.result === 'lost' ? (a.guess ? `The number was ${a.secret}. ${esc(owner.name)} guessed ${a.guess}.` : `The number was ${a.secret}. No guess was made.`) : `The council voted ${a.yes} to ${a.no}.`;
       body = head + `<div class="center"><span class="sticker shake shout" style="display:inline-block;background:${good ? 'var(--good)' : 'var(--bad)'};color:${good ? 'var(--on-good)' : 'var(--on-bad)'};font-size:52px">${word}</span></div><div class="center" style="font-size:19px;font-weight:700">${detail}</div>`;
     }
-    root.innerHTML = `<div class="overlay"><div class="art"><div class="council-tag">The council</div></div><div class="body">${body}</div></div>`;
+    if (a.kind !== 'match') root.innerHTML = `<div class="overlay"><div class="art"><div class="council-tag">The council</div></div><div class="body">${body}</div></div>`;
   }
   const cs = $('#constel'); if (cs) cs.innerHTML = constellation(a.nVoters, a.nVoted) + `<div class="center" style="font-weight:700;margin-top:6px">${a.nVoted} of ${a.nVoters} voted</div>`;
 }
@@ -970,6 +1052,22 @@ function lbHTML(withHide){
   const ps = players().map(p => ({ ...p, s:G.scores[p.pid] || 0, r:live[p.pid] || 0 })).sort((a,b) => (b.s + b.r) - (a.s + a.r));
   return `<div class="row" style="justify-content:space-between;margin-bottom:6px"><span class="label">Scores</span>${withHide ? '<button class="btn small ghost" data-act="lb" style="min-height:32px">Hide</button>' : ''}</div>
     ${ps.map((p, i) => `<div class="lb-row"><span style="font-weight:800;width:18px">${i + 1}</span><span class="pdot" style="background:${pcolor(p.color)}"></span><span style="font-weight:700">${esc(p.name)}</span><span class="pts">${p.s}${p.r ? `<span style="font-size:14px;color:var(--ink);background:var(--a3);border-radius:6px;padding:0 5px;margin-left:4px">+${p.r}</span>` : ''}</span></div>`).join('')}`;
+}
+let endOpen = false;
+function renderEndPanel(){
+  const root = $('#endRoot'); if (!root) return;
+  if (!isHost || !G || G.phase === 'lobby' || G.phase === 'final') endOpen = false;
+  if (!endOpen){ if (root.innerHTML) root.innerHTML = ''; return; }
+  if (root.innerHTML) return;
+  const inReveal = G.phase === 'reveal';
+  root.innerHTML = `<div style="position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;padding:16px">
+    <div class="card stack pop" style="width:100%;max-width:520px;margin:0">
+      <div class="shout" style="font-size:34px">End this game?</div>
+      <button class="btn alt" data-act="endsetup">Back to setup</button>
+      <div class="muted" style="font-size:14px;margin-top:-6px">Everyone stays. Change categories, rounds, or timing, then start fresh. Scores reset.</div>
+      <button class="btn" data-act="endfinish">Finish now and show scores</button>
+      <div class="muted" style="font-size:14px;margin-top:-6px">Goes straight to the podium with the scores so far${inReveal ? ', including this round' : '. This round won’t count'}.</div>
+      <button class="btn ghost" data-act="endgame">Keep playing</button></div></div>`;
 }
 let inviteOpen = false;
 function renderInvite(){
