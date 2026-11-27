@@ -10,8 +10,8 @@
 --     reported clock fits inside the real time that passed on the server.
 --   * One official run per player per day (refreshing mid-run keeps the
 --     original start time, so restarting doesn't reset the clock).
--- No accounts needed: each browser gets a random player id, and players
--- pick a nickname for the board.
+-- No accounts needed: each browser gets a random player id, and the board
+-- shows a friendly generated name from it (players can't type a name).
 -- ============================================================
 
 create table if not exists public.gauntlet_runs (
@@ -64,6 +64,30 @@ begin
 end;
 $$;
 
+-- Generated board names: "Adjective Animal NN", worked out from the player's random id.
+-- The page computes the same name with the same rule, so players see which name is theirs.
+-- Word lists are hand-picked to be friendly in any combination.
+create or replace function public.gauntlet_name(p_player uuid)
+returns text
+language sql immutable
+set search_path = public
+as $$
+  with h as (select replace(p_player::text, '-', '') as x)
+  select (array['Brisk','Calm','Clever','Daring','Eager','Gentle','Golden','Happy','Jolly','Keen',
+                'Lucky','Mellow','Merry','Nimble','Noble','Plucky','Quick','Quiet','Rapid','Sharp',
+                'Sunny','Swift','Steady','Witty','Bold','Bright','Cosmic','Crisp','Dapper','Fearless',
+                'Glad','Hardy','Lively','Mighty','Polite','Proud','Snappy','Spry','Stellar','Zesty'])
+           [(('x' || substr(x, 1, 4))::bit(16)::int % 40) + 1]
+      || ' ' ||
+         (array['Otter','Heron','Falcon','Fox','Badger','Swan','Bison','Crane','Dolphin','Eagle',
+                'Ferret','Finch','Gecko','Gazelle','Hare','Hawk','Ibis','Jaguar','Koala','Lark',
+                'Lemur','Lynx','Marten','Moose','Narwhal','Ocelot','Owl','Panda','Penguin','Puffin',
+                'Quail','Raven','Robin','Seal','Sparrow','Tapir','Tiger','Toucan','Walrus','Wren'])
+           [(('x' || substr(x, 5, 4))::bit(16)::int % 40) + 1]
+      || ' ' || ((('x' || substr(x, 9, 4))::bit(16)::int % 900) + 100)::text
+  from h;
+$$;
+
 -- ---------- 2. Finish the run ----------
 -- Returns the player's rank, how many finished today, and their total.
 create or replace function public.gauntlet_finish(
@@ -92,8 +116,8 @@ begin
           and p_penalty_s between 0 and 1000
           and p_skipped between 0 and 7;
 
-  v_name := left(regexp_replace(coalesce(trim(p_nickname), ''), '[^A-Za-z0-9 _.\-]', '', 'g'), 16);
-  if v_name = '' then v_name := 'Player'; end if;
+  -- names are generated from the player id; anything typed by the player is ignored
+  v_name := gauntlet_name(p_player);
   v_total := p_clock_ms + p_penalty_s * 1000;
 
   update gauntlet_runs g set

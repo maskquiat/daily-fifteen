@@ -551,7 +551,10 @@
     .gt-rules{list-style:none;padding:0;margin:0 0 14px;text-align:left;max-width:340px;font-size:14px;color:#4A4A4A;line-height:1.45}
     .gt-rules li{padding:6px 0;border-bottom:1px solid #DCD7CC}.gt-rules b{color:#121212}
     .gt-namelbl{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4A4A4A;margin-bottom:4px}
-    .gt-name{width:min(100%,330px);font:inherit;font-size:16px;padding:10px 12px;border:1px solid #DCD7CC;border-radius:4px;background:#fff;text-align:center;margin-bottom:12px}
+    .gt-me{font-family:'Libre Baskerville',serif;font-weight:700;font-size:22px;margin:2px 0 4px}
+    .gt-me-note{font-size:12px;color:#4A4A4A;max-width:300px;line-height:1.4;margin-bottom:14px}
+    .gt-you{text-transform:none!important;letter-spacing:0!important;color:#121212!important}
+    .gt-lb-sub{display:flex;justify-content:flex-end;max-width:360px;width:100%;margin:0 auto 4px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4A4A4A}
     .gt-cta{width:min(100%,330px);background:#121212;color:#F9F8F4;border:none;border-radius:4px;padding:15px;font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase}
     .gt-cta.gt-quiet{background:transparent;color:#121212;border:1px solid #DCD7CC;margin-top:8px}
     .gt-reveal{font-family:'Libre Baskerville',serif;font-weight:700;font-size:56px;letter-spacing:-.02em;margin:8px 0}
@@ -580,7 +583,7 @@
     .hm-gbar i{display:block;border-radius:3px}
     @media (min-width:640px){ .hm-gbar{--gw:150px} }
     @media (min-width:1280px){ .hm-gbar{--gw:190px} }
-    @media (max-height:620px){ .gt-big{font-size:30px;margin:2px 0} .gt-lede{margin-bottom:6px} .gt-rules{margin-bottom:10px;font-size:13px} .gt-rules li{padding:4px 0} .gt-name{padding:8px 12px;margin-bottom:8px} .gt-cta{padding:13px} }
+    @media (max-height:620px){ .gt-big{font-size:30px;margin:2px 0} .gt-lede{margin-bottom:6px} .gt-rules{margin-bottom:10px;font-size:13px} .gt-rules li{padding:4px 0} .gt-me{font-size:20px} .gt-me-note{margin-bottom:10px} .gt-cta{padding:13px} }
     /* === HOME / GAME HUB — sized to fit the window with no page scroll === */
     body.home-locked{height:100vh;height:100dvh;overflow:hidden}
     body.home-locked #root{height:100%;display:flex;flex-direction:column}
@@ -2017,6 +2020,12 @@
     function gtRunNo(ds) { return Math.max(1, Math.round((new Date(ds + 'T00:00:00') - new Date(GT_LAUNCH + 'T00:00:00')) / 864e5) + 1); }
     function gtFmt(ms) { const t = Math.max(0, ms) / 1000; const m = Math.floor(t / 60); const s = t - m * 60; return m + ':' + (s < 10 ? '0' : '') + s.toFixed(1); }
     function gtLS(k, v) { try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || 'null'); localStorage.setItem(k, JSON.stringify(v)); } catch (e) { return null; } }
+    // Board names are generated, never typed: "Adjective Animal NNN" from the player's random id.
+    // Same rule as the server function gauntlet_name(), so the page can show players which name is theirs.
+    const GT_ADJ = ['Brisk','Calm','Clever','Daring','Eager','Gentle','Golden','Happy','Jolly','Keen','Lucky','Mellow','Merry','Nimble','Noble','Plucky','Quick','Quiet','Rapid','Sharp','Sunny','Swift','Steady','Witty','Bold','Bright','Cosmic','Crisp','Dapper','Fearless','Glad','Hardy','Lively','Mighty','Polite','Proud','Snappy','Spry','Stellar','Zesty'];
+    const GT_ANIMAL = ['Otter','Heron','Falcon','Fox','Badger','Swan','Bison','Crane','Dolphin','Eagle','Ferret','Finch','Gecko','Gazelle','Hare','Hawk','Ibis','Jaguar','Koala','Lark','Lemur','Lynx','Marten','Moose','Narwhal','Ocelot','Owl','Panda','Penguin','Puffin','Quail','Raven','Robin','Seal','Sparrow','Tapir','Tiger','Toucan','Walrus','Wren'];
+    function gtNameFor(id) { const x = String(id).replace(/-/g, '').toLowerCase(); const n = i => parseInt(x.slice(i, i + 4), 16); return GT_ADJ[n(0) % 40] + ' ' + GT_ANIMAL[n(4) % 40] + ' ' + (n(8) % 900 + 100); }
+    function gtMyName() { return gtNameFor(gtPlayerId()); }
     function gtPlayerId() {
       let id = gtLS('gt_player');
       if (!id) {
@@ -2085,7 +2094,6 @@
     function gtDrawLobby() {
       const root = document.getElementById('gtRoot'); if (!root) return;
       const s = gtState; const resume = !s.practice && s.runId !== null && s.idx > 0 && !s.finished;
-      const name = gtLS('gt_name') || '';
       root.innerHTML = `<div class="gt-screen">
         <div class="gt-kicker">${new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
         <div class="gt-big">Gauntlet #${s.runNo}${s.practice ? ' <span class="gt-prac">practice</span>' : ''}</div>
@@ -2096,13 +2104,12 @@
           <li>Mistakes add <b>seconds</b>. Stuck? <b>Skip</b> a stage for +${GT_SKIP_PENALTY}s.</li>
           <li>${s.practice ? 'Practice runs use new puzzles and are not ranked.' : 'Everyone gets the same run today. <b>One official attempt</b>; leaving mid-run doesn\'t reset it.'}</li>
         </ul>
-        ${s.practice ? '' : `<label class="gt-namelbl" for="gtName">Name for today's board</label>
-        <input id="gtName" class="gt-name" maxlength="16" autocomplete="nickname" placeholder="Player" value="${gtEsc(name)}">`}
+        ${s.practice ? '' : `<div class="gt-namelbl">On today's board you are</div>
+        <div class="gt-me">${gtEsc(gtMyName())}</div>
+        <div class="gt-me-note">Names are made up for you so the board stays friendly. Yours stays the same on this device.</div>`}
         <button class="gt-cta" id="gtGo">${resume ? 'Resume run · stage ' + (s.idx + 1) + ' of 7' : 'Enter the Gauntlet'}</button>
       </div>`;
       document.getElementById('gtGo').onclick = () => {
-        const n = document.getElementById('gtName');
-        if (n) gtLS('gt_name', n.value.trim().slice(0, 16));
         if (!s.practice && (s.runId === null || s.runId === 'pending' || s.runId === 'offline')) {
           s.runId = 'pending';
           // the server stamps the start time; the game doesn't wait on the network
@@ -2197,7 +2204,7 @@
         if (!s.runId || s.runId === 'offline' || s.runId === 'pending') throw new Error('offline');
         if (s.runId === 'done-elsewhere') { s.final.note = 'This browser already posted a run today.'; gtSave(); gtMount(); return; }
         const rows = await gtRpc('gauntlet_finish', {
-          p_run: s.runId, p_player: gtPlayerId(), p_nickname: gtLS('gt_name') || '', p_clock_ms: clock,
+          p_run: s.runId, p_player: gtPlayerId(), p_nickname: '', p_clock_ms: clock,
           p_penalty_s: s.penalty, p_skipped: s.results.filter(r => r.skipped).length,
           p_splits: s.results.map(r => ({ k: r.key, t: r.time, p: r.pen, s: r.skipped ? 1 : 0 }))
         });
@@ -2235,15 +2242,14 @@
       let board = '';
       if (!s.practice) {
         const rows = s.board || [];
-        const mine = s.final && s.final.rank ? s.final : null;
         let marked = false;
-        // same clean-up the server applies to names, so ties still mark the right row
-        const myName = (gtLS('gt_name') || '').trim().replace(/[^A-Za-z0-9 _.\-]/g, '').slice(0, 16) || 'Player';
-        board = `<div class="gt-lb-h"><b>Today's standings</b><span>${rows.length ? rows.length + (rows.length === 50 ? '+' : '') + ' finished' : ''}</span></div>` +
+        // generated names: the player's own row is the one with their name
+        const myName = gtMyName();
+        board = `<div class="gt-lb-h"><b>Today's standings</b><span class="gt-you">You: ${gtEsc(myName)}</span></div><div class="gt-lb-sub"><span>${rows.length ? rows.length + (rows.length === 50 ? '+' : '') + ' finished' : ''}</span></div>` +
           (s.boardErr ? `<div class="gt-split">${s.boardErr}</div>`
             : !s.board ? '<div class="gt-split">Loading…</div>'
             : !rows.length ? '<div class="gt-split">No finishers yet. You could be first.</div>'
-            : `<table class="gt-table">${rows.map(r => { const me = !marked && mine && Number(r.rank) === mine.rank && Number(r.total_ms) === mine.total && (!myName || r.nickname === myName); if (me) marked = true;
+            : `<table class="gt-table">${rows.map(r => { const me = !marked && r.nickname === myName; if (me) marked = true;
                 return `<tr class="${me ? 'me' : ''}"><td style="width:30px">${r.rank}</td><td>${gtEsc(r.nickname)}${me ? ' (you)' : ''}</td><td class="r">${gtFmt(r.total_ms)}</td></tr>`; }).join('')}</table>`);
       }
       root.innerHTML = `<div class="gt-screen gt-done">
