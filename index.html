@@ -387,6 +387,8 @@
     }
     html { height: 100%; }
     body { min-height: 100%; overscroll-behavior-y: none; -webkit-tap-highlight-color: transparent; }
+    /* Keep header buttons out of the iPhone status bar / notch area, where iOS intercepts taps. */
+    body { padding-top: env(safe-area-inset-top, 0px); box-sizing: border-box; }
     button { touch-action: manipulation; }
     @media (max-width: 767px) {
       body.game-locked {
@@ -413,12 +415,20 @@
       }
       body.game-locked footer { display: none; }
       body.game-locked .blitz-board {
-        width: min(100%, 337px, max(220px, calc(100vh - 290px))) !important;
-        width: min(100%, 337px, max(220px, calc(100dvh - 290px))) !important;
+        width: min(100%, 337px, max(220px, calc(100vh - 306px - env(safe-area-inset-top, 0px)))) !important;
+        width: min(100%, 337px, max(220px, calc(100dvh - 306px - env(safe-area-inset-top, 0px)))) !important;
+      }
+      body.game-locked .fifteen-board {
+        width: min(100%, 450px, max(220px, calc(100vh - 250px - env(safe-area-inset-top, 0px)))) !important;
+        width: min(100%, 450px, max(220px, calc(100dvh - 250px - env(safe-area-inset-top, 0px)))) !important;
+      }
+      body.game-locked .cog-matrix-grid {
+        width: min(320px, 100%, max(200px, calc(100dvh - 300px - env(safe-area-inset-top, 0px)))) !important;
+        height: auto !important; margin-bottom: 1rem;
       }
       body.game-locked .block-board {
-        width: min(100%, 350px, max(200px, calc(100vh - 330px))) !important;
-        width: min(100%, 350px, max(200px, calc(100dvh - 330px))) !important;
+        width: min(100%, 350px, max(166px, calc(100vh - 378px - env(safe-area-inset-top, 0px)))) !important;
+        width: min(100%, 350px, max(166px, calc(100dvh - 378px - env(safe-area-inset-top, 0px)))) !important;
       }
       body.game-locked .sygnal-mobile-stack {
         flex: 1 1 auto;
@@ -1905,7 +1915,7 @@
     // ========== RENDERING ==========
     function render() {
       const root = document.getElementById('root');
-      const lockLayout = currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ' || currentMode === 'LINK';
+      const lockLayout = currentMode === 'DAILY_15' || currentMode === 'COLOR_MATCH' || currentMode === 'MEMORY_MATRIX' || currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ' || currentMode === 'LINK';
       document.body.classList.toggle('game-locked', lockLayout);
       document.body.classList.toggle('home-locked', currentMode === 'HOME');
       root.innerHTML = `
@@ -1928,7 +1938,7 @@
         year: 'numeric'
       });
 
-      const compact = currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ' || currentMode === 'LINK';
+      const compact = currentMode === 'DAILY_15' || currentMode === 'COLOR_MATCH' || currentMode === 'MEMORY_MATRIX' || currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ' || currentMode === 'LINK';
       return `
         <header class="w-full flex flex-col items-center ${compact ? 'pt-2 pb-2 md:pt-8 md:pb-6' : 'pt-8 pb-6'} px-4 border-b border-border-subtle bg-paper relative">
           <div class="absolute right-4 ${compact ? 'top-2 md:top-8' : 'top-8'} md:right-8">
@@ -2063,9 +2073,9 @@
             </div>
           ` : ''}
           
-          <div class="w-full flex justify-between items-end ${mode === 'BLITZ' ? 'mb-2 pb-2 md:mb-6 md:pb-4' : 'mb-6 pb-4'} border-b border-border-subtle">
+          <div class="w-full flex justify-between items-end ${mode === 'BLITZ' ? 'mb-2 pb-2 md:mb-6 md:pb-4' : 'mb-3 pb-2 md:mb-6 md:pb-4'} border-b border-border-subtle">
             <div>
-              <h2 class="font-serif ${mode === 'BLITZ' ? 'text-xl md:text-3xl' : 'text-3xl'} text-ink font-bold">
+              <h2 class="font-serif ${mode === 'BLITZ' ? 'text-xl md:text-3xl' : 'text-2xl md:text-3xl'} text-ink font-bold">
                 ${mode === 'DAILY' ? 'The Fifteen' : 'Quick Blitz'}
               </h2>
               ${mode === 'DAILY' ? `
@@ -2081,7 +2091,7 @@
           </div>
 
           <div 
-            class="grid gap-2 bg-[#EAE8E3] p-3 rounded-sm shadow-inner ${gridSize === 3 ? 'blitz-board' : ''}"
+            class="grid gap-2 bg-[#EAE8E3] p-3 rounded-sm shadow-inner ${gridSize === 3 ? 'blitz-board' : 'fifteen-board'}"
             style="grid-template-columns: repeat(${gridSize}, 1fr); width: 100%; aspect-ratio: 1/1; max-width: ${gridSize === 3 ? '337px' : '450px'};"
           >
             ${fifteenState.grid.map((val, idx) => {
@@ -2210,28 +2220,28 @@
       if (sygnalState.status === 'idle') {
         return `
           <div class="flex flex-col items-center max-w-xl mx-auto w-full">
-            <div class="w-full mb-8 border-b border-border-subtle pb-4">
+            <div class="w-full mb-4 pb-3 md:mb-8 md:pb-4 border-b border-border-subtle">
               <h2 class="font-serif text-3xl text-ink font-bold">Sygnal</h2>
               <p class="font-sans text-sm text-ink-light tracking-wide uppercase mt-1">
                 Pattern IQ Challenge
               </p>
             </div>
 
-            <div class="bg-white rounded-lg shadow-soft p-8 text-center max-w-md">
-              <div class="mb-6">
-                <svg class="w-20 h-20 mx-auto text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-white rounded-lg shadow-soft p-6 md:p-8 text-center max-w-md">
+              <div class="mb-3 md:mb-6">
+                <svg class="w-14 h-14 md:w-20 md:h-20 mx-auto text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                 </svg>
               </div>
-              <h3 class="font-serif text-2xl font-bold text-ink mb-4">Match the Symbols</h3>
-              <p class="text-ink-light font-sans mb-6">
+              <h3 class="font-serif text-2xl font-bold text-ink mb-3 md:mb-4">Match the Symbols</h3>
+              <p class="text-ink-light font-sans mb-4 md:mb-6">
                 Find <strong>any matching symbol</strong> between the two cards.<br/>
                 Complete 20 matches as fast as possible!<br/>
                 <strong>60 second time limit</strong>
               </p>
               <button 
                 id="startSygnal"
-                class="w-full bg-accent hover:bg-accent-hover text-white font-sans font-semibold py-4 px-6 rounded-lg transition-colors"
+                class="w-full bg-accent hover:bg-accent-hover text-white font-sans font-semibold py-3 md:py-4 px-6 rounded-lg transition-colors"
               >
                 Start Challenge
               </button>
