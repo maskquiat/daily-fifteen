@@ -470,6 +470,115 @@
         padding-bottom: env(safe-area-inset-bottom);
       }
     }
+    /* === GAUNTLET — all gt- prefixed === */
+    .gt-root{width:100%;max-width:460px;margin:0 auto;display:flex;flex-direction:column;min-height:0;font-family:'Source Sans 3',sans-serif;color:#121212}
+    @media (min-width:768px){ .gt-root.gt-playing{height:min(780px,calc(100dvh - 24px))} }
+    /* while a stage is on screen the run gets the whole window: no footer, no page padding */
+    main:has(.gt-playing){padding-top:8px !important;padding-bottom:8px !important}
+    body:has(.gt-playing) footer{display:none}
+    .gt-bar{flex:0 0 auto;padding:6px 0 8px;border-bottom:1px solid #DCD7CC}
+    .gt-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .gt-brand{font-family:'Libre Baskerville',serif;font-weight:700;font-size:17px;letter-spacing:-.01em}
+    .gt-brand small{display:block;font-family:'Source Sans 3',sans-serif;font-weight:700;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4A4A4A}
+    .gt-clock{font-family:'Libre Baskerville',serif;font-weight:700;font-size:28px;font-variant-numeric:tabular-nums}
+    .gt-pen{font-size:12px;font-weight:700;color:#B03A2E;text-align:right;min-width:62px;letter-spacing:.04em}
+    .gt-pen span{display:block;font-size:10px;color:#4A4A4A;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+    .gt-steps{display:flex;gap:4px;margin-top:9px}
+    .gt-step{flex:1;height:5px;border-radius:3px;background:#DCD7CC}
+    .gt-step.on{background:#121212}.gt-step.ok{background:#2F7A4F}.gt-step.warn{background:#B7862A}.gt-step.skip{background:#55514A}
+    .gt-head{flex:0 0 auto;display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:10px 0 4px}
+    .gt-name-s{font-family:'Libre Baskerville',serif;font-weight:700;font-size:21px;white-space:nowrap}
+    .gt-goal{font-size:13px;color:#4A4A4A;font-weight:600;text-align:right}
+    .gt-area{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+    .gt-holder,.gt-col{display:flex;flex-direction:column;align-items:center;width:100%}
+    .gt-foot{flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:8px 0 4px}
+    .gt-skip,.gt-leave{border:1px solid #DCD7CC;background:transparent;border-radius:999px;padding:8px 14px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4A4A4A;min-height:36px}
+    .gt-leave{border-color:transparent;padding-left:0;text-transform:none;letter-spacing:0;font-size:13px}
+    .gt-toast{position:absolute;top:6px;left:50%;transform:translateX(-50%);background:#B03A2E;color:#fff;font-weight:700;font-size:14px;padding:5px 12px;border-radius:999px;opacity:0;transition:opacity .15s;pointer-events:none;z-index:5}
+    .gt-toast.show{opacity:1}
+    .gt-shake{animation:gtShake .3s}
+    @keyframes gtShake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+    .gt-note{font-size:12px;color:#4A4A4A;font-style:italic;font-family:'Libre Baskerville',serif;margin-top:10px;text-align:center}
+    .gt-msg{margin-top:12px;font-size:14px;color:#4A4A4A;font-weight:600}
+    .gt-slide{display:grid;gap:6px;background:#EFECE5;padding:8px;border-radius:4px;aspect-ratio:1;width:min(100%,340px,calc(100dvh - 300px))}
+    .gt-slide button{border:1px solid rgba(0,0,0,.06);background:#fff;border-radius:3px;font-family:'Libre Baskerville',serif;font-weight:700;font-size:clamp(18px,6vw,28px);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+    .gt-slide button.empty{visibility:hidden}.gt-slide button.home{color:#2F7A4F}
+    .gt-bk-board{display:grid;gap:4px;background:#4a4a4a;padding:6px;border-radius:4px;width:min(100%,250px,calc(100dvh - 380px));aspect-ratio:1}
+    .gt-bk-cell{border:none;border-radius:2px;background:#fff;padding:0}
+    .gt-bk-cell.x{background:repeating-linear-gradient(45deg,#1d1d1d 0 6px,#333 6px 12px)}
+    .gt-bk-cell.ok{outline:3px solid #121212;outline-offset:-3px}.gt-bk-cell.no{outline:3px solid #B03A2E;outline-offset:-3px}
+    .gt-bk-tray{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px;max-width:340px}
+    .gt-bk-piece{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;border:1px solid #DCD7CC;background:#fff;border-radius:4px;padding:8px;min-width:58px;min-height:58px;display:flex;align-items:center;justify-content:center}
+    .gt-bk-piece.sel{border-color:#121212;box-shadow:0 0 0 2px #121212}
+    .gt-bk-mini{display:grid;gap:2px}.gt-bk-mini i{width:11px;height:11px;border-radius:1px;display:block}
+    .gt-bk-ghost{position:fixed;z-index:80;pointer-events:none;display:grid;opacity:.9;filter:drop-shadow(0 6px 10px rgba(0,0,0,.25))}
+    .gt-bk-ghost i{display:block;border-radius:2px}
+    .gt-sy-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;--s:min(calc(100vw - 28px),340px,calc((100dvh - 262px)/2))}
+    .gt-sy-card{position:relative;background:#fff;border:1px solid #DCD7CC;border-radius:50%;width:var(--s);height:var(--s);flex:0 0 auto;overflow:hidden}
+    .gt-sy-card button{position:absolute;width:calc(var(--s)*.27);height:calc(var(--s)*.27);margin:calc(var(--s)*-.135) 0 0 calc(var(--s)*-.135);border:none;background:transparent;padding:0}
+    .gt-sy-card img{width:100%;height:100%;object-fit:contain;pointer-events:none;display:block}
+    @media (max-height:700px){.gt-sy-wrap{flex-direction:row;justify-content:center;--s:min(calc((100vw - 36px)/2),190px,calc(100dvh - 310px))}}
+    .gt-cm-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:min(100%,360px)}
+    .gt-cm-card{background:#fff;border:1px solid #DCD7CC;border-radius:10px;padding:16px 6px 22px;text-align:center}
+    .gt-cm-card small{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#7b8694;font-weight:700;margin-bottom:14px}
+    .gt-cm-word{font-family:'Libre Baskerville',serif;font-weight:700;font-size:clamp(20px,6.4vw,30px)}
+    .gt-cm-q{font-size:14px;color:#4A4A4A;text-align:center;margin:16px 0;max-width:320px;line-height:1.45}
+    .gt-cm-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:min(100%,360px)}
+    .gt-cm-btns button{border:1px solid #DCD7CC;background:#fff;border-radius:8px;padding:16px 0;font-weight:700;font-size:20px}
+    .gt-cm-btns button.yes{background:#2C3E50;color:#fff;border-color:#2C3E50}
+    .gt-tr-grid{display:grid;gap:7px;aspect-ratio:1;width:min(100%,300px,calc(100dvh - 330px))}
+    .gt-tr-grid button{border:1px solid #e5e5e5;border-radius:4px;background:#F0F0F0}
+    .gt-tr-grid button.lit{background:#2C3E50}.gt-tr-grid button.got{background:#2F7A4F}.gt-tr-grid button.bad{background:#B03A2E}
+    .gt-lk-w{font-family:'Libre Baskerville',serif;font-weight:700;font-size:26px;letter-spacing:2px}
+    .gt-lk-rule{width:200px;border-top:1px solid #DCD7CC;margin:10px 0}
+    .gt-lk-slots{display:flex;gap:6px;margin:4px 0 2px}
+    .gt-lk-slots span{width:26px;height:34px;border-bottom:2px solid #121212;font-family:'Libre Baskerville',serif;font-weight:700;font-size:24px;text-align:center}
+    .gt-lk-slots span.rev{color:#2F7A4F;border-color:#2F7A4F}
+    .gt-lk-meta{display:flex;gap:14px;align-items:center;margin:8px 0 2px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4A4A4A}
+    .gt-lk-meta button{border:1px solid rgba(176,58,46,.35);background:rgba(176,58,46,.06);color:#B03A2E;border-radius:2px;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+    .gt-kb{margin-top:10px;width:min(100%,380px);display:flex;flex-direction:column;gap:6px}
+    .gt-kb div{display:flex;gap:4px;justify-content:center}
+    .gt-kb button{flex:1;max-width:34px;height:42px;border:none;background:#EFECE5;border-radius:4px;font-weight:700;font-size:15px;padding:0}
+    .gt-kb button.wide{max-width:64px;flex:1.6;font-size:12px}.gt-kb button.go{background:#121212;color:#fff}
+    .gt-screen{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:8px 2px;min-height:0}
+    .gt-screen>*{flex-shrink:0}
+    .gt-kicker{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#4A4A4A}
+    .gt-big{font-family:'Libre Baskerville',serif;font-weight:700;font-size:36px;margin:6px 0 2px;letter-spacing:-.02em}
+    .gt-prac{font-size:14px;color:#B03A2E;font-family:'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;vertical-align:middle}
+    .gt-lede{font-family:'Libre Baskerville',serif;font-style:italic;color:#4A4A4A;font-size:15px;margin:0 0 12px}
+    .gt-rules{list-style:none;padding:0;margin:0 0 14px;text-align:left;max-width:340px;font-size:14px;color:#4A4A4A;line-height:1.45}
+    .gt-rules li{padding:6px 0;border-bottom:1px solid #DCD7CC}.gt-rules b{color:#121212}
+    .gt-namelbl{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4A4A4A;margin-bottom:4px}
+    .gt-name{width:min(100%,330px);font:inherit;font-size:16px;padding:10px 12px;border:1px solid #DCD7CC;border-radius:4px;background:#fff;text-align:center;margin-bottom:12px}
+    .gt-cta{width:min(100%,330px);background:#121212;color:#F9F8F4;border:none;border-radius:4px;padding:15px;font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase}
+    .gt-cta.gt-quiet{background:transparent;color:#121212;border:1px solid #DCD7CC;margin-top:8px}
+    .gt-reveal{font-family:'Libre Baskerville',serif;font-weight:700;font-size:56px;letter-spacing:-.02em;margin:8px 0}
+    .gt-count{font-family:'Libre Baskerville',serif;font-size:20px;color:#4A4A4A;margin-top:22px}
+    .gt-split{font-size:13px;color:#4A4A4A;margin:6px 0 10px}
+    .gt-link{background:none;border:0;padding:0;color:#2C3E50;font:inherit;font-weight:700;text-decoration:underline}
+    .gt-done{justify-content:flex-start;overflow-y:auto;padding-top:12px}
+    .gt-total{font-family:'Libre Baskerville',serif;font-weight:700;font-size:46px;letter-spacing:-.02em;margin:2px 0}
+    .gt-standing{font-family:'Libre Baskerville',serif;font-weight:700;font-size:18px;margin:0 0 10px}
+    .gt-table{width:100%;max-width:360px;border-collapse:collapse;font-size:13px;margin:0 auto 14px}
+    .gt-table td{padding:6px 4px;border-bottom:1px solid #DCD7CC;text-align:left}
+    .gt-table td.r{text-align:right;font-variant-numeric:tabular-nums}.gt-table td.p{color:#B03A2E;text-align:right;width:52px}
+    .gt-table tr.me td{font-weight:700;background:#fff}
+    .gt-dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;vertical-align:-1px}
+    .gt-sb{display:flex;gap:2px;width:100%;max-width:360px;height:34px;margin:4px auto 6px;border-radius:4px;overflow:hidden}
+    .gt-sb>div{display:flex;min-width:6px;height:100%}
+    .gt-sb .t{flex:1 1 auto;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;overflow:hidden;white-space:nowrap}
+    .gt-sb .p{flex:0 0 auto;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.55) 0 3px,transparent 3px 6px)}
+    .gt-sb-scale{display:flex;justify-content:space-between;width:100%;max-width:360px;margin:0 auto 12px;font-size:10px;color:#A39E93;font-weight:600}
+    .gt-share{background:#fff;border:1px dashed #DCD7CC;border-radius:6px;padding:10px;font-size:14px;margin:0 auto 10px;max-width:360px;width:100%;white-space:pre-line}
+    .gt-lb-h{display:flex;justify-content:space-between;align-items:baseline;max-width:360px;width:100%;margin:16px auto 4px}
+    .gt-lb-h b{font-family:'Libre Baskerville',serif;font-size:17px}
+    .gt-lb-h span{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4A4A4A}
+    /* home: Gauntlet feature tile art — seven game colours as a split bar */
+    .hm-gbar{flex:0 0 auto;display:flex;gap:3px;width:var(--gw,96px);height:calc(var(--gw,96px) * .5);padding:6px;background:rgba(255,255,255,.12);border-radius:10px;box-sizing:border-box}
+    .hm-gbar i{display:block;border-radius:3px}
+    @media (min-width:640px){ .hm-gbar{--gw:150px} }
+    @media (min-width:1280px){ .hm-gbar{--gw:190px} }
+    @media (max-height:620px){ .gt-big{font-size:30px;margin:2px 0} .gt-lede{margin-bottom:6px} .gt-rules{margin-bottom:10px;font-size:13px} .gt-rules li{padding:4px 0} .gt-name{padding:8px 12px;margin-bottom:8px} .gt-cta{padding:13px} }
     /* === HOME / GAME HUB — sized to fit the window with no page scroll === */
     body.home-locked{height:100vh;height:100dvh;overflow:hidden}
     body.home-locked #root{height:100%;display:flex;flex-direction:column}
@@ -481,7 +590,7 @@
     .hm-title{font-family:'Libre Baskerville',serif;font-weight:700;font-size:26px;line-height:1.1;letter-spacing:-.02em;margin:0;color:#121212;white-space:nowrap}
     .hm-tag{margin:0;font-family:'Libre Baskerville',serif;font-style:italic;font-size:13px;color:#4A4A4A;text-align:center}
     .hm-wrap{flex:1 1 auto;min-height:0;width:100%;max-width:1240px;margin:0 auto;box-sizing:border-box;padding:10px 12px 6px;display:flex;flex-direction:column;justify-content:center}
-    .hm-grid{flex:1 1 auto;min-height:0;display:grid;gap:8px;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto repeat(3,minmax(0,1fr)) auto}
+    .hm-grid{flex:1 1 auto;min-height:0;display:grid;gap:8px;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto repeat(4,minmax(0,1fr))}
     .hm-tile{position:relative;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;gap:6px;background:#FFFFFF;border:1px solid #E5E5E5;border-radius:16px;padding:12px;color:#121212;text-decoration:none;box-sizing:border-box;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;font-family:'Source Sans 3',sans-serif}
     a.hm-tile:hover{transform:translateY(-3px);box-shadow:0 14px 28px -12px rgba(18,18,18,.22);border-color:#C9C2B4}
     a.hm-tile:active{transform:scale(.98)}
@@ -511,8 +620,8 @@
     .hm-board span.hm-gap{background:transparent;border:1.5px dashed rgba(255,255,255,.35);box-sizing:border-box}
     .hm-soon{display:none;border:2px dashed #C9C2B4;background:transparent;color:#4A4A4A}
     .hm-soon .hm-icon{border:2px dashed #A39E93;box-sizing:border-box;box-shadow:none}
-    .hm-next{grid-column:1/-1;background:#2C3E50;border-color:#2C3E50;color:#F9F8F4;flex-direction:row;align-items:center;justify-content:space-between;padding:9px 14px;border-radius:14px}
-    .hm-nexthead{display:flex;align-items:center;gap:8px}
+    .hm-next{grid-column:auto;background:#2C3E50;border-color:#2C3E50;color:#F9F8F4;flex-direction:column;align-items:stretch;justify-content:space-between;padding:12px;border-radius:16px}
+    .hm-nexthead{display:flex;align-items:center;justify-content:space-between;gap:8px}
     .hm-next .hm-cat{display:block;color:#D5DCE3}
     .hm-clock{font-family:'Libre Baskerville',serif;font-weight:700;font-size:19px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
     .hm-nextmark{width:20px;height:20px;flex:0 0 auto;box-shadow:0 0 0 1.5px rgba(255,255,255,.35);border-radius:5px}
@@ -1836,10 +1945,486 @@
     }
 
 
+    // ==================== GAUNTLET (all seven games, one clock, daily standings) ====================
+    // One official run per player per day, same puzzles for everyone (seeded by local date).
+    // Standings live in Supabase (project "Animal Kingdom Game"): table gauntlet_runs, reached only
+    // through the functions gauntlet_start / gauntlet_finish / gauntlet_board. The server stamps the start
+    // time and flags a finish whose clock is longer than the real time that passed.
+    const GT_SUPABASE_URL = 'https://ynctsjhghrmqdshybfou.supabase.co';
+    const GT_SUPABASE_KEY = 'sb_publishable_JN3rBLXxv045gETqp5m6kA_SkhrP-4z';   // publishable (browser-safe) key
+    const GT_LAUNCH = '2026-11-27';
+    const GT_SKIP_PENALTY = 45;
+    const GT_STAGES = {
+      blitz:     { name: 'Blitz',     goal: 'Solve the 3×3 slider',             color: '#B03A2E' },
+      fifteen:   { name: 'Fifteen',   goal: 'Solve the 4×4 slider',             color: '#2C3E50' },
+      block:     { name: 'Block',     goal: 'Fill every open square',           color: '#2F5D45' },
+      sygnal:    { name: 'Sygnal',    goal: 'Make 6 matches · miss +3s',        color: '#6B3E66' },
+      chromatic: { name: 'Chromatic', goal: 'Get 8 right · miss +5s',           color: '#8A5A12' },
+      trace:     { name: 'Trace',     goal: 'Clear 3 levels · miss +5s',        color: '#1F5F6B' },
+      link:      { name: 'Link',      goal: 'Find the linking word · miss +5s', color: '#3A3530' }
+    };
+
+    let gtState = null;      // in-memory run state
+    let gtGame = null;       // the live mini-game for the current stage
+    let gtRaf = null;
+    let gtFinishing = false;
+
+    function gtMulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+    function gtHash(s) { let h = 2166136261; for (const ch of s) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+    function gtShuffle(a, rng) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function gtPick(a, rng) { return a[Math.floor(rng() * a.length)]; }
+    function gtEsc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+    function gtToday() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    function gtRunNo(ds) { return Math.max(1, Math.round((new Date(ds + 'T00:00:00') - new Date(GT_LAUNCH + 'T00:00:00')) / 864e5) + 1); }
+    function gtFmt(ms) { const t = Math.max(0, ms) / 1000; const m = Math.floor(t / 60); const s = t - m * 60; return m + ':' + (s < 10 ? '0' : '') + s.toFixed(1); }
+    function gtLS(k, v) { try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || 'null'); localStorage.setItem(k, JSON.stringify(v)); } catch (e) { return null; } }
+    function gtPlayerId() {
+      let id = gtLS('gt_player');
+      if (!id) {
+        id = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+          : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); });
+        gtLS('gt_player', id);
+      }
+      return id;
+    }
+    async function gtRpc(fn, body) {
+      const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 9000);
+      try {
+        const res = await fetch(GT_SUPABASE_URL + '/rest/v1/rpc/' + fn, {
+          method: 'POST', signal: ctl.signal,
+          headers: { apikey: GT_SUPABASE_KEY, Authorization: 'Bearer ' + GT_SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json().catch(() => null);
+        if (!res.ok) throw new Error((data && data.message) || ('HTTP ' + res.status));
+        return data;
+      } finally { clearTimeout(to); }
+    }
+
+    // Today's saved official run on this device (resume / results)
+    function gtSaved(ds) { const s = gtLS('gt_run_' + ds); return s && s.date === ds ? s : null; }
+    function gtSave() { if (gtState && !gtState.practice) gtLS('gt_run_' + gtState.date, { date: gtState.date, runId: gtState.runId, idx: gtState.idx, results: gtState.results, penalty: gtState.penalty, elapsed: gtState.elapsed, finished: gtState.finished, final: gtState.final || null, posted: gtState.posted || null }); }
+    function hubGauntletStatus() { const s = gtSaved(gtToday()); return s && s.finished && s.final ? s.final : null; }
+
+    function initGauntlet() {
+      const ds = gtToday();
+      const saved = gtSaved(ds);
+      gtState = { date: ds, runNo: gtRunNo(ds), practice: false, phase: 'lobby', order: gtShuffle(Object.keys(GT_STAGES), gtMulberry(gtHash('gauntlet:' + ds))),
+                  idx: 0, results: [], penalty: 0, elapsed: 0, runningSince: null, runId: null, finished: false, board: null, boardErr: null };
+      if (saved) {
+        Object.assign(gtState, { runId: saved.runId, idx: saved.idx || 0, results: saved.results || [], penalty: saved.penalty || 0, elapsed: saved.elapsed || 0, finished: !!saved.finished, final: saved.final, posted: saved.posted });
+        if (saved.finished) gtState.phase = 'done';
+      }
+      render();
+      if (gtState.phase === 'done') gtLoadBoard();
+    }
+    // the site header is hidden while a run is on screen, so the stage gets the whole screen
+    function gtHidesHeader() { return currentMode === 'GAUNTLET' && gtState && (gtState.phase === 'reveal' || gtState.phase === 'play'); }
+    function gtSeedBase() { return gtState.practice ? gtState.practiceSeed : gtHash('gauntlet:' + gtState.date); }
+    function gtElapsed() { return gtState.elapsed + (gtState.runningSince ? performance.now() - gtState.runningSince : 0); }
+    function gtStartClock() { if (!gtState.runningSince) gtState.runningSince = performance.now(); }
+    function gtPauseClock() { if (gtState && gtState.runningSince) { gtState.elapsed += performance.now() - gtState.runningSince; gtState.runningSince = null; } }
+    function gtStop() { cancelAnimationFrame(gtRaf); gtRaf = null; gtPauseClock(); gtGame = null; }
+    function gtTick() { const c = document.getElementById('gtClock'); if (c) c.textContent = gtFmt(gtElapsed() + gtState.penalty * 1000); gtRaf = requestAnimationFrame(gtTick); }
+
+    function renderGauntlet() { return `<div id="gtRoot" class="gt-root ${gtHidesHeader() ? 'gt-playing' : ''}"></div>`; }
+    // called after every render(): draw the current screen into #gtRoot
+    function gtMount() {
+      if (currentMode !== 'GAUNTLET' || !gtState) return;
+      const p = gtState.phase;
+      if (p === 'lobby') gtDrawLobby();
+      else if (p === 'reveal') gtDrawReveal();
+      else if (p === 'play') gtDrawStage();
+      else if (p === 'done') gtDrawDone();
+    }
+    function gtSetPhase(p) {
+      const before = gtHidesHeader();
+      gtState.phase = p;
+      if (before !== gtHidesHeader()) render(); else gtMount();
+    }
+
+    function gtDrawLobby() {
+      const root = document.getElementById('gtRoot'); if (!root) return;
+      const s = gtState; const resume = !s.practice && s.runId !== null && s.idx > 0 && !s.finished;
+      const name = gtLS('gt_name') || '';
+      root.innerHTML = `<div class="gt-screen">
+        <div class="gt-kicker">${new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
+        <div class="gt-big">Gauntlet #${s.runNo}${s.practice ? ' <span class="gt-prac">practice</span>' : ''}</div>
+        <p class="gt-lede">Seven quick puzzles. One clock.</p>
+        <ul class="gt-rules">
+          <li><b>All seven games</b>, in an order you won't see until each one starts.</li>
+          <li>A <b>stopwatch</b> runs the whole way. Lowest total time wins.</li>
+          <li>Mistakes add <b>seconds</b>. Stuck? <b>Skip</b> a stage for +${GT_SKIP_PENALTY}s.</li>
+          <li>${s.practice ? 'Practice runs use new puzzles and are not ranked.' : 'Everyone gets the same run today. <b>One official attempt</b>; leaving mid-run doesn\'t reset it.'}</li>
+        </ul>
+        ${s.practice ? '' : `<label class="gt-namelbl" for="gtName">Name for today's board</label>
+        <input id="gtName" class="gt-name" maxlength="16" autocomplete="nickname" placeholder="Player" value="${gtEsc(name)}">`}
+        <button class="gt-cta" id="gtGo">${resume ? 'Resume run · stage ' + (s.idx + 1) + ' of 7' : 'Enter the Gauntlet'}</button>
+      </div>`;
+      document.getElementById('gtGo').onclick = () => {
+        const n = document.getElementById('gtName');
+        if (n) gtLS('gt_name', n.value.trim().slice(0, 16));
+        if (!s.practice && (s.runId === null || s.runId === 'pending' || s.runId === 'offline')) {
+          s.runId = 'pending';
+          // the server stamps the start time; the game doesn't wait on the network
+          s.startReq = gtRpc('gauntlet_start', { p_player: gtPlayerId(), p_date: s.date })
+            .then(id => { s.runId = id || 'done-elsewhere'; gtSave(); })
+            .catch(() => { s.runId = 'offline'; });
+        }
+        gtSave();
+        gtSetPhase('reveal');
+      };
+    }
+
+    function gtDrawReveal() {
+      const root = document.getElementById('gtRoot'); if (!root) return;
+      gtPauseClock();
+      const key = gtState.order[gtState.idx];
+      root.innerHTML = `<div class="gt-screen">
+        <div class="gt-kicker">Stage ${gtState.idx + 1} of 7</div>
+        <div class="gt-reveal">${GT_STAGES[key].name}</div>
+        <div class="gt-goal" style="font-size:15px">${GT_STAGES[key].goal}</div>
+        <div class="gt-count" id="gtCd">Ready…</div>
+        <div class="gt-split">Clock paused at ${gtFmt(gtElapsed() + gtState.penalty * 1000)}</div>
+      </div>`;
+      const seq = ['3', '2', '1']; let i = 0;
+      const step = () => { const el = document.getElementById('gtCd'); if (!el || gtState.phase !== 'reveal') return;
+        if (i < seq.length) { el.textContent = seq[i++]; setTimeout(step, 550); } else gtSetPhase('play'); };
+      setTimeout(step, 450);
+    }
+
+    function gtDrawStage() {
+      const root = document.getElementById('gtRoot'); if (!root) return;
+      const s = gtState; const key = s.order[s.idx];
+      s.stagePenalty = 0;
+      root.innerHTML = `
+        <div class="gt-bar">
+          <div class="gt-row">
+            <div class="gt-brand">Gauntlet<small>#${s.runNo}${s.practice ? ' · practice' : ''}</small></div>
+            <div class="gt-clock" id="gtClock">${gtFmt(gtElapsed() + s.penalty * 1000)}</div>
+            <div class="gt-pen" id="gtPen">+${s.penalty}s<span>penalties</span></div>
+          </div>
+          <div class="gt-steps">${s.order.map((k, i) => { const r = s.results[i]; let c = ''; if (i === s.idx) c = 'on'; else if (r) c = r.skipped ? 'skip' : (r.pen ? 'warn' : 'ok'); return `<div class="gt-step ${c}"></div>`; }).join('')}</div>
+        </div>
+        <div class="gt-head"><div class="gt-name-s">${s.idx + 1}. ${GT_STAGES[key].name}</div><div class="gt-goal">${GT_STAGES[key].goal}</div></div>
+        <div class="gt-area" id="gtArea"><div class="gt-toast" id="gtToast"></div></div>
+        <div class="gt-foot"><button class="gt-leave" id="gtLeave">← Leave</button><button class="gt-skip" id="gtSkip">Skip +${GT_SKIP_PENALTY}s</button></div>`;
+      const holder = document.createElement('div');
+      holder.className = 'gt-holder';
+      document.getElementById('gtArea').appendChild(holder);
+      const rng = gtMulberry(gtSeedBase() + (s.idx + 1) * 7919);
+      gtGame = GT_GAMES[key](holder, rng, { done: () => gtFinishStage(false), penalize: gtPenalize });
+      document.getElementById('gtSkip').onclick = () => { gtPenalize(GT_SKIP_PENALTY, true); gtFinishStage(true); };
+      const leave = document.getElementById('gtLeave');
+      leave.onclick = () => {
+        if (!leave.dataset.armed) { leave.dataset.armed = '1'; leave.textContent = s.practice ? 'Tap again to leave' : 'Leave? Tap again · you can resume'; setTimeout(() => { if (leave.isConnected) { delete leave.dataset.armed; leave.textContent = '← Leave'; } }, 3000); return; }
+        gtStop(); gtState.phase = 'lobby'; navigate('');
+      };
+      s.stageStart = gtElapsed();
+      gtStartClock();
+      cancelAnimationFrame(gtRaf); gtTick();
+    }
+
+    function gtPenalize(sec, silent) {
+      gtState.penalty += sec; gtState.stagePenalty += sec;
+      const p = document.getElementById('gtPen'); if (p) p.innerHTML = '+' + gtState.penalty + 's<span>penalties</span>';
+      if (silent) return;
+      const t = document.getElementById('gtToast');
+      if (t) { t.textContent = '+' + sec + 's'; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 700); }
+      if (navigator.vibrate) try { navigator.vibrate(30); } catch (e) {}
+    }
+
+    function gtFinishStage(skipped) {
+      if (gtFinishing) return; gtFinishing = true;
+      const s = gtState; const key = s.order[s.idx];
+      s.results[s.idx] = { key, time: Math.round(gtElapsed() - s.stageStart), pen: s.stagePenalty, skipped };
+      gtGame = null;
+      setTimeout(() => {
+        gtFinishing = false;
+        s.idx++;
+        gtPauseClock();
+        if (s.idx >= s.order.length) { cancelAnimationFrame(gtRaf); s.finished = true; gtSave(); gtSubmit(); gtSetPhase('done'); }
+        else { gtSave(); gtSetPhase('reveal'); }
+      }, skipped ? 0 : 450);
+    }
+
+    async function gtSubmit() {
+      const s = gtState; if (s.practice) return;
+      const clock = Math.round(s.elapsed);
+      s.final = { total: clock + s.penalty * 1000, rank: null, players: null };
+      gtSave();
+      try {
+        if (s.startReq) await s.startReq;
+        if (!s.runId || s.runId === 'offline' || s.runId === 'pending') throw new Error('offline');
+        if (s.runId === 'done-elsewhere') { s.final.note = 'This browser already posted a run today.'; gtSave(); gtMount(); return; }
+        const rows = await gtRpc('gauntlet_finish', {
+          p_run: s.runId, p_player: gtPlayerId(), p_nickname: gtLS('gt_name') || '', p_clock_ms: clock,
+          p_penalty_s: s.penalty, p_skipped: s.results.filter(r => r.skipped).length,
+          p_splits: s.results.map(r => ({ k: r.key, t: r.time, p: r.pen, s: r.skipped ? 1 : 0 }))
+        });
+        const r = rows && rows[0];
+        s.posted = true; s.final.note = null;
+        if (r && r.rank != null) { s.final.rank = Number(r.rank); s.final.players = Number(r.players); }
+        else s.final.note = 'This run couldn\'t be verified, so it isn\'t on today\'s board.';
+      } catch (e) {
+        s.posted = false; s.final.note = 'Couldn\'t reach the standings. Your time is saved on this device.';
+      }
+      gtSave();
+      if (currentMode === 'GAUNTLET' && s.phase === 'done') { gtMount(); gtLoadBoard(); }
+    }
+
+    async function gtLoadBoard() {
+      const s = gtState; if (!s || s.practice) return;
+      try { s.board = await gtRpc('gauntlet_board', { p_date: s.date, p_limit: 50 }); s.boardErr = null; }
+      catch (e) { s.boardErr = 'Standings are unavailable right now.'; }
+      if (currentMode === 'GAUNTLET' && s.phase === 'done') gtMount();
+    }
+
+    function gtDrawDone() {
+      const root = document.getElementById('gtRoot'); if (!root) return;
+      cancelAnimationFrame(gtRaf);
+      const s = gtState;
+      const total = s.final ? s.final.total : Math.round(s.elapsed) + s.penalty * 1000;
+      const share = `Gauntlet #${s.runNo} — ${gtFmt(total)}\ndaily15.xyz`;
+      const bar = s.results.map(r => { const t = r.skipped ? 0 : r.time, pms = r.pen * 1000, w = Math.max(1, t + pms), pct = 100 * w / total; const c = GT_STAGES[r.key].color;
+        return `<div style="flex:${w} 1 0;background:${c}" title="${GT_STAGES[r.key].name}">${t ? `<span class="t">${pct >= 9 ? Math.round(t / 1000) : ''}</span>` : ''}${pms ? `<span class="p" style="width:${(100 * pms / w).toFixed(1)}%;${t ? '' : 'flex:1 1 auto;'}"></span>` : ''}</div>`; }).join('');
+      let standing = '';
+      if (s.practice) standing = '<div class="gt-split">Practice run, not ranked.</div>';
+      else if (s.final && s.final.rank) standing = `<div class="gt-standing">#${s.final.rank} of ${s.final.players} today</div>`;
+      else if (s.final && s.final.note) standing = `<div class="gt-split">${gtEsc(s.final.note)}${s.posted === false ? ' <button class="gt-link" id="gtRetry">Try again</button>' : ''}</div>`;
+      else standing = '<div class="gt-split">Posting your time…</div>';
+      let board = '';
+      if (!s.practice) {
+        const rows = s.board || [];
+        const mine = s.final && s.final.rank ? s.final : null;
+        let marked = false;
+        // same clean-up the server applies to names, so ties still mark the right row
+        const myName = (gtLS('gt_name') || '').trim().replace(/[^A-Za-z0-9 _.\-]/g, '').slice(0, 16) || 'Player';
+        board = `<div class="gt-lb-h"><b>Today's standings</b><span>${rows.length ? rows.length + (rows.length === 50 ? '+' : '') + ' finished' : ''}</span></div>` +
+          (s.boardErr ? `<div class="gt-split">${s.boardErr}</div>`
+            : !s.board ? '<div class="gt-split">Loading…</div>'
+            : !rows.length ? '<div class="gt-split">No finishers yet. You could be first.</div>'
+            : `<table class="gt-table">${rows.map(r => { const me = !marked && mine && Number(r.rank) === mine.rank && Number(r.total_ms) === mine.total && (!myName || r.nickname === myName); if (me) marked = true;
+                return `<tr class="${me ? 'me' : ''}"><td style="width:30px">${r.rank}</td><td>${gtEsc(r.nickname)}${me ? ' (you)' : ''}</td><td class="r">${gtFmt(r.total_ms)}</td></tr>`; }).join('')}</table>`);
+      }
+      root.innerHTML = `<div class="gt-screen gt-done">
+        <div class="gt-kicker">Gauntlet #${s.runNo}${s.practice ? ' practice' : ''} complete</div>
+        <div class="gt-total">${gtFmt(total)}</div>
+        <div class="gt-split">${gtFmt(total - s.penalty * 1000)} on the clock + ${s.penalty}s penalties</div>
+        ${standing}
+        <div class="gt-sb" aria-label="Time split by game">${bar}</div>
+        <div class="gt-sb-scale"><span>0:00</span><span>Striped = penalty seconds</span><span>${gtFmt(total)}</span></div>
+        <table class="gt-table">${s.results.map(r => `<tr><td><span class="gt-dot" style="background:${GT_STAGES[r.key].color}"></span>${GT_STAGES[r.key].name}${r.skipped ? ' <span style="color:#4A4A4A">(skipped)</span>' : ''}</td><td class="r">${r.skipped ? '—' : gtFmt(r.time)}</td><td class="p">${r.pen ? '+' + r.pen + 's' : ''}</td></tr>`).join('')}</table>
+        <div class="gt-share" id="gtShareTxt">${gtEsc(share)}</div>
+        <button class="gt-cta" id="gtShare">Share result</button>
+        ${board}
+        <div class="gt-split" style="margin-top:10px">A new Gauntlet opens at midnight.</div>
+        <button class="gt-cta gt-quiet" id="gtPractice">Practice run (new puzzles)</button>
+      </div>`;
+      document.getElementById('gtShare').onclick = async () => {
+        const btn = document.getElementById('gtShare');
+        try { if (navigator.share) { await navigator.share({ text: share }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+        try { await navigator.clipboard.writeText(share); btn.textContent = 'Copied'; }
+        catch (e) { btn.textContent = 'Copy the text above'; }
+      };
+      const retry = document.getElementById('gtRetry');
+      if (retry) retry.onclick = () => {
+        retry.disabled = true;
+        if (s.runId === 'offline' || s.runId === 'pending') s.startReq = gtRpc('gauntlet_start', { p_player: gtPlayerId(), p_date: s.date }).then(id => { s.runId = id || 'done-elsewhere'; }).catch(() => { s.runId = 'offline'; });
+        gtSubmit();
+      };
+      document.getElementById('gtPractice').onclick = () => {
+        Object.assign(gtState, { practice: true, practiceSeed: gtHash('practice:' + Math.random()), phase: 'lobby', idx: 0, results: [], penalty: 0, elapsed: 0, runningSince: null, finished: false, final: null, board: null });
+        gtState.order = gtShuffle(Object.keys(GT_STAGES), gtMulberry(gtState.practiceSeed));
+        gtSetPhase('lobby');
+      };
+    }
+
+    /* ---------- the seven stages ---------- */
+    function gtShake(el) { el.classList.remove('gt-shake'); void el.offsetWidth; el.classList.add('gt-shake'); }
+
+    function gtSlider(n, moves) {
+      return function (root, rng, api) {
+        const N = n * n; let g = [...Array(N - 1).keys()].map(x => x + 1).concat([0]); let e = N - 1, prev = -1;
+        const nb = i => [i - n, i + n, (i % n) ? i - 1 : -1, (i % n < n - 1) ? i + 1 : -1].filter(j => j >= 0 && j < N);
+        for (let k = 0; k < moves; k++) { const c = nb(e).filter(j => j !== prev); const j = gtPick(c, rng); g[e] = g[j]; g[j] = 0; prev = e; e = j; }
+        const solved = () => g.every((v, i) => i === N - 1 ? v === 0 : v === i + 1);
+        if (solved()) { const j = nb(e)[0]; g[e] = g[j]; g[j] = 0; e = j; }
+        const board = document.createElement('div'); board.className = 'gt-slide'; board.style.gridTemplateColumns = `repeat(${n},1fr)`; root.appendChild(board);
+        let movesMade = 0; const cnt = document.createElement('div'); cnt.className = 'gt-note'; root.appendChild(cnt);
+        function draw() { board.innerHTML = g.map((v, i) => `<button data-i="${i}" class="${v ? '' : 'empty'} ${v === i + 1 ? 'home' : ''}">${v || ''}</button>`).join(''); cnt.textContent = movesMade + ' moves'; }
+        board.onclick = ev => { const b = ev.target.closest('button'); if (!b) return; const i = +b.dataset.i;
+          if (nb(i).includes(e)) { g[e] = g[i]; g[i] = 0; e = i; movesMade++; draw(); if (solved()) api.done(); } };
+        draw();
+        return { solve() { api.done(); } };
+      };
+    }
+
+    const GT_PIECE_COLORS = ['#D35447', '#4A90D9', '#E3A23B', '#5DB585', '#9A62B3', '#C2581F', '#3E7BB6', '#3FA58C'];
+    function gtBlock(root, rng, api) {
+      const n = 4; let pieces;
+      // solvable by construction: carve the open squares into pieces, then scramble their rotations
+      for (let t = 0; t < 500 && !pieces; t++) {
+        const blocked = new Set(); while (blocked.size < 2) blocked.add(Math.floor(rng() * n * n));
+        const owner = Array(n * n).fill(-1); blocked.forEach(b => owner[b] = -2); const ps = []; let ok = true;
+        for (let c = 0; c < n * n && ok; c++) { if (owner[c] !== -1) continue; const target = 2 + Math.floor(rng() * 3); const reg = [c]; owner[c] = ps.length;
+          while (reg.length < target) { const cand = []; reg.forEach(x => { const r = Math.floor(x / n), q = x % n; [[r - 1, q], [r + 1, q], [r, q - 1], [r, q + 1]].forEach(([a, b]) => { if (a >= 0 && a < n && b >= 0 && b < n && owner[a * n + b] === -1) cand.push(a * n + b); }); }); if (!cand.length) break; const y = gtPick(cand, rng); owner[y] = ps.length; reg.push(y); }
+          if (reg.length < 2) ok = false; ps.push(reg); }
+        if (ok && ps.length >= 4 && ps.length <= 6) pieces = { blocked, ps };
+      }
+      const norm = cells => { const mr = Math.min(...cells.map(c => c[0])), mc = Math.min(...cells.map(c => c[1])); return cells.map(([r, c]) => [r - mr, c - mc]).sort((a, b) => a[0] - b[0] || a[1] - b[1]); };
+      const rot = cells => norm(cells.map(([r, c]) => [c, -r]));
+      let shapes = pieces.ps.map((reg, i) => { let s = norm(reg.map(x => [Math.floor(x / n), x % n])); const k = Math.floor(rng() * 4); for (let j = 0; j < k; j++) s = rot(s); return { id: i, cells: s, placed: null, color: GT_PIECE_COLORS[i % GT_PIECE_COLORS.length] }; });
+      shapes = gtShuffle(shapes, rng);
+      const occ = Array(n * n).fill(-1); pieces.blocked.forEach(b => occ[b] = -2); let sel = null;
+      const board = document.createElement('div'); board.className = 'gt-bk-board'; board.style.gridTemplateColumns = `repeat(${n},1fr)`; root.appendChild(board);
+      const tray = document.createElement('div'); tray.className = 'gt-bk-tray'; root.appendChild(tray);
+      const note = document.createElement('div'); note.className = 'gt-note'; note.textContent = 'Drag a piece onto the grid. Tap a piece to rotate it. Tap a placed piece to send it back.'; root.appendChild(note);
+      function draw() {
+        board.innerHTML = occ.map((o, i) => `<button class="gt-bk-cell ${o === -2 ? 'x' : ''}" data-i="${i}" style="${o >= 0 ? 'background:' + shapes.find(s => s.id === o).color : ''}"></button>`).join('');
+        tray.innerHTML = shapes.filter(s => !s.placed).map(s => { const R = Math.max(...s.cells.map(c => c[0])) + 1, C = Math.max(...s.cells.map(c => c[1])) + 1; let cells = ''; for (let r = 0; r < R; r++) for (let c = 0; c < C; c++) cells += `<i style="background:${s.cells.some(x => x[0] === r && x[1] === c) ? s.color : 'transparent'}"></i>`;
+          return `<button class="gt-bk-piece ${sel === s.id ? 'sel' : ''}" data-p="${s.id}"><span class="gt-bk-mini" style="grid-template-columns:repeat(${C},11px)">${cells}</span></button>`; }).join('');
+      }
+      const cellsAt = (s, R, C) => s.cells.map(([r, c]) => [R + r, C + c]);
+      const fits = t => t.every(([r, c]) => r >= 0 && c >= 0 && r < n && c < n && occ[r * n + c] === -1);
+      function place(s, t) { t.forEach(([r, c]) => occ[r * n + c] = s.id); s.placed = true; sel = null; const left = shapes.filter(x => !x.placed); if (left.length) sel = left[0].id; draw(); if (occ.every(o => o !== -1)) api.done(); }
+      let drag = null, lastDrop = 0;
+      const geom = () => { const cs = board.querySelectorAll('.gt-bk-cell'); const a = cs[0].getBoundingClientRect(), b = cs[1].getBoundingClientRect(); return { x0: a.left, y0: a.top, size: a.width, pitch: b.left - a.left }; };
+      const clearPreview = () => board.querySelectorAll('.ok,.no').forEach(e => { e.classList.remove('ok', 'no'); if (e.dataset.tint) { e.style.background = ''; delete e.dataset.tint; } });
+      const target = d => { const g = geom(), gr = d.ghost.getBoundingClientRect(); return { R: Math.round((gr.top - g.y0) / g.pitch), C: Math.round((gr.left - g.x0) / g.pitch) }; };
+      tray.onpointerdown = ev => { const b = ev.target.closest('[data-p]'); if (!b) return; ev.preventDefault(); drag = { id: +b.dataset.p, x: ev.clientX, y: ev.clientY, touch: ev.pointerType !== 'mouse', moved: false, ghost: null }; };
+      const onMove = ev => { if (!drag || !board.isConnected) return; if (!drag.moved && Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y) < 8) return;
+        const s = shapes.find(x => x.id === drag.id); const g = geom();
+        if (!drag.moved) { drag.moved = true; sel = drag.id; const R = Math.max(...s.cells.map(c => c[0])) + 1, C = Math.max(...s.cells.map(c => c[1])) + 1;
+          const gh = document.createElement('div'); gh.className = 'gt-bk-ghost'; gh.style.gridTemplateColumns = `repeat(${C},${g.size}px)`; gh.style.gap = (g.pitch - g.size) + 'px';
+          let h = ''; for (let r = 0; r < R; r++) for (let c = 0; c < C; c++) h += `<i style="width:${g.size}px;height:${g.size}px;background:${s.cells.some(x => x[0] === r && x[1] === c) ? s.color : 'transparent'}"></i>`;
+          gh.innerHTML = h; document.body.appendChild(gh); drag.ghost = gh; drag.w = C * g.pitch; drag.h = R * g.pitch;
+          const tb = tray.querySelector(`[data-p="${drag.id}"]`); if (tb) tb.style.opacity = .25; }
+        drag.ghost.style.left = (ev.clientX - drag.w / 2) + 'px'; drag.ghost.style.top = (drag.touch ? ev.clientY - drag.h - 28 : ev.clientY - drag.h / 2) + 'px';
+        clearPreview(); const { R, C } = target(drag); const t = cellsAt(s, R, C); const on = t.filter(([r, c]) => r >= 0 && c >= 0 && r < n && c < n);
+        if (on.length) { const ok = fits(t); on.forEach(([r, c]) => { const el = board.children[r * n + c]; el.classList.add(ok ? 'ok' : 'no'); if (ok) { el.style.background = s.color + '59'; el.dataset.tint = '1'; } }); } };
+      const onUp = () => { if (!drag) return; const d = drag; drag = null; if (!board.isConnected) { if (d.ghost) d.ghost.remove(); return; }
+        const s = shapes.find(x => x.id === d.id);
+        if (!d.moved) { if (sel === d.id) s.cells = rot(s.cells); sel = d.id; draw(); return; }
+        lastDrop = performance.now();   // the board ignores the stray tap some phones fire right after a drop
+        const { R, C } = target(d); d.ghost.remove(); clearPreview();
+        const t = cellsAt(s, R, C); if (fits(t)) place(s, t); else { draw(); gtShake(board); } };
+      window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp); window.addEventListener('pointercancel', onUp);
+      board.onclick = ev => { if (performance.now() - lastDrop < 300) return; const b = ev.target.closest('[data-i]'); if (!b) return; const i = +b.dataset.i;
+        if (occ[i] >= 0) { const id = occ[i]; occ.forEach((o, k) => { if (o === id) occ[k] = -1; }); shapes.find(s => s.id === id).placed = null; sel = id; draw(); return; }
+        if (sel === null || occ[i] !== -1) return;
+        const s = shapes.find(x => x.id === sel); const [ar, ac] = s.cells[0]; const R = Math.floor(i / n), C = i % n;
+        const tgt = s.cells.map(([r, c]) => [R + r - ar, C + c - ac]);
+        if (!fits(tgt)) { gtShake(board); return; }
+        place(s, tgt); };
+      sel = shapes[0].id; draw();
+      return { solve() { api.done(); } };
+    }
+
+    function gtSygnal(root, rng, api) {
+      const SYM = Object.keys(CUSTOM_ICONS).map(k => CUSTOM_ICONS[k]);   // Ken's original drawings
+      const GOAL = 6; let made = 0, shared;
+      const wrap = document.createElement('div'); wrap.className = 'gt-sy-wrap'; root.appendChild(wrap);
+      const prog = document.createElement('div'); prog.className = 'gt-msg'; root.appendChild(prog);
+      function deal() {
+        const s = gtShuffle([...SYM.keys()], rng); shared = String(s[0]);
+        const a = gtShuffle([s[0], ...s.slice(1, 6)], rng), b = gtShuffle([s[0], ...s.slice(6, 11)], rng);
+        // one drawing in the middle, five evenly around it
+        const card = arr => { const turn = rng() * 72; return `<div class="gt-sy-card">${arr.map((x, i) => { let L = 50, T = 50; if (i > 0) { const an = (turn + (i - 1) * 72 - 90) * Math.PI / 180; L = 50 + 32 * Math.cos(an); T = 50 + 32 * Math.sin(an); }
+          return `<button data-s="${x}" style="left:${L.toFixed(1)}%;top:${T.toFixed(1)}%;transform:rotate(${Math.floor(rng() * 50 - 25)}deg) scale(${(0.95 + rng() * 0.1).toFixed(2)})"><img src="${SYM[x]}" alt=""></button>`; }).join('')}</div>`; };
+        wrap.innerHTML = card(a) + card(b); prog.textContent = made + ' of ' + GOAL + ' matches';
+      }
+      wrap.onclick = ev => { const b = ev.target.closest('[data-s]'); if (!b) return;
+        if (b.dataset.s === shared) { made++; if (made >= GOAL) { prog.textContent = GOAL + ' of ' + GOAL; api.done(); return; } deal(); }
+        else { api.penalize(3); gtShake(b.parentElement); } };
+      deal();
+      return { solve() { api.done(); }, shared: () => shared };
+    }
+
+    function gtChromatic(root, rng, api) {
+      const COLORS = STROOP_COLORS.map(c => [c.name, c.value]);
+      const GOAL = 8; let right = 0, answer;
+      const box = document.createElement('div'); box.className = 'gt-col'; root.appendChild(box);
+      box.innerHTML = `<div class="gt-cm-cards"><div class="gt-cm-card"><small>Anchor</small><div class="gt-cm-word" id="gtCmA"></div></div><div class="gt-cm-card"><small>Choice</small><div class="gt-cm-word" id="gtCmB"></div></div></div>
+        <div class="gt-cm-q">Does the <b>ink color</b> of the choice match the <b>meaning</b> of the anchor?</div>
+        <div class="gt-cm-btns"><button id="gtCmNo">No</button><button class="yes" id="gtCmYes">Yes</button></div><div class="gt-msg" id="gtCmP"></div>`;
+      function deal() {
+        const a = gtPick(COLORS, rng), aInk = gtPick(COLORS.filter(c => c !== a), rng); const match = rng() < 0.5;
+        const bInk = match ? a : gtPick(COLORS.filter(c => c !== a), rng); const bWord = gtPick(COLORS.filter(c => c !== bInk), rng);
+        answer = match; const A = box.querySelector('#gtCmA'), B = box.querySelector('#gtCmB');
+        A.textContent = a[0]; A.style.color = aInk[1]; B.textContent = bWord[0]; B.style.color = bInk[1];
+        box.querySelector('#gtCmP').textContent = right + ' of ' + GOAL + ' correct';
+      }
+      const ans = v => { if (v === answer) { right++; if (right >= GOAL) { api.done(); return; } } else { api.penalize(5); gtShake(box.querySelector('.gt-cm-cards')); } deal(); };
+      box.querySelector('#gtCmYes').onclick = () => ans(true); box.querySelector('#gtCmNo').onclick = () => ans(false);
+      deal();
+      return { solve() { api.done(); }, answer: () => answer };
+    }
+
+    function gtTrace(root, rng, api) {
+      const LEVELS = [[3, 3], [3, 4], [4, 5]]; let lv = 0, targets, found, phase;
+      const grid = document.createElement('div'); grid.className = 'gt-tr-grid'; root.appendChild(grid);
+      const msg = document.createElement('div'); msg.className = 'gt-msg'; root.appendChild(msg);
+      function start() {
+        const [n, k] = LEVELS[lv]; grid.style.gridTemplateColumns = `repeat(${n},1fr)`;
+        targets = new Set(gtShuffle([...Array(n * n).keys()], rng).slice(0, k)); found = new Set(); phase = 'show';
+        grid.innerHTML = [...Array(n * n).keys()].map(i => `<button data-i="${i}" class="${targets.has(i) ? 'lit' : ''}"></button>`).join('');
+        msg.textContent = 'Level ' + (lv + 1) + ' of 3 · remember the pattern';
+        setTimeout(() => { if (!grid.isConnected) return; phase = 'play'; grid.querySelectorAll('button').forEach(b => b.className = ''); msg.textContent = 'Level ' + (lv + 1) + ' of 3 · tap the tiles you saw'; }, 1100 + k * 120);
+      }
+      grid.onclick = ev => { const b = ev.target.closest('[data-i]'); if (!b || phase !== 'play') return; const i = +b.dataset.i; if (found.has(i)) return;
+        if (targets.has(i)) { found.add(i); b.className = 'got'; if (found.size === targets.size) { phase = 'wait'; setTimeout(() => { if (!grid.isConnected) return; lv++; if (lv >= LEVELS.length) api.done(); else start(); }, 350); } }
+        else { phase = 'wait'; b.className = 'bad'; api.penalize(5); targets.forEach(t => { if (!found.has(t)) grid.querySelector(`[data-i="${t}"]`).className = 'lit'; }); msg.textContent = 'Missed. New pattern…'; setTimeout(() => { if (grid.isConnected) start(); }, 900); } };
+      start();
+      return { solve() { api.done(); }, targets: () => [...targets], phase: () => phase };
+    }
+
+    // Link stage: TOP · ? · BOTTOM from the real Link word pairs, only where exactly one word fits,
+    // and never a word from today's Link chain (so the Gauntlet can't spoil the regular game).
+    let GT_LINK_TRIPLES = null;
+    function gtLinkTriples() {
+      if (GT_LINK_TRIPLES) return GT_LINK_TRIPLES;
+      const out = [];
+      for (const a of Object.keys(LK_EDGES).sort()) for (const b of LK_EDGES[a]) for (const c of (LK_EDGES[b] || [])) {
+        if (c === a) continue;
+        const fit = (LK_EDGES[a] || []).filter(x => (LK_EDGES[x] || []).includes(c));
+        if (fit.length === 1) out.push([a, b, c]);
+      }
+      return (GT_LINK_TRIPLES = out);
+    }
+    function gtLink(root, rng, api) {
+      let avoid = new Set();
+      try { avoid = new Set(lkChainForDate(gtState.date)); } catch (e) {}
+      const pool = gtLinkTriples().filter(t => !t.some(w => avoid.has(w)));
+      const [top, ans, bot] = gtPick(pool.length ? pool : gtLinkTriples(), rng);
+      let typed = '', shown = 0;
+      const box = document.createElement('div'); box.className = 'gt-col'; root.appendChild(box);
+      const rows = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
+      box.innerHTML = `<div class="gt-lk-w">${top}</div><div class="gt-lk-rule"></div><div class="gt-lk-slots" id="gtLkS"></div>
+        <div class="gt-lk-meta"><span>${ans.length} letters</span><button id="gtLkH">Hint +5s</button></div><div class="gt-lk-rule"></div><div class="gt-lk-w">${bot}</div>
+        <div class="gt-kb">${rows.map((r, i) => `<div>${i === 2 ? '<button class="wide" data-k="DEL" aria-label="Delete">⌫</button>' : ''}${[...r].map(c => `<button data-k="${c}">${c}</button>`).join('')}${i === 2 ? '<button class="wide go" data-k="GO">Enter</button>' : ''}</div>`).join('')}</div>`;
+      function draw() { box.querySelector('#gtLkS').innerHTML = [...ans].map((ch, i) => { const t = typed[i]; return `<span class="${!t && i < shown ? 'rev' : ''}">${t || (i < shown ? ch : '')}</span>`; }).join('');
+        const h = box.querySelector('#gtLkH'); h.disabled = shown >= ans.length - 1; h.style.opacity = h.disabled ? .4 : 1; }
+      box.querySelector('.gt-kb').onclick = ev => { const b = ev.target.closest('[data-k]'); if (!b) return; const k = b.dataset.k;
+        if (k === 'DEL') typed = typed.slice(0, -1);
+        else if (k === 'GO') { if (typed.length < ans.length) { gtShake(box.querySelector('#gtLkS')); return; }
+          if (typed === ans) { api.done(); return; } api.penalize(5); gtShake(box.querySelector('#gtLkS')); typed = ans.slice(0, shown); }
+        else if (typed.length < ans.length) typed += k;
+        draw(); };
+      box.querySelector('#gtLkH').onclick = () => { if (shown >= ans.length - 1) return; shown++; api.penalize(5); if (ans.indexOf(typed) !== 0 || typed.length < shown) typed = ans.slice(0, shown); draw(); };
+      draw();
+      return { solve() { api.done(); }, answer: () => ans };
+    }
+
+    const GT_GAMES = { blitz: gtSlider(3, 22), fifteen: gtSlider(4, 40), block: gtBlock, sygnal: gtSygnal, chromatic: gtChromatic, trace: gtTrace, link: gtLink };
+
     // ========== HOME (GAME HUB) + ROUTING ==========
     // Each game has a #hash route so tiles are real links and the browser Back button returns to the hub.
     // timed: shown on the tile as "Timed" / "Untimed". Add a new game here and it gets a tile automatically.
     const HUB_GAMES = [
+      { route: 'fifteen',   mode: 'DAILY_15',      name: 'Fifteen',   cat: 'Classic',    color: '#2C3E50', timed: false,
+        desc: 'Slide the tiles back into order, 1 through 15.',
+        icon: '<svg viewBox="0 0 48 48" fill="#FFFFFF"><rect x="6" y="6" width="8" height="8" rx="1.5"/><rect x="16" y="6" width="8" height="8" rx="1.5"/><rect x="26" y="6" width="8" height="8" rx="1.5"/><rect x="36" y="6" width="8" height="8" rx="1.5"/><rect x="6" y="16" width="8" height="8" rx="1.5"/><rect x="16" y="16" width="8" height="8" rx="1.5"/><rect x="26" y="16" width="8" height="8" rx="1.5"/><rect x="36" y="16" width="8" height="8" rx="1.5"/><rect x="6" y="26" width="8" height="8" rx="1.5"/><rect x="16" y="26" width="8" height="8" rx="1.5"/><rect x="26" y="26" width="8" height="8" rx="1.5"/><rect x="36" y="26" width="8" height="8" rx="1.5"/><rect x="6" y="36" width="8" height="8" rx="1.5"/><rect x="16" y="36" width="8" height="8" rx="1.5"/><rect x="26" y="36" width="8" height="8" rx="1.5"/></svg>' },
       { route: 'blitz',     mode: 'QUICK_BLITZ',   name: 'Blitz',     cat: 'Speed',      color: '#B03A2E', timed: true,
         desc: 'A 3×3 slider against a 60-second clock.',
         icon: '<svg viewBox="0 0 48 48" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"><circle cx="24" cy="27" r="15"/><path d="M20 6h8M24 6v6M24 27V18M37 14l3-3"/></svg>' },
@@ -1859,7 +2444,7 @@
         desc: 'Memorize the lit tiles, then tap them back.',
         icon: '<svg viewBox="0 0 48 48" fill="#FFFFFF"><circle cx="10" cy="10" r="3"/><circle cx="24" cy="10" r="3"/><circle cx="38" cy="10" r="3"/><circle cx="10" cy="24" r="3"/><circle cx="24" cy="24" r="3"/><circle cx="38" cy="24" r="3"/><circle cx="10" cy="38" r="3"/><circle cx="24" cy="38" r="3"/><circle cx="38" cy="38" r="3"/><path d="M10 10H24V24L38 38" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="38" r="5.5"/></svg>' },
     ];
-    const ROUTE_TO_MODE = { fifteen: 'DAILY_15' };
+    const ROUTE_TO_MODE = { fifteen: 'DAILY_15', gauntlet: 'GAUNTLET' };
     HUB_GAMES.forEach(g => { ROUTE_TO_MODE[g.route] = g.mode; });
 
     let homeCdTimer = null;
@@ -1924,18 +2509,19 @@
       const timedIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M10 2h4"/></svg>';
       const untimedIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 8c-2.8 0-4.5 1.8-4.5 4s1.7 4 4.5 4c3.8 0 6.2-8 10-8 2.8 0 4.5 1.8 4.5 4s-1.7 4-4.5 4c-3.8 0-6.2-8-10-8z"/></svg>';
 
-      const board = [5, 1, 3, 4, 9, 2, 7, 8, 13, 6, 11, 12, 14, 10, 0, 15]
-        .map(n => n ? '<span>' + n + '</span>' : '<span class="hm-gap"></span>').join('');
-      const fStatus = hubTodayStatus('fifteen');
+      const gStat = hubGauntletStatus();
+      const gWeights = [3, 2, 4, 2, 1, 5, 4];
+      const gbar = Object.keys(GT_STAGES).map((k, i) => '<i style="flex:' + gWeights[i] + ' 1 0;background:' + GT_STAGES[k].color + ';box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)"></i>').join('');
+      const gChip = gStat ? check + 'Done · ' + gtFmt(gStat.total) + (gStat.rank ? ' · #' + gStat.rank : '') : 'Daily challenge';
 
       const feature = `
-        <a href="#fifteen" class="hm-tile hm-feature" aria-label="Play Fifteen${fStatus ? ' (' + fStatus.toLowerCase() + ')' : ''}">
-          <div class="hm-board" aria-hidden="true">${board}</div>
+        <a href="#gauntlet" class="hm-tile hm-feature" aria-label="Play the Gauntlet${gStat ? ' (done today)' : ''}">
+          <div class="hm-gbar" aria-hidden="true">${gbar}</div>
           <div class="hm-ftext">
-            <span class="hm-chip">${fStatus ? check + fStatus : 'The Flagship'}</span>
-            <h2 class="hm-ftitle">Fifteen</h2>
-            <p class="hm-fdesc">Slide the tiles back into order, 1 through 15.</p>
-            <span class="hm-fplay">${fStatus ? 'See result' : 'Play now'}
+            <span class="hm-chip">${gChip}</span>
+            <h2 class="hm-ftitle">Gauntlet</h2>
+            <p class="hm-fdesc">All seven games, one clock. Today's standings.</p>
+            <span class="hm-fplay">${gStat ? 'See standings' : 'Enter'}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </span>
           </div>
@@ -1965,14 +2551,6 @@
           <section class="hm-grid" aria-label="Today's puzzles">
             ${feature}
             ${tiles}
-            <div class="hm-tile hm-soon">
-              <div class="hm-iconwrap"><div class="hm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div></div>
-              <div class="hm-text">
-                <div class="hm-cat">Coming soon</div>
-                <h3 class="hm-name" style="color:#121212">New puzzle</h3>
-                <p class="hm-desc">A new puzzle joins the edition.</p>
-              </div>
-            </div>
             <div class="hm-tile hm-next">
               <div class="hm-nexthead"><span class="hm-cat">New puzzles in</span>${logoMark('hm-nextmark')}</div>
               <div id="hmCountdown" class="hm-clock">${hubCountdownText()}</div>
@@ -1987,6 +2565,7 @@
       if (sygnalTimerInterval) { clearInterval(sygnalTimerInterval); sygnalTimerInterval = null; }
       if (blitzTimerInterval) { clearInterval(blitzTimerInterval); blitzTimerInterval = null; }
       stopCognitiveTimers();
+      gtStop();
     }
 
     function openMode(mode) {
@@ -2001,6 +2580,7 @@
       else if (mode === 'COLOR_MATCH') initColorMatch();
       else if (mode === 'MEMORY_MATRIX') initMemoryMatrix();
       else if (mode === 'LINK') initLink();
+      else if (mode === 'GAUNTLET') initGauntlet();
       else { currentMode = 'HOME'; render(); }
       window.scrollTo(0, 0);
     }
@@ -2024,7 +2604,7 @@
     // ========== RENDERING ==========
     function render() {
       const root = document.getElementById('root');
-      const lockLayout = currentMode === 'DAILY_15' || currentMode === 'COLOR_MATCH' || currentMode === 'MEMORY_MATRIX' || currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ' || currentMode === 'LINK';
+      const lockLayout = currentMode === 'GAUNTLET' || currentMode === 'DAILY_15' || currentMode === 'COLOR_MATCH' || currentMode === 'MEMORY_MATRIX' || currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ' || currentMode === 'LINK';
       document.body.classList.toggle('game-locked', lockLayout);
       document.body.classList.toggle('home-locked', currentMode === 'HOME');
       root.innerHTML = `
@@ -2036,10 +2616,12 @@
       `;
       attachEventListeners();
       syncHomeCountdown();
+      gtMount();
     }
 
     function renderHeader() {
       if (currentMode === 'HOME') return renderHomeHeader();
+      if (gtHidesHeader()) return '';
       const dateStr = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
         month: 'long',
@@ -2047,7 +2629,7 @@
         year: 'numeric'
       });
 
-      const compact = currentMode === 'DAILY_15' || currentMode === 'COLOR_MATCH' || currentMode === 'MEMORY_MATRIX' || currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ' || currentMode === 'LINK';
+      const compact = currentMode === 'GAUNTLET' || currentMode === 'DAILY_15' || currentMode === 'COLOR_MATCH' || currentMode === 'MEMORY_MATRIX' || currentMode === 'BLOCK_LOGIC' || currentMode === 'SYGNAL' || currentMode === 'QUICK_BLITZ' || currentMode === 'LINK';
       return `
         <header class="w-full flex flex-col items-center ${compact ? 'pt-2 pb-2 md:pt-8 md:pb-6' : 'pt-8 pb-6'} px-4 border-b border-border-subtle bg-paper relative">
           <div class="absolute right-4 ${compact ? 'top-2 md:top-8' : 'top-8'} md:right-8">
@@ -2161,6 +2743,7 @@
           ${currentMode === 'COLOR_MATCH' ? renderColorMatch() : ''}
           ${currentMode === 'MEMORY_MATRIX' ? renderMemoryMatrix() : ''}
           ${currentMode === 'LINK' ? renderLink() : ''}
+          ${currentMode === 'GAUNTLET' ? renderGauntlet() : ''}
           ${currentMode === 'COG_GAMEOVER' ? renderCogGameOver() : ''}
         </main>
       `;
