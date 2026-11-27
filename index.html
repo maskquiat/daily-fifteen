@@ -545,6 +545,10 @@
     .gt-screen{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:8px 2px;min-height:0}
     .gt-screen>*{flex-shrink:0}
     .gt-kicker{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#4A4A4A}
+    .gt-band{display:flex;align-items:flex-end;gap:5px;width:min(100%,340px);height:84px;padding:10px;margin:0 auto 16px;background:#2C3E50;border-radius:16px;box-sizing:border-box;box-shadow:0 10px 24px -14px rgba(18,18,18,.5)}
+    .gt-band i{display:block;height:100%;border-radius:5px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);transform-origin:bottom;animation:gtBandIn .5s cubic-bezier(.2,.9,.3,1) both}
+    @keyframes gtBandIn{from{transform:scaleY(.15);opacity:0}to{transform:scaleY(1);opacity:1}}
+    @media (prefers-reduced-motion:reduce){.gt-band i{animation:none}}
     .gt-big{font-family:'Libre Baskerville',serif;font-weight:700;font-size:36px;margin:6px 0 2px;letter-spacing:-.02em}
     .gt-prac{font-size:14px;color:#B03A2E;font-family:'Source Sans 3',sans-serif;letter-spacing:.1em;text-transform:uppercase;vertical-align:middle}
     .gt-lede{font-family:'Libre Baskerville',serif;font-style:italic;color:#4A4A4A;font-size:15px;margin:0 0 12px}
@@ -583,7 +587,8 @@
     .hm-gbar i{display:block;border-radius:3px}
     @media (min-width:640px){ .hm-gbar{--gw:150px} }
     @media (min-width:1280px){ .hm-gbar{--gw:190px} }
-    @media (max-height:620px){ .gt-big{font-size:30px;margin:2px 0} .gt-lede{margin-bottom:6px} .gt-rules{margin-bottom:10px;font-size:13px} .gt-rules li{padding:4px 0} .gt-me{font-size:20px} .gt-me-note{margin-bottom:10px} .gt-cta{padding:13px} }
+    @media (max-height:700px), (min-width:768px) and (max-height:900px){ .gt-band{height:52px;padding:7px;margin-bottom:10px;border-radius:12px} .gt-me-note{display:none} }
+    @media (max-height:620px){ .gt-band{height:44px;margin-bottom:8px} .gt-big{font-size:30px;margin:2px 0} .gt-lede{margin-bottom:6px} .gt-rules{margin-bottom:10px;font-size:13px} .gt-rules li{padding:4px 0} .gt-me{font-size:20px} .gt-me-note{margin-bottom:10px} .gt-cta{padding:13px} }
     /* === HOME / GAME HUB — sized to fit the window with no page scroll === */
     body.home-locked{height:100vh;height:100dvh;overflow:hidden}
     body.home-locked #root{height:100%;display:flex;flex-direction:column}
@@ -2094,7 +2099,10 @@
     function gtDrawLobby() {
       const root = document.getElementById('gtRoot'); if (!root) return;
       const s = gtState; const resume = !s.practice && s.runId !== null && s.idx > 0 && !s.finished;
+      // the seven game colours, same band as the home tile (fixed order, so it never hints at today's stage order)
+      const band = Object.keys(GT_STAGES).map((k, i) => '<i style="flex:' + [3, 2, 4, 2, 1, 5, 4][i] + ' 1 0;background:' + GT_STAGES[k].color + ';animation-delay:' + (i * 60) + 'ms"></i>').join('');
       root.innerHTML = `<div class="gt-screen">
+        <div class="gt-band" aria-hidden="true">${band}</div>
         <div class="gt-kicker">${new Date(s.date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
         <div class="gt-big">Gauntlet #${s.runNo}${s.practice ? ' <span class="gt-prac">practice</span>' : ''}</div>
         <p class="gt-lede">Seven quick puzzles. One clock.</p>
