@@ -513,11 +513,10 @@
     .gt-bk-mini{display:grid;gap:2px}.gt-bk-mini i{width:11px;height:11px;border-radius:1px;display:block}
     .gt-bk-ghost{position:fixed;z-index:80;pointer-events:none;display:grid;opacity:.9;filter:drop-shadow(0 6px 10px rgba(0,0,0,.25))}
     .gt-bk-ghost i{display:block;border-radius:2px}
-    .gt-sy-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;--s:min(calc(100vw - 28px),340px,calc((100dvh - 262px)/2))}
+    .gt-sy-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;width:100%;--s:min(calc(100vw - 28px),340px,calc((100dvh - 262px)/2))}
     .gt-sy-card{position:relative;background:#fff;border:1px solid #DCD7CC;border-radius:50%;width:var(--s);height:var(--s);flex:0 0 auto;overflow:hidden}
     .gt-sy-card button{position:absolute;width:calc(var(--s)*.27);height:calc(var(--s)*.27);margin:calc(var(--s)*-.135) 0 0 calc(var(--s)*-.135);border:none;background:transparent;padding:0}
     .gt-sy-card img{width:100%;height:100%;object-fit:contain;pointer-events:none;display:block}
-    @media (max-height:700px){.gt-sy-wrap{flex-direction:row;justify-content:center;--s:min(calc((100vw - 36px)/2),190px,calc(100dvh - 310px))}}
     .gt-cm-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:min(100%,360px)}
     .gt-cm-card{background:#fff;border:1px solid #DCD7CC;border-radius:10px;padding:16px 6px 22px;text-align:center}
     .gt-cm-card small{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#7b8694;font-weight:700;margin-bottom:14px}
@@ -2326,6 +2325,18 @@
       const GOAL = 6; let made = 0, shared;
       const wrap = document.createElement('div'); wrap.className = 'gt-sy-wrap'; root.appendChild(wrap);
       const prog = document.createElement('div'); prog.className = 'gt-msg'; root.appendChild(prog);
+      // Measure the free space and use whichever layout (stacked or side by side) gives bigger cards.
+      function fit() {
+        const area = document.getElementById('gtArea'); if (!area || !wrap.isConnected) return;
+        const W = area.clientWidth, H = area.clientHeight - 36, GAP = 12;   // 36 ≈ the "x of 6 matches" line
+        const stacked = Math.min(W, (H - GAP) / 2, 360), side = Math.min((W - GAP) / 2, H, 360);
+        const row = side > stacked;
+        wrap.style.flexDirection = row ? 'row' : 'column';
+        wrap.style.setProperty('--s', Math.max(120, Math.floor(row ? side : stacked)) + 'px');
+      }
+      fit();
+      const onResize = () => { if (!wrap.isConnected) { window.removeEventListener('resize', onResize); return; } fit(); };
+      window.addEventListener('resize', onResize);
       function deal() {
         const s = gtShuffle([...SYM.keys()], rng); shared = String(s[0]);
         const a = gtShuffle([s[0], ...s.slice(1, 6)], rng), b = gtShuffle([s[0], ...s.slice(6, 11)], rng);
